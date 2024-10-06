@@ -1,0 +1,4 @@
+{"level":"error","msg":"","mysql migrate error":"Error 1067 (42000): Invalid default value for 'create_time'","time":"2024-10-06 18:13:40"}
+{"level":"error","msg":"","mysql migrate error":"Error 1067 (42000): Invalid default value for 'create_time'","time":"2024-10-06 18:14:15"}
+{"level":"error","msg":"","mysql migrate error":"Error 1067 (42000): Invalid default value for 'create_time'","time":"2024-10-06 18:15:02"}
+{"level":"error","msg":"","mysql migrate error":"Error 1067 (42000): Invalid default value for 'create_time'","time":"2024-10-06 18:23:56"}
