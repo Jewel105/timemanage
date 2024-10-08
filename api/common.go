@@ -1,4 +1,4 @@
-package controllers
+package api
 
 import (
 	"fmt"
@@ -6,30 +6,73 @@ import (
 	"os"
 	"path"
 	"runtime/debug"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type JsonStruct struct {
-	Code  string      `json:"code"`
-	Msg   interface{} `json:"msg"`
-	Data  interface{} `json:"data"`
-	Count int64       `json:"count"`
-}
-type JsonError struct {
-	Code string      `json:"code"`
-	Msg  interface{} `json:"msg"`
+	Code    string      `json:"code"`
+	Msg     string      `json:"msg"`
+	Data    interface{} `json:"data"`
+	Success bool        `json:"success"`
 }
 
-func ReturnSuccess(c *gin.Context, code string, msg interface{}, data interface{}, count int64) {
-	json := &JsonStruct{Code: code, Msg: msg, Data: data, Count: count}
+const (
+	SUCCESS             = "200"
+	SYSTEM_ERROR        = "500"
+	DEBUG_CODE          = "400"
+	SERVICE_UNAVAILABLE = "503"
+
+	PARAMS_INVALID             = "300"
+	TOKEN_INVALID              = "301"
+	PROCESSING                 = "302"
+	EQUIPMENT_INVALID          = "303"
+	MATCH_ORDER_ERROR          = "304"
+	ORDER_EXISTS               = "305"
+	ACCOUNT_BALANCE_NOT_ENOUGH = "306"
+	LOGIN_FAILED               = "-1"
+	NOT_SUPPORTED              = "307"
+	UNABLE_TO_VERIFY           = "308"
+)
+
+var MsgFlags = map[string]string{
+	SUCCESS:             "SUCCESS",
+	SYSTEM_ERROR:        "SYSTEM_ERROR",
+	DEBUG_CODE:          "DEBUG_CODE",
+	SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",
+
+	PARAMS_INVALID:             "PARAMS_INVALID",
+	TOKEN_INVALID:              "TOKEN_INVALID",
+	PROCESSING:                 "PROCESSING",
+	LOGIN_FAILED:               "LOGIN_FAILED",
+	EQUIPMENT_INVALID:          "EQUIPMENT_INVALID",
+	MATCH_ORDER_ERROR:          "MATCH_ORDER_ERROR",
+	ORDER_EXISTS:               "ORDER_EXISTS",
+	ACCOUNT_BALANCE_NOT_ENOUGH: "ACCOUNT_BALANCE_NOT_ENOUGH",
+	NOT_SUPPORTED:              "NOT_SUPPORTED",
+	UNABLE_TO_VERIFY:           "UNABLE_TO_VERIFY",
+}
+
+func ReturnResponse(c *gin.Context, code string, data interface{}) {
+	json := &JsonStruct{
+		Code:    code,
+		Msg:     GetMsg(code),
+		Data:    data,
+		Success: code == "200",
+	}
 	c.JSON(200, json)
 }
 
-func ReturnError(c *gin.Context, code string, msg interface{}) {
-	json := &JsonError{Code: code, Msg: msg}
-	c.JSON(200, json)
+// GetMsg 返回错误的消息解释
+func GetMsg(code string) string {
+	msg, ok := MsgFlags[code]
+	if ok {
+		return strings.Replace(strings.ToLower(msg), "_", " ", -1)
+	}
+
+	return MsgFlags[SYSTEM_ERROR]
 }
 
 func LoggerToFile() gin.LoggerConfig {
@@ -90,7 +133,7 @@ func Recover(c *gin.Context) {
 			f.WriteString(fmt.Sprintf("%v", err) + "\n")
 			f.WriteString("stacktrace from panic:" + string(debug.Stack()) + "\n")
 			f.Close()
-			ReturnError(c, "500", fmt.Sprintf("%v", err))
+			ReturnResponse(c, SYSTEM_ERROR, fmt.Sprintf("%v", err))
 			//终止后续接口调用，不加的话recover异常之后，还会继续执行后续代码
 			c.Abort()
 		}

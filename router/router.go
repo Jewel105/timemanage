@@ -2,7 +2,7 @@ package router
 
 import (
 	"fmt"
-	"gin_study/controllers"
+	"gin_study/api"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,20 +10,25 @@ import (
 
 func Router() *gin.Engine {
 	r := gin.Default()
-	r.Use(gin.LoggerWithConfig(controllers.LoggerToFile()))
-	r.Use(controllers.Recover)
+	r.Use(gin.LoggerWithConfig(api.LoggerToFile()))
+	r.Use(api.Recover)
 	r.GET("/hello", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "hello world")
 	})
-	user := r.Group("/user")
-	user.GET("/list", controllers.UserController{}.GetList)
-	user.GET("/info/:id", controllers.UserController{}.GetInfo)
-	user.POST("/save", controllers.UserController{}.SaveUser)
-	user.POST("/delete/:id", controllers.UserController{}.Delete)
+	apiV1 := r.Group("/api/v1")
+	common := apiV1.Group("/common")
+	user := common.Group("/user")
+	{
+		user.POST("/login", api.UserController{}.Login)
+
+		user.GET("/list", api.UserController{}.GetList)
+		user.POST("/info", api.UserController{}.GetInfo)
+		user.POST("/delete/:id", api.UserController{}.Delete)
+	}
 
 	order := r.Group("/order")
-	order.GET("/list", controllers.OrderController{}.GetList)
-	order.GET("/info", controllers.OrderController{}.GetInfo)
+	order.GET("/list", api.OrderController{}.GetList)
+	order.GET("/info", api.OrderController{}.GetInfo)
 
 	fmt.Println("fmt")
 	return r

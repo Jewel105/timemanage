@@ -1,13 +1,14 @@
-package controllers
+package api
 
 import "github.com/gin-gonic/gin"
 
 type OrderController struct{}
 
 func (o OrderController) GetInfo(c *gin.Context) {
-	ReturnSuccess(c, "0", "success", "value", 3)
+	ReturnResponse(c, SUCCESS, true)
 }
 
 func (o OrderController) GetList(c *gin.Context) {
-	ReturnError(c, "4001", "fail")
+	ReturnResponse(c, SUCCESS, true)
+
 }
