@@ -29,7 +29,7 @@ func (u UserController) SaveUser(c *gin.Context) {
 		return
 	}
 	userModel.SaveUser(&user)
-	ReturnSuccess(c, "0", "success", user.Id, 3)
+	ReturnSuccess(c, "0", "success", user.ID, 3)
 }
 
 func (u UserController) Delete(c *gin.Context) {

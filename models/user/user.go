@@ -2,15 +2,18 @@ package userModel
 
 import (
 	"gin_study/dao"
-	"time"
+	categoryModel "gin_study/models/category"
+	taskModel "gin_study/models/task"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
-	Id          int64     `gorm:"column:id;primarykey;autoIncrement" json:"id"`
-	Name        string    `gorm:"column:name" json:"name"`
-	Password    string    `gorm:"column:password" json:"password"`
-	CreatedTime time.Time `gorm:"column:create_time;autoCreateTime:milli" json:"created_time"`
-	UpdatedTime time.Time `gorm:"column:update_time;autoUpdateTime:milli" json:"updated_time"`
+	gorm.Model
+	Name       string                   `gorm:"column:name;size:64" json:"name"`
+	Password   string                   `gorm:"column:password;size:64" json:"password"`
+	Tasks      []taskModel.Task         `json:"tasks"`
+	Categories []categoryModel.Category `json:"categories"`
 }
 
 func GetInfoById(id int) (*User, error) {
@@ -27,7 +30,7 @@ func GetAll() ([]*User, error) {
 
 // create or update
 func SaveUser(user *User) error {
-	if user.Id == 0 {
+	if user.ID == 0 {
 		result := dao.DB.Create(user)
 		return result.Error
 	}

@@ -21,11 +21,4 @@ func init() {
 	if DB.Error != nil {
 		logger.Error(map[string]interface{}{"database error": DB.Error})
 	}
-
-	// user := models.User{Name: "John Doe", Password: "123456"}
-	// result := db.Create(&user)
-	// if result.Error != nil {
-	// 	// 处理创建错误
-	// 	logger.Error(map[string]interface{}{"mysql Create table error": err.Error()})
-	// }
 }
