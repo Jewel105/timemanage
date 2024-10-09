@@ -20,6 +20,7 @@ func Router() *gin.Engine {
 	user := common.Group("/user")
 	{
 		user.POST("/login", api.UserController{}.Login)
+		user.POST("/register", api.UserController{}.Register)
 
 		user.GET("/list", api.UserController{}.GetList)
 		user.POST("/info", api.UserController{}.GetInfo)

@@ -22,7 +22,7 @@ type JsonStruct struct {
 const (
 	SUCCESS             = "200"
 	SYSTEM_ERROR        = "500"
-	DEBUG_CODE          = "400"
+	CLIENT_ERROR        = "400"
 	SERVICE_UNAVAILABLE = "503"
 
 	PARAMS_INVALID             = "300"
@@ -40,7 +40,7 @@ const (
 var MsgFlags = map[string]string{
 	SUCCESS:             "SUCCESS",
 	SYSTEM_ERROR:        "SYSTEM_ERROR",
-	DEBUG_CODE:          "DEBUG_CODE",
+	CLIENT_ERROR:        "CLIENT_ERROR",
 	SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",
 
 	PARAMS_INVALID:             "PARAMS_INVALID",
@@ -63,6 +63,14 @@ func ReturnResponse(c *gin.Context, code string, data interface{}) {
 		Success: code == "200",
 	}
 	c.JSON(200, json)
+}
+
+func DealResponse(c *gin.Context, data interface{}, err error) {
+	if err != nil {
+		ReturnResponse(c, SYSTEM_ERROR, err.Error())
+		return
+	}
+	ReturnResponse(c, SUCCESS, data)
 }
 
 // GetMsg 返回错误的消息解释
@@ -139,4 +147,13 @@ func Recover(c *gin.Context) {
 		}
 	}()
 	c.Next()
+}
+
+func ParseJson(c *gin.Context, obj any) bool {
+	err := c.ShouldBindJSON(obj)
+	if err != nil {
+		ReturnResponse(c, PARAMS_INVALID, err.Error())
+		return false
+	}
+	return true
 }

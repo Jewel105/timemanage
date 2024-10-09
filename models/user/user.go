@@ -10,8 +10,8 @@ import (
 
 type User struct {
 	gorm.Model
-	Name       string                   `gorm:"column:name;size:64" json:"name"`
-	Password   string                   `gorm:"column:password;size:64" json:"password"`
+	Name       string                   `gorm:"column:name;size:64" json:"name" binding:"required"`
+	Password   string                   `gorm:"column:password;size:64" json:"password" binding:"required"`
 	Tasks      []taskModel.Task         `json:"tasks"`
 	Categories []categoryModel.Category `json:"categories"`
 }
@@ -19,6 +19,12 @@ type User struct {
 func GetInfoById(id int) (*User, error) {
 	user := User{}
 	result := dao.DB.First(&user, id)
+	return &user, result.Error
+}
+
+func GetInfoByName(name string) (*User, error) {
+	user := User{}
+	result := dao.DB.Where("name = ?", name).First(&user)
 	return &user, result.Error
 }
 

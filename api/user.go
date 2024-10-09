@@ -1,9 +1,8 @@
 package api
 
 import (
-	"fmt"
+	"gin_study/factory"
 	userModel "gin_study/models/user"
-	"gin_study/util"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -11,49 +10,66 @@ import (
 
 type UserController struct{}
 
-func (u UserController) GetInfo(c *gin.Context) { //-
-	json := make(map[string]interface{}) //-
-	err := c.BindJSON(&json)             //-
-	if err != nil {                      //-
-		ReturnResponse(c, SYSTEM_ERROR, err.Error()) //-
-		return                                       //-
-	} //-
+func (u UserController) GetInfo(c *gin.Context) {
+	json := make(map[string]interface{})
+	err := c.BindJSON(&json)
+	if err != nil {
+		ReturnResponse(c, SYSTEM_ERROR, err.Error())
+		return
+	}
 	token := json["token"]
 	if token == nil {
 		ReturnResponse(c, SYSTEM_ERROR, "token不能为空")
 		return
 	}
-	uu, ett := util.DecodeToken(token.(string)) //+
+	uu, ett := factory.DecodeToken(token.(string))
 	if ett != nil {
 		ReturnResponse(c, TOKEN_INVALID, ett.Error())
 		return
 	}
-	ReturnResponse(c, SUCCESS, uu) //-
-	fmt.Println(uu.UserName)       //+
+	ReturnResponse(c, SUCCESS, uu)
 }
 
 func (u UserController) GetList(c *gin.Context) {
 	users, _ := userModel.GetAll()
 	ReturnResponse(c, SUCCESS, users)
-
 }
 
 func (u UserController) Login(c *gin.Context) {
 	user := userModel.User{}
-	err := c.BindJSON(&user)
-	if err != nil {
-		ReturnResponse(c, SYSTEM_ERROR, err.Error())
+	if !ParseJson(c, &user) {
 		return
 	}
-	// get token
-	token, e := util.CreateToken(user.Name, 1)
-	if e != nil {
-		ReturnResponse(c, SYSTEM_ERROR, e.Error())
-		return
-	}
-	// userModel.SaveUser(&user)
-	ReturnResponse(c, SUCCESS, token)
 
+	dbUser, e := userModel.GetInfoByName(user.Name)
+	if e != nil {
+		ReturnResponse(c, LOGIN_FAILED, "User and password are incorrect.")
+		return
+	}
+	userPass := factory.Md5Hash(user.Password)
+	if userPass != dbUser.Password {
+		ReturnResponse(c, LOGIN_FAILED, "User and password are incorrect.")
+		return
+	}
+
+	// get token
+	token, e := factory.CreateToken(user.Name, 1)
+	DealResponse(c, token, e)
+}
+
+func (u UserController) Register(c *gin.Context) {
+	user := userModel.User{}
+	if !ParseJson(c, &user) {
+		return
+	}
+	dbUser, _ := userModel.GetInfoByName(user.Name)
+	if dbUser != nil {
+		ReturnResponse(c, CLIENT_ERROR, "User already exists.")
+		return
+	}
+	user.Password = factory.Md5Hash(user.Password)
+	err := userModel.SaveUser(&user)
+	DealResponse(c, user.ID, err)
 }
 
 func (u UserController) Delete(c *gin.Context) {
