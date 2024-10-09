@@ -1,13 +1,7 @@
 package api
 
 import (
-	"fmt"
-	"io"
-	"os"
-	"path"
-	"runtime/debug"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,8 +27,10 @@ const (
 	ORDER_EXISTS               = "305"
 	ACCOUNT_BALANCE_NOT_ENOUGH = "306"
 	LOGIN_FAILED               = "-1"
-	NOT_SUPPORTED              = "307"
-	UNABLE_TO_VERIFY           = "308"
+)
+
+const (
+	USER_ID = "userID"
 )
 
 var MsgFlags = map[string]string{
@@ -51,8 +47,6 @@ var MsgFlags = map[string]string{
 	MATCH_ORDER_ERROR:          "MATCH_ORDER_ERROR",
 	ORDER_EXISTS:               "ORDER_EXISTS",
 	ACCOUNT_BALANCE_NOT_ENOUGH: "ACCOUNT_BALANCE_NOT_ENOUGH",
-	NOT_SUPPORTED:              "NOT_SUPPORTED",
-	UNABLE_TO_VERIFY:           "UNABLE_TO_VERIFY",
 }
 
 func ReturnResponse(c *gin.Context, code string, data interface{}) {
@@ -81,72 +75,6 @@ func GetMsg(code string) string {
 	}
 
 	return MsgFlags[SYSTEM_ERROR]
-}
-
-func LoggerToFile() gin.LoggerConfig {
-	if _, err := os.Stat("./runtime/log"); os.IsNotExist(err) {
-		err = os.MkdirAll("./runtime/log", 0777)
-		if err != nil {
-			panic(fmt.Errorf("create log dir '%s' error:%s", "./runtime/log", err))
-		}
-	}
-
-	timeStr := time.Now().Format("2006-01-02")
-	fileName := path.Join("./runtime/log", "success_"+timeStr+".log")
-
-	os.Stderr, _ = os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
-
-	var conf = gin.LoggerConfig{
-		Formatter: func(params gin.LogFormatterParams) string {
-			return fmt.Sprintf("%s - %s \"%s %s %s %d \"%s\" %s\"%s\"\n",
-				params.TimeStamp.Format("2006-01-02 15:04:06"),
-				params.ClientIP,
-				params.Method,
-				params.Path,
-				params.Request.Proto,
-				params.StatusCode,
-				params.Latency,
-				params.Request.UserAgent(),
-				params.ErrorMessage,
-			)
-		},
-		Output: io.MultiWriter(os.Stdout, os.Stderr),
-	}
-
-	return conf
-
-}
-
-func Recover(c *gin.Context) {
-	defer func() {
-		if err := recover(); err != nil {
-			if _, errDir := os.Stat("./runtime/log"); os.IsNotExist(errDir) {
-				err = os.MkdirAll("./runtime/log", 0777)
-				if err != nil {
-					panic(fmt.Errorf("create log dir '%s' error:%s", "./runtime/log", err))
-				}
-			}
-
-			timeStr := time.Now().Format("2006-01-02")
-			fileName := path.Join("./runtime/log", "err_"+timeStr+".log")
-
-			f, errFile := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
-
-			if errFile != nil {
-				fmt.Println(errFile)
-			}
-
-			timeFileStr := time.Now().Format("2006-01-02 15:04:05")
-			f.WriteString("panic error time:" + timeFileStr + "\n")
-			f.WriteString(fmt.Sprintf("%v", err) + "\n")
-			f.WriteString("stacktrace from panic:" + string(debug.Stack()) + "\n")
-			f.Close()
-			ReturnResponse(c, SYSTEM_ERROR, fmt.Sprintf("%v", err))
-			//终止后续接口调用，不加的话recover异常之后，还会继续执行后续代码
-			c.Abort()
-		}
-	}()
-	c.Next()
 }
 
 func ParseJson(c *gin.Context, obj any) bool {

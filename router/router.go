@@ -21,10 +21,12 @@ func Router() *gin.Engine {
 	{
 		user.POST("/login", api.UserController{}.Login)
 		user.POST("/register", api.UserController{}.Register)
+	}
 
-		user.GET("/list", api.UserController{}.GetList)
-		user.POST("/info", api.UserController{}.GetInfo)
-		user.POST("/delete/:id", api.UserController{}.Delete)
+	tasks := apiV1.Group("/tasks")
+	tasks.Use(api.VerifyToken)
+	{
+		tasks.GET("/list", api.TaskController{}.GetList)
 	}
 
 	order := r.Group("/order")
