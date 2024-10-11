@@ -1,14 +1,13 @@
 package router
 
 import (
-	"fmt"
 	"gin_study/api"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Router() *gin.Engine {
+func init() {
 	r := gin.Default()
 	r.Use(gin.LoggerWithConfig(api.LoggerToFile()))
 	r.Use(api.Recover)
@@ -27,12 +26,13 @@ func Router() *gin.Engine {
 	tasks.Use(api.VerifyToken)
 	{
 		tasks.GET("/list", api.TaskController{}.GetList)
+		tasks.GET("/add", api.TaskController{}.GetList)
+
 	}
 
 	order := r.Group("/order")
 	order.GET("/list", api.OrderController{}.GetList)
 	order.GET("/info", api.OrderController{}.GetInfo)
 
-	fmt.Println("fmt")
-	return r
+	r.Run()
 }

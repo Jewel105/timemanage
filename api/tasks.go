@@ -10,3 +10,11 @@ func (t TaskController) GetList(c *gin.Context) {
 		return
 	}
 }
+
+// func (t TaskController) AddTask(c *gin.Context) {
+// 	if userID, exists := c.Get(USER_ID); !exists {
+// 		ReturnResponse(c, TOKEN_INVALID, "user not found")
+// 		return
+// 	}
+
+// }
