@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct{}
+type UserApi struct{}
 
-func (u UserController) Login(c *gin.Context) {
+func (u UserApi) Login(c *gin.Context) {
 	req := request.LoginRequest{}
 	if !ParseJson(c, &req) {
 		return
@@ -31,7 +31,7 @@ func (u UserController) Login(c *gin.Context) {
 	DealResponse(c, token, e)
 }
 
-func (u UserController) Register(c *gin.Context) {
+func (u UserApi) Register(c *gin.Context) {
 	req := request.RegisterRequest{}
 	if !ParseJson(c, &req) {
 		return

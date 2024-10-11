@@ -18,16 +18,16 @@ func init() {
 	common := apiV1.Group("/common")
 	user := common.Group("/user")
 	{
-		user.POST("/login", api.UserController{}.Login)
-		user.POST("/register", api.UserController{}.Register)
+		user.POST("/login", api.UserApi{}.Login)
+		user.POST("/register", api.UserApi{}.Register)
 	}
 
 	tasks := apiV1.Group("/tasks")
 	tasks.Use(api.VerifyToken)
 	{
-		tasks.GET("/list", api.TaskController{}.GetList)
-		tasks.POST("/save", api.TaskController{}.SaveTask)
-		tasks.GET("/delete", api.TaskController{}.SaveTask)
+		tasks.GET("/list", api.TaskApi{}.GetList)
+		tasks.POST("/save", api.TaskApi{}.SaveTask)
+		tasks.POST("/delete/:id", api.TaskApi{}.DeleteTask)
 	}
 
 	order := r.Group("/order")

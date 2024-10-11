@@ -32,7 +32,7 @@ func newTask(db *gorm.DB, opts ...gen.DOOption) task {
 	_task.DeleteTime = field.NewField(tableName, "delete_time")
 	_task.UserID = field.NewInt64(tableName, "user_id")
 	_task.Description = field.NewString(tableName, "description")
-	_task.SpentTime = field.NewFloat64(tableName, "spent_time")
+	_task.SpentTime = field.NewInt64(tableName, "spent_time")
 	_task.CategoryID = field.NewInt64(tableName, "category_id")
 	_task.StartTime = field.NewInt64(tableName, "start_time")
 	_task.EndTime = field.NewInt64(tableName, "end_time")
@@ -52,7 +52,7 @@ type task struct {
 	DeleteTime  field.Field
 	UserID      field.Int64
 	Description field.String
-	SpentTime   field.Float64
+	SpentTime   field.Int64
 	CategoryID  field.Int64
 	StartTime   field.Int64
 	EndTime     field.Int64
@@ -78,7 +78,7 @@ func (t *task) updateTableName(table string) *task {
 	t.DeleteTime = field.NewField(table, "delete_time")
 	t.UserID = field.NewInt64(table, "user_id")
 	t.Description = field.NewString(table, "description")
-	t.SpentTime = field.NewFloat64(table, "spent_time")
+	t.SpentTime = field.NewInt64(table, "spent_time")
 	t.CategoryID = field.NewInt64(table, "category_id")
 	t.StartTime = field.NewInt64(table, "start_time")
 	t.EndTime = field.NewInt64(table, "end_time")

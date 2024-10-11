@@ -5,13 +5,14 @@ import (
 	"gin_study/gen/query"
 	"gin_study/gen/request"
 	"gin_study/gen/response"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-type TaskController struct{}
+type TaskApi struct{}
 
-func (t TaskController) GetList(c *gin.Context) {
+func (t TaskApi) GetList(c *gin.Context) {
 	userID := GetUserID(c)
 	if userID == 0 {
 		return
@@ -34,7 +35,7 @@ func (t TaskController) GetList(c *gin.Context) {
 	DealResponse(c, res, err)
 }
 
-func (t TaskController) SaveTask(c *gin.Context) {
+func (t TaskApi) SaveTask(c *gin.Context) {
 	userID := GetUserID(c)
 	if userID == 0 {
 		return
@@ -43,15 +44,23 @@ func (t TaskController) SaveTask(c *gin.Context) {
 	if !ParseJson(c, &req) {
 		return
 	}
+
+	category, errQuery := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
+
+	if errQuery != nil || category == nil {
+		ReturnResponse(c, CLIENT_ERROR, "Category not found.")
+		return
+	}
+
 	task := models.Task{
 		UserID:      userID,
 		Description: req.Description,
-		SpentTime:   req.SpentTime,
 		CategoryID:  req.CategoryID,
 		StartTime:   req.StartTime,
 		EndTime:     req.EndTime,
 	}
 	task.ID = req.ID
+	task.SpentTime = task.EndTime - task.StartTime
 
 	tx := query.Q.Begin()
 	err := query.Task.Save(&task)
@@ -61,4 +70,38 @@ func (t TaskController) SaveTask(c *gin.Context) {
 		err = tx.Commit()
 	}
 	DealResponse(c, task.ID, err)
+}
+
+func (t TaskApi) DeleteTask(c *gin.Context) {
+	userID := GetUserID(c)
+	if userID == 0 {
+		return
+	}
+	idStr := c.Param("id")
+	id, parseErr := strconv.ParseInt(idStr, 10, 64)
+	if parseErr != nil {
+		ReturnResponse(c, SYSTEM_ERROR, parseErr.Error())
+		return
+	}
+	qIDO := query.Task.Where(query.Task.ID.Eq(id))
+	task, errQuery := qIDO.First()
+
+	if errQuery != nil {
+		ReturnResponse(c, CLIENT_ERROR, errQuery.Error())
+		return
+	}
+
+	if task.UserID != userID {
+		ReturnResponse(c, CLIENT_ERROR, "Not authorized to delete this task.")
+		return
+	}
+
+	tx := query.Q.Begin()
+	_, err := qIDO.Delete()
+	if err != nil {
+		err = tx.Rollback()
+	} else {
+		err = tx.Commit()
+	}
+	DealResponse(c, nil, err)
 }

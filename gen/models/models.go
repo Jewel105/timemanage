@@ -24,12 +24,12 @@ type Task struct {
 	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
 	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
 
-	UserID      int64   `gorm:"column:user_id" json:"userID"`                   // 创建该任务的用户ID
-	Description string  `gorm:"column:description;size:200" json:"description"` // 任务描述
-	SpentTime   float64 `gorm:"column:spent_time" json:"spentTime"`             // 花费时间
-	CategoryID  int64   `gorm:"column:category_id" json:"categoryID"`           // 任务所属分类ID
-	StartTime   int64   `gorm:"column:start_time" json:"startTime"`
-	EndTime     int64   `gorm:"column:end_time" json:"endTime"`
+	UserID      int64  `gorm:"column:user_id" json:"userID"`                   // 创建该任务的用户ID
+	Description string `gorm:"column:description;size:200" json:"description"` // 任务描述
+	SpentTime   int64  `gorm:"column:spent_time" json:"spentTime"`             // 花费时间
+	CategoryID  int64  `gorm:"column:category_id" json:"categoryID"`           // 任务所属分类ID
+	StartTime   int64  `gorm:"column:start_time" json:"startTime"`
+	EndTime     int64  `gorm:"column:end_time" json:"endTime"`
 }
 
 type Category struct {
