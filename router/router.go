@@ -26,7 +26,7 @@ func init() {
 	tasks.Use(api.VerifyToken)
 	{
 		tasks.GET("/list", api.TaskController{}.GetList)
-		tasks.GET("/save", api.TaskController{}.SaveTask)
+		tasks.POST("/save", api.TaskController{}.SaveTask)
 		tasks.GET("/delete", api.TaskController{}.SaveTask)
 	}
 

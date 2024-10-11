@@ -26,10 +26,10 @@ func newTask(db *gorm.DB, opts ...gen.DOOption) task {
 
 	tableName := _task.taskDo.TableName()
 	_task.ALL = field.NewAsterisk(tableName)
-	_task.ID = field.NewUint(tableName, "id")
-	_task.CreatedAt = field.NewTime(tableName, "created_at")
-	_task.UpdatedAt = field.NewTime(tableName, "updated_at")
-	_task.DeletedAt = field.NewField(tableName, "deleted_at")
+	_task.ID = field.NewInt64(tableName, "id")
+	_task.CreatedTime = field.NewTime(tableName, "create_time")
+	_task.UpdatedTime = field.NewTime(tableName, "update_time")
+	_task.DeleteTime = field.NewField(tableName, "delete_time")
 	_task.UserID = field.NewInt64(tableName, "user_id")
 	_task.Description = field.NewString(tableName, "description")
 	_task.SpentTime = field.NewFloat64(tableName, "spent_time")
@@ -46,10 +46,10 @@ type task struct {
 	taskDo
 
 	ALL         field.Asterisk
-	ID          field.Uint
-	CreatedAt   field.Time
-	UpdatedAt   field.Time
-	DeletedAt   field.Field
+	ID          field.Int64
+	CreatedTime field.Time
+	UpdatedTime field.Time
+	DeleteTime  field.Field
 	UserID      field.Int64
 	Description field.String
 	SpentTime   field.Float64
@@ -72,10 +72,10 @@ func (t task) As(alias string) *task {
 
 func (t *task) updateTableName(table string) *task {
 	t.ALL = field.NewAsterisk(table)
-	t.ID = field.NewUint(table, "id")
-	t.CreatedAt = field.NewTime(table, "created_at")
-	t.UpdatedAt = field.NewTime(table, "updated_at")
-	t.DeletedAt = field.NewField(table, "deleted_at")
+	t.ID = field.NewInt64(table, "id")
+	t.CreatedTime = field.NewTime(table, "create_time")
+	t.UpdatedTime = field.NewTime(table, "update_time")
+	t.DeleteTime = field.NewField(table, "delete_time")
 	t.UserID = field.NewInt64(table, "user_id")
 	t.Description = field.NewString(table, "description")
 	t.SpentTime = field.NewFloat64(table, "spent_time")
@@ -100,9 +100,9 @@ func (t *task) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 func (t *task) fillFieldMap() {
 	t.fieldMap = make(map[string]field.Expr, 10)
 	t.fieldMap["id"] = t.ID
-	t.fieldMap["created_at"] = t.CreatedAt
-	t.fieldMap["updated_at"] = t.UpdatedAt
-	t.fieldMap["deleted_at"] = t.DeletedAt
+	t.fieldMap["create_time"] = t.CreatedTime
+	t.fieldMap["update_time"] = t.UpdatedTime
+	t.fieldMap["delete_time"] = t.DeleteTime
 	t.fieldMap["user_id"] = t.UserID
 	t.fieldMap["description"] = t.Description
 	t.fieldMap["spent_time"] = t.SpentTime

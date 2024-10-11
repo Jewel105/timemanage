@@ -26,10 +26,10 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 
 	tableName := _user.userDo.TableName()
 	_user.ALL = field.NewAsterisk(tableName)
-	_user.ID = field.NewUint(tableName, "id")
-	_user.CreatedAt = field.NewTime(tableName, "created_at")
-	_user.UpdatedAt = field.NewTime(tableName, "updated_at")
-	_user.DeletedAt = field.NewField(tableName, "deleted_at")
+	_user.ID = field.NewInt64(tableName, "id")
+	_user.CreatedTime = field.NewTime(tableName, "create_time")
+	_user.UpdatedTime = field.NewTime(tableName, "update_time")
+	_user.DeleteTime = field.NewField(tableName, "delete_time")
 	_user.Name = field.NewString(tableName, "name")
 	_user.Password = field.NewString(tableName, "password")
 	_user.Tasks = userHasManyTasks{
@@ -52,14 +52,14 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 type user struct {
 	userDo
 
-	ALL       field.Asterisk
-	ID        field.Uint
-	CreatedAt field.Time
-	UpdatedAt field.Time
-	DeletedAt field.Field
-	Name      field.String
-	Password  field.String
-	Tasks     userHasManyTasks
+	ALL         field.Asterisk
+	ID          field.Int64
+	CreatedTime field.Time
+	UpdatedTime field.Time
+	DeleteTime  field.Field
+	Name        field.String
+	Password    field.String
+	Tasks       userHasManyTasks
 
 	Categories userHasManyCategories
 
@@ -78,10 +78,10 @@ func (u user) As(alias string) *user {
 
 func (u *user) updateTableName(table string) *user {
 	u.ALL = field.NewAsterisk(table)
-	u.ID = field.NewUint(table, "id")
-	u.CreatedAt = field.NewTime(table, "created_at")
-	u.UpdatedAt = field.NewTime(table, "updated_at")
-	u.DeletedAt = field.NewField(table, "deleted_at")
+	u.ID = field.NewInt64(table, "id")
+	u.CreatedTime = field.NewTime(table, "create_time")
+	u.UpdatedTime = field.NewTime(table, "update_time")
+	u.DeleteTime = field.NewField(table, "delete_time")
 	u.Name = field.NewString(table, "name")
 	u.Password = field.NewString(table, "password")
 
@@ -102,9 +102,9 @@ func (u *user) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 func (u *user) fillFieldMap() {
 	u.fieldMap = make(map[string]field.Expr, 8)
 	u.fieldMap["id"] = u.ID
-	u.fieldMap["created_at"] = u.CreatedAt
-	u.fieldMap["updated_at"] = u.UpdatedAt
-	u.fieldMap["deleted_at"] = u.DeletedAt
+	u.fieldMap["create_time"] = u.CreatedTime
+	u.fieldMap["update_time"] = u.UpdatedTime
+	u.fieldMap["delete_time"] = u.DeleteTime
 	u.fieldMap["name"] = u.Name
 	u.fieldMap["password"] = u.Password
 

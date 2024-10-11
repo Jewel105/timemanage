@@ -86,6 +86,15 @@ func ParseJson(c *gin.Context, obj any) bool {
 	return true
 }
 
+func ParseQuery(c *gin.Context, obj any) bool {
+	err := c.ShouldBindQuery(obj)
+	if err != nil {
+		ReturnResponse(c, PARAMS_INVALID, err.Error())
+		return false
+	}
+	return true
+}
+
 func GetUserID(c *gin.Context) int64 {
 	userID, exists := c.Get(USER_ID)
 	if !exists {

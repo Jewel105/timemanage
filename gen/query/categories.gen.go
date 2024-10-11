@@ -26,10 +26,10 @@ func newCategory(db *gorm.DB, opts ...gen.DOOption) category {
 
 	tableName := _category.categoryDo.TableName()
 	_category.ALL = field.NewAsterisk(tableName)
-	_category.ID = field.NewUint(tableName, "id")
-	_category.CreatedAt = field.NewTime(tableName, "created_at")
-	_category.UpdatedAt = field.NewTime(tableName, "updated_at")
-	_category.DeletedAt = field.NewField(tableName, "deleted_at")
+	_category.ID = field.NewInt64(tableName, "id")
+	_category.CreatedTime = field.NewTime(tableName, "create_time")
+	_category.UpdatedTime = field.NewTime(tableName, "update_time")
+	_category.DeleteTime = field.NewField(tableName, "delete_time")
 	_category.Name = field.NewString(tableName, "name")
 	_category.ParentID = field.NewInt64(tableName, "parent_id")
 	_category.UserID = field.NewInt64(tableName, "user_id")
@@ -43,15 +43,15 @@ func newCategory(db *gorm.DB, opts ...gen.DOOption) category {
 type category struct {
 	categoryDo
 
-	ALL       field.Asterisk
-	ID        field.Uint
-	CreatedAt field.Time
-	UpdatedAt field.Time
-	DeletedAt field.Field
-	Name      field.String
-	ParentID  field.Int64
-	UserID    field.Int64
-	Path      field.String
+	ALL         field.Asterisk
+	ID          field.Int64
+	CreatedTime field.Time
+	UpdatedTime field.Time
+	DeleteTime  field.Field
+	Name        field.String
+	ParentID    field.Int64
+	UserID      field.Int64
+	Path        field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -68,10 +68,10 @@ func (c category) As(alias string) *category {
 
 func (c *category) updateTableName(table string) *category {
 	c.ALL = field.NewAsterisk(table)
-	c.ID = field.NewUint(table, "id")
-	c.CreatedAt = field.NewTime(table, "created_at")
-	c.UpdatedAt = field.NewTime(table, "updated_at")
-	c.DeletedAt = field.NewField(table, "deleted_at")
+	c.ID = field.NewInt64(table, "id")
+	c.CreatedTime = field.NewTime(table, "create_time")
+	c.UpdatedTime = field.NewTime(table, "update_time")
+	c.DeleteTime = field.NewField(table, "delete_time")
 	c.Name = field.NewString(table, "name")
 	c.ParentID = field.NewInt64(table, "parent_id")
 	c.UserID = field.NewInt64(table, "user_id")
@@ -94,9 +94,9 @@ func (c *category) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 func (c *category) fillFieldMap() {
 	c.fieldMap = make(map[string]field.Expr, 8)
 	c.fieldMap["id"] = c.ID
-	c.fieldMap["created_at"] = c.CreatedAt
-	c.fieldMap["updated_at"] = c.UpdatedAt
-	c.fieldMap["deleted_at"] = c.DeletedAt
+	c.fieldMap["create_time"] = c.CreatedTime
+	c.fieldMap["update_time"] = c.UpdatedTime
+	c.fieldMap["delete_time"] = c.DeleteTime
 	c.fieldMap["name"] = c.Name
 	c.fieldMap["parent_id"] = c.ParentID
 	c.fieldMap["user_id"] = c.UserID

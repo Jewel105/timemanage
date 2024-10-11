@@ -10,14 +10,14 @@ import (
 
 type UserClaims struct {
 	TokenId  uuid.UUID
-	UserID   uint
+	UserID   int64
 	UserName string
 	jwt.RegisteredClaims
 }
 
 var jwtSecret = []byte(config.JwtSecret)
 
-func CreateToken(username string, userID uint) (string, error) {
+func CreateToken(username string, userID int64) (string, error) {
 	tokenId, err := uuid.NewRandom()
 	if err != nil {
 		return "", err
