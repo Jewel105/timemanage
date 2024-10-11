@@ -26,8 +26,8 @@ func init() {
 	tasks.Use(api.VerifyToken)
 	{
 		tasks.GET("/list", api.TaskController{}.GetList)
-		tasks.GET("/add", api.TaskController{}.GetList)
-
+		tasks.GET("/save", api.TaskController{}.SaveTask)
+		tasks.GET("/delete", api.TaskController{}.SaveTask)
 	}
 
 	order := r.Group("/order")

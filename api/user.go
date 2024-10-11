@@ -27,7 +27,7 @@ func (u UserController) Login(c *gin.Context) {
 		return
 	}
 	// get token
-	token, e := factory.CreateToken(user.Name, 1)
+	token, e := factory.CreateToken(user.Name, user.ID)
 	DealResponse(c, token, e)
 }
 
@@ -46,7 +46,7 @@ func (u UserController) Register(c *gin.Context) {
 		Password: factory.Md5Hash(req.Password),
 	}
 	tx := query.Q.Begin()
-	err := query.User.Create(&user)
+	err := query.User.Save(&user)
 	if err != nil {
 		err = tx.Rollback()
 	} else {

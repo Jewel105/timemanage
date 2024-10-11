@@ -85,3 +85,12 @@ func ParseJson(c *gin.Context, obj any) bool {
 	}
 	return true
 }
+
+func GetUserID(c *gin.Context) int64 {
+	userID, exists := c.Get(USER_ID)
+	if !exists {
+		ReturnResponse(c, TOKEN_INVALID, "user not found")
+		return 0
+	}
+	return userID.(int64)
+}
