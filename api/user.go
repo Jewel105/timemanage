@@ -45,6 +45,12 @@ func (u UserController) Register(c *gin.Context) {
 		Name:     req.Name,
 		Password: factory.Md5Hash(req.Password),
 	}
+	tx := query.Q.Begin()
 	err := query.User.Create(&user)
+	if err != nil {
+		err = tx.Rollback()
+	} else {
+		err = tx.Commit()
+	}
 	DealResponse(c, user.ID, err)
 }
