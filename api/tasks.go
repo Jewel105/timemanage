@@ -45,21 +45,22 @@ func (t TaskApi) SaveTask(c *gin.Context) {
 		return
 	}
 
-	category, errQuery := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
+	// Category not found.
+	_, errQuery := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
 
-	if errQuery != nil || category == nil {
+	if errQuery != nil {
 		ReturnResponse(c, CLIENT_ERROR, "Category not found.")
 		return
 	}
 
 	task := models.Task{
+		ID:          req.ID,
 		UserID:      userID,
 		Description: req.Description,
 		CategoryID:  req.CategoryID,
 		StartTime:   req.StartTime,
 		EndTime:     req.EndTime,
 	}
-	task.ID = req.ID
 	task.SpentTime = task.EndTime - task.StartTime
 
 	tx := query.Q.Begin()
@@ -83,25 +84,16 @@ func (t TaskApi) DeleteTask(c *gin.Context) {
 		ReturnResponse(c, SYSTEM_ERROR, parseErr.Error())
 		return
 	}
-	qIDO := query.Task.Where(query.Task.ID.Eq(id))
-	task, errQuery := qIDO.First()
-
-	if errQuery != nil {
-		ReturnResponse(c, CLIENT_ERROR, errQuery.Error())
-		return
-	}
-
-	if task.UserID != userID {
-		ReturnResponse(c, CLIENT_ERROR, "Not authorized to delete this task.")
-		return
-	}
 
 	tx := query.Q.Begin()
+	qIDO := query.Task.Where(query.Task.ID.Eq(id)).Where(query.Task.UserID.Eq(userID))
+	qIDO.First()
 	_, err := qIDO.Delete()
 	if err != nil {
-		err = tx.Rollback()
-	} else {
-		err = tx.Commit()
+		DealResponse(c, nil, err)
+		tx.Rollback()
+		return
 	}
+	tx.Commit()
 	DealResponse(c, nil, err)
 }

@@ -34,6 +34,7 @@ func newCategory(db *gorm.DB, opts ...gen.DOOption) category {
 	_category.ParentID = field.NewInt64(tableName, "parent_id")
 	_category.UserID = field.NewInt64(tableName, "user_id")
 	_category.Path = field.NewString(tableName, "path")
+	_category.Level = field.NewInt(tableName, "level")
 
 	_category.fillFieldMap()
 
@@ -52,6 +53,7 @@ type category struct {
 	ParentID    field.Int64
 	UserID      field.Int64
 	Path        field.String
+	Level       field.Int
 
 	fieldMap map[string]field.Expr
 }
@@ -76,6 +78,7 @@ func (c *category) updateTableName(table string) *category {
 	c.ParentID = field.NewInt64(table, "parent_id")
 	c.UserID = field.NewInt64(table, "user_id")
 	c.Path = field.NewString(table, "path")
+	c.Level = field.NewInt(table, "level")
 
 	c.fillFieldMap()
 
@@ -92,7 +95,7 @@ func (c *category) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (c *category) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 8)
+	c.fieldMap = make(map[string]field.Expr, 9)
 	c.fieldMap["id"] = c.ID
 	c.fieldMap["create_time"] = c.CreatedTime
 	c.fieldMap["update_time"] = c.UpdatedTime
@@ -101,6 +104,7 @@ func (c *category) fillFieldMap() {
 	c.fieldMap["parent_id"] = c.ParentID
 	c.fieldMap["user_id"] = c.UserID
 	c.fieldMap["path"] = c.Path
+	c.fieldMap["level"] = c.Level
 }
 
 func (c category) clone(db *gorm.DB) category {

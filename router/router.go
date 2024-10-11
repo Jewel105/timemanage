@@ -30,9 +30,13 @@ func init() {
 		tasks.POST("/delete/:id", api.TaskApi{}.DeleteTask)
 	}
 
-	order := r.Group("/order")
-	order.GET("/list", api.OrderController{}.GetList)
-	order.GET("/info", api.OrderController{}.GetInfo)
+	categories := apiV1.Group("/categories")
+	categories.Use(api.VerifyToken)
+	{
+		categories.GET("/list", api.CategoryApi{}.GetList)
+		categories.POST("/save", api.CategoryApi{}.SaveCategory)
+		categories.POST("/delete/:id", api.CategoryApi{}.DeleteCategory)
+	}
 
 	r.Run()
 }
