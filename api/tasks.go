@@ -49,7 +49,7 @@ func (t TaskApi) SaveTask(c *gin.Context) {
 	_, errQuery := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
 
 	if errQuery != nil {
-		ReturnResponse(c, CLIENT_ERROR, "Category not found.")
+		ReturnResponse(c, NETWORK_ERROR, "Category not found.")
 		return
 	}
 

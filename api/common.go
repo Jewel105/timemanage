@@ -14,19 +14,14 @@ type JsonStruct struct {
 }
 
 const (
-	SUCCESS             = "200"
-	SYSTEM_ERROR        = "500"
-	CLIENT_ERROR        = "400"
-	SERVICE_UNAVAILABLE = "503"
+	SUCCESS       = "200"
+	SYSTEM_ERROR  = "500"
+	NETWORK_ERROR = "400"
 
-	PARAMS_INVALID             = "300"
-	TOKEN_INVALID              = "301"
-	PROCESSING                 = "302"
-	EQUIPMENT_INVALID          = "303"
-	MATCH_ORDER_ERROR          = "304"
-	ORDER_EXISTS               = "305"
-	ACCOUNT_BALANCE_NOT_ENOUGH = "306"
-	LOGIN_FAILED               = "-1"
+	PARAMS_INVALID  = "300"
+	TOKEN_INVALID   = "301"
+	LOGIN_FAILED    = "302"
+	REGISTER_FAILED = "303"
 )
 
 const (
@@ -34,19 +29,14 @@ const (
 )
 
 var MsgFlags = map[string]string{
-	SUCCESS:             "SUCCESS",
-	SYSTEM_ERROR:        "SYSTEM_ERROR",
-	CLIENT_ERROR:        "CLIENT_ERROR",
-	SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",
+	SUCCESS:       "SUCCESS",
+	SYSTEM_ERROR:  "SYSTEM_ERROR",
+	NETWORK_ERROR: "NETWORK_ERROR",
 
-	PARAMS_INVALID:             "PARAMS_INVALID",
-	TOKEN_INVALID:              "TOKEN_INVALID",
-	PROCESSING:                 "PROCESSING",
-	LOGIN_FAILED:               "LOGIN_FAILED",
-	EQUIPMENT_INVALID:          "EQUIPMENT_INVALID",
-	MATCH_ORDER_ERROR:          "MATCH_ORDER_ERROR",
-	ORDER_EXISTS:               "ORDER_EXISTS",
-	ACCOUNT_BALANCE_NOT_ENOUGH: "ACCOUNT_BALANCE_NOT_ENOUGH",
+	PARAMS_INVALID:  "PARAMS_INVALID",
+	TOKEN_INVALID:   "TOKEN_INVALID",
+	LOGIN_FAILED:    "LOGIN_FAILED",
+	REGISTER_FAILED: "REGISTER_FAILED",
 }
 
 func ReturnResponse(c *gin.Context, code string, data interface{}) {
@@ -59,9 +49,13 @@ func ReturnResponse(c *gin.Context, code string, data interface{}) {
 	c.JSON(200, json)
 }
 
-func DealResponse(c *gin.Context, data interface{}, err error) {
+func DealResponse(c *gin.Context, data interface{}, err error, errCode ...string) {
 	if err != nil {
-		ReturnResponse(c, SYSTEM_ERROR, err.Error())
+		if len(errCode) > 0 {
+			ReturnResponse(c, errCode[0], err.Error())
+		} else {
+			ReturnResponse(c, SYSTEM_ERROR, err.Error())
+		}
 		return
 	}
 	ReturnResponse(c, SUCCESS, data)
@@ -73,7 +67,6 @@ func GetMsg(code string) string {
 	if ok {
 		return strings.Replace(strings.ToLower(msg), "_", " ", -1)
 	}
-
 	return MsgFlags[SYSTEM_ERROR]
 }
 
@@ -98,7 +91,7 @@ func ParseQuery(c *gin.Context, obj any) bool {
 func GetUserID(c *gin.Context) int64 {
 	userID, exists := c.Get(USER_ID)
 	if !exists {
-		ReturnResponse(c, TOKEN_INVALID, "user not found111")
+		ReturnResponse(c, TOKEN_INVALID, "user not found")
 		return 0
 	}
 	return userID.(int64)
