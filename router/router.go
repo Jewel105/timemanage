@@ -2,6 +2,9 @@ package router
 
 import (
 	"gin_study/api"
+	categoryapi "gin_study/api/category_api"
+	taskapi "gin_study/api/task_api"
+	userapi "gin_study/api/user_api"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,24 +21,24 @@ func init() {
 	common := apiV1.Group("/common")
 	user := common.Group("/user")
 	{
-		user.POST("/login", api.UserApi{}.Login)
-		user.POST("/register", api.UserApi{}.Register)
+		user.POST("/login", userapi.Login)
+		user.POST("/register", userapi.Register)
 	}
 
 	tasks := apiV1.Group("/tasks")
 	tasks.Use(api.VerifyToken)
 	{
-		tasks.GET("/list", api.TaskApi{}.GetList)
-		tasks.POST("/save", api.TaskApi{}.SaveTask)
-		tasks.POST("/delete/:id", api.TaskApi{}.DeleteTask)
+		tasks.GET("/list", taskapi.GetList)
+		tasks.POST("/save", taskapi.SaveTask)
+		tasks.POST("/delete/:id", taskapi.DeleteTask)
 	}
 
 	categories := apiV1.Group("/categories")
 	categories.Use(api.VerifyToken)
 	{
-		categories.GET("/list", api.CategoryApi{}.GetList)
-		categories.POST("/save", api.CategoryApi{}.SaveCategory)
-		categories.POST("/delete/:id", api.CategoryApi{}.DeleteCategory)
+		categories.GET("/list", categoryapi.GetList)
+		categories.POST("/save", categoryapi.SaveCategory)
+		categories.POST("/delete/:id", categoryapi.DeleteCategory)
 	}
 
 	r.Run()

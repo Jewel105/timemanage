@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"gin_study/api/consts"
 	"gin_study/factory"
 	"io"
 	"os"
@@ -73,7 +74,7 @@ func Recover(c *gin.Context) {
 			f.WriteString(fmt.Sprintf("%v", err) + "\n")
 			f.WriteString("stacktrace from panic:" + string(debug.Stack()) + "\n")
 			f.Close()
-			ReturnResponse(c, SYSTEM_ERROR, fmt.Sprintf("%v", err))
+			ReturnResponse(c, consts.SYSTEM_ERROR, fmt.Sprintf("%v", err))
 			//终止后续接口调用，不加的话recover异常之后，还会继续执行后续代码
 			c.Abort()
 		}
@@ -84,17 +85,17 @@ func Recover(c *gin.Context) {
 func VerifyToken(c *gin.Context) {
 	var token TokenHeader
 	if err := c.ShouldBindHeader(&token); err != nil {
-		ReturnResponse(c, TOKEN_INVALID, err.Error())
+		ReturnResponse(c, consts.TOKEN_INVALID, err.Error())
 		c.Abort()
 		return
 	}
 	userClaims, err := factory.DecodeToken(token.Token)
 	if err != nil {
-		ReturnResponse(c, TOKEN_INVALID, err.Error())
+		ReturnResponse(c, consts.TOKEN_INVALID, err.Error())
 		c.Abort()
 		return
 	}
 
-	c.Set(USER_ID, userClaims.UserID)
+	c.Set(consts.USER_ID, userClaims.UserID)
 	c.Next()
 }

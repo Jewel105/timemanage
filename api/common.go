@@ -1,6 +1,8 @@
 package api
 
 import (
+	"errors"
+	"gin_study/api/consts"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -13,32 +15,6 @@ type JsonStruct struct {
 	Success bool        `json:"success"`
 }
 
-const (
-	SUCCESS       = "200"
-	SYSTEM_ERROR  = "500"
-	NETWORK_ERROR = "400"
-
-	PARAMS_INVALID  = "300"
-	TOKEN_INVALID   = "301"
-	LOGIN_FAILED    = "302"
-	REGISTER_FAILED = "303"
-)
-
-const (
-	USER_ID = "userID"
-)
-
-var MsgFlags = map[string]string{
-	SUCCESS:       "SUCCESS",
-	SYSTEM_ERROR:  "SYSTEM_ERROR",
-	NETWORK_ERROR: "NETWORK_ERROR",
-
-	PARAMS_INVALID:  "PARAMS_INVALID",
-	TOKEN_INVALID:   "TOKEN_INVALID",
-	LOGIN_FAILED:    "LOGIN_FAILED",
-	REGISTER_FAILED: "REGISTER_FAILED",
-}
-
 func ReturnResponse(c *gin.Context, code string, data interface{}) {
 	json := &JsonStruct{
 		Code:    code,
@@ -49,31 +25,32 @@ func ReturnResponse(c *gin.Context, code string, data interface{}) {
 	c.JSON(200, json)
 }
 
-func DealResponse(c *gin.Context, data interface{}, err error, errCode ...string) {
+func DealResponse(c *gin.Context, data interface{}, err error) {
 	if err != nil {
-		if len(errCode) > 0 {
-			ReturnResponse(c, errCode[0], err.Error())
+		var ApiErr *consts.ApiErr
+		if errors.As(err, &ApiErr) {
+			ReturnResponse(c, ApiErr.Code, err.Error())
 		} else {
-			ReturnResponse(c, SYSTEM_ERROR, err.Error())
+			ReturnResponse(c, consts.SYSTEM_ERROR, err.Error())
 		}
 		return
 	}
-	ReturnResponse(c, SUCCESS, data)
+	ReturnResponse(c, consts.SUCCESS, data)
 }
 
 // GetMsg 返回错误的消息解释
 func GetMsg(code string) string {
-	msg, ok := MsgFlags[code]
+	msg, ok := consts.MsgFlags[code]
 	if ok {
 		return strings.Replace(strings.ToLower(msg), "_", " ", -1)
 	}
-	return MsgFlags[SYSTEM_ERROR]
+	return consts.MsgFlags[consts.SYSTEM_ERROR]
 }
 
 func ParseJson(c *gin.Context, obj any) bool {
 	err := c.ShouldBindJSON(obj)
 	if err != nil {
-		ReturnResponse(c, PARAMS_INVALID, err.Error())
+		ReturnResponse(c, consts.PARAMS_INVALID, err.Error())
 		return false
 	}
 	return true
@@ -82,16 +59,16 @@ func ParseJson(c *gin.Context, obj any) bool {
 func ParseQuery(c *gin.Context, obj any) bool {
 	err := c.ShouldBindQuery(obj)
 	if err != nil {
-		ReturnResponse(c, PARAMS_INVALID, err.Error())
+		ReturnResponse(c, consts.PARAMS_INVALID, err.Error())
 		return false
 	}
 	return true
 }
 
 func GetUserID(c *gin.Context) int64 {
-	userID, exists := c.Get(USER_ID)
+	userID, exists := c.Get(consts.USER_ID)
 	if !exists {
-		ReturnResponse(c, TOKEN_INVALID, "user not found")
+		ReturnResponse(c, consts.TOKEN_INVALID, "user not found")
 		return 0
 	}
 	return userID.(int64)
