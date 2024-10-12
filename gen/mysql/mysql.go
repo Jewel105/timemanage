@@ -19,3 +19,16 @@ func init() {
 	}
 	query.SetDefault(db)
 }
+
+func DeferTx(tx *query.QueryTx, err error) error {
+	if err != nil {
+		if err := tx.Rollback(); err != nil {
+			return err
+		}
+		return err
+	}
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+	return nil
+}

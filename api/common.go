@@ -27,9 +27,9 @@ func ReturnResponse(c *gin.Context, code string, data interface{}) {
 
 func DealResponse(c *gin.Context, data interface{}, err error) {
 	if err != nil {
-		var ApiErr *consts.ApiErr
-		if errors.As(err, &ApiErr) {
-			ReturnResponse(c, ApiErr.Code, err.Error())
+		var apiErr *consts.ApiErr
+		if errors.As(err, &apiErr) {
+			ReturnResponse(c, apiErr.Code, apiErr.Error())
 		} else {
 			ReturnResponse(c, consts.SYSTEM_ERROR, err.Error())
 		}
@@ -38,7 +38,6 @@ func DealResponse(c *gin.Context, data interface{}, err error) {
 	ReturnResponse(c, consts.SUCCESS, data)
 }
 
-// GetMsg 返回错误的消息解释
 func GetMsg(code string) string {
 	msg, ok := consts.MsgFlags[code]
 	if ok {

@@ -3,6 +3,7 @@ package taskservice
 import (
 	"gin_study/api/consts"
 	"gin_study/gen/models"
+	"gin_study/gen/mysql"
 	"gin_study/gen/query"
 	"gin_study/gen/request"
 	"gin_study/gen/response"
@@ -25,9 +26,13 @@ func GetList(userID int64, req *request.GetTasksRequest) (*response.PageResponse
 
 func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 	// Category not found.
-	_, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
+	count, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).Count()
 	if err != nil {
-		return 0, consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Category not found."}
+		return 0, err
+	}
+
+	if count == 0 {
+		return 0, &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Category not found."}
 	}
 
 	task := models.Task{
@@ -42,15 +47,7 @@ func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 
 	tx := query.Q.Begin()
 	err = query.Task.Save(&task)
-	if err != nil {
-		if err := tx.Rollback(); err != nil {
-			return 0, err
-		}
-		return 0, err
-	}
-	if err := tx.Commit(); err != nil {
-		return 0, err
-	}
+	err = mysql.DeferTx(tx, err)
 	return task.ID, err
 }
 
@@ -62,19 +59,15 @@ func DeleteTask(userID int64, idStr string) error {
 
 	tx := query.Q.Begin()
 	taskQuery := query.Task.Where(query.Task.ID.Eq(id)).Where(query.Task.UserID.Eq(userID))
-	_, err = taskQuery.First()
+
+	count, err := taskQuery.Count()
 	if err != nil {
-		return consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Task not exists."}
+		return err
+	}
+	if count == 0 {
+		return &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Task not exists."}
 	}
 	_, err = taskQuery.Delete()
-	if err != nil {
-		if err := tx.Rollback(); err != nil {
-			return err
-		}
-		return err
-	}
-	if err := tx.Commit(); err != nil {
-		return err
-	}
-	return nil
+	err = mysql.DeferTx(tx, err)
+	return err
 }
