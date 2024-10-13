@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"gin_study/config"
 	"gin_study/gen/models"
 
 	"gorm.io/driver/mysql"
@@ -11,7 +10,9 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open(mysql.Open(config.MysqlDsn), &gorm.Config{})
+	mysqlDsn := "root:Mysql123456.@tcp(127.0.0.1:3306)/timemanage?charset=utf8mb4&parseTime=true&timeout=30s&readTimeout=30s"
+	// mysqlDsn := "root:Mysql123456.@tcp(127.0.0.1:3306)/timemanage?charset=utf8mb4&parseTime=true&timeout=30s&readTimeout=30s"
+	db, err := gorm.Open(mysql.Open(mysqlDsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println("mysql connect error", err.Error())
 	}

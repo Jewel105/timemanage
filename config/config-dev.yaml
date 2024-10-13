@@ -1,0 +1,14 @@
+server:
+  ip: 0.0.0.0
+  port: 8080
+  enableH2C: false
+  enableSSL: false
+  # certificate:
+  #   key: ./ssl/http/_.planx.io.key
+  #   cert: ./ssl/http/_.planx.io_fullchain.pem
+mysql:
+  dsn: root:Mysql123456.@tcp(127.0.0.1:3306)/timemanage?charset=utf8mb4&parseTime=true&timeout=30s&readTimeout=30s
+  maxIdle: 1
+  maxOpenConn: 2
+jwt:
+  secret: s123456

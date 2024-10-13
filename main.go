@@ -1,9 +1,23 @@
 package main
 
 import (
-	_ "gin_study/gen/mysql"
-	_ "gin_study/router"
+	"flag"
+	"fmt"
+	"gin_study/config"
+	"gin_study/gen/mysql"
+	"gin_study/router"
 )
 
+var env string
+
+func init() {
+	flag.StringVar(&env, "env", "dev", "Specify the environment: dev, pro")
+}
+
 func main() {
+	flag.Parse()
+	fmt.Println("Running in environment:", env)
+	config.GetConfig(env)
+	mysql.Start()
+	router.Start()
 }

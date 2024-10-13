@@ -5,12 +5,13 @@ import (
 	categoryapi "gin_study/api/category_api"
 	taskapi "gin_study/api/task_api"
 	userapi "gin_study/api/user_api"
+	"gin_study/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func init() {
+func Start() {
 	r := gin.Default()
 	r.Use(gin.LoggerWithConfig(api.LoggerToFile()))
 	r.Use(api.Recover)
@@ -41,5 +42,5 @@ func init() {
 		categories.POST("/delete/:id", categoryapi.DeleteCategory)
 	}
 
-	r.Run()
+	r.Run(":" + config.Config.Server.Port)
 }

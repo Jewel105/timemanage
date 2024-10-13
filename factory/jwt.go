@@ -15,9 +15,8 @@ type UserClaims struct {
 	jwt.RegisteredClaims
 }
 
-var jwtSecret = []byte(config.JwtSecret)
-
 func CreateToken(username string, userID int64) (string, error) {
+	var jwtSecret = []byte(config.Config.Jwt.Secret)
 	tokenId, err := uuid.NewRandom()
 	if err != nil {
 		return "", err
@@ -40,6 +39,7 @@ func CreateToken(username string, userID int64) (string, error) {
 }
 
 func DecodeToken(tokenstring string) (*UserClaims, error) {
+	var jwtSecret = []byte(config.Config.Jwt.Secret)
 	t, err := jwt.ParseWithClaims(tokenstring, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtSecret), nil
 	})
