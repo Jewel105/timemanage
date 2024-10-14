@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"gin_study/config"
+	"gin_study/factory"
 	"gin_study/gen/mysql"
 	"gin_study/router"
 )
@@ -19,5 +20,6 @@ func main() {
 	fmt.Println("Running in environment:", env)
 	config.GetConfig(env)
 	mysql.Start()
+	factory.RedisStart()
 	router.Start()
 }

@@ -11,6 +11,7 @@ type AppConfig struct {
 	Server *Server `yaml:"server" valid:"required"`
 	Mysql  *Mysql  `yaml:"mysql" valid:"required"`
 	Jwt    *Jwt    `yaml:"jwt" valid:"required"`
+	Redis  *Redis  `yaml:"redis" valid:"required"`
 }
 
 type Mysql struct {
@@ -34,6 +35,14 @@ type Certificate struct {
 
 type Jwt struct {
 	Secret string `yaml:"secret"`
+}
+
+type Redis struct {
+	Host        string `yaml:"host" valid:"required"`
+	Port        int    `yaml:"port" valid:"required"`
+	Db          int    `yaml:"db" valid:"required"`
+	Password    string `yaml:"password" valid:"required"`
+	IdleTimeout int64  `yaml:"idleTimeout" valid:"required"`
 }
 
 // 配置对象
