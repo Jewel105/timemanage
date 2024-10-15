@@ -1,12 +1,12 @@
 package router
 
 import (
-	"fmt"
 	"gin_study/api"
 	categoryapi "gin_study/api/category_api"
 	taskapi "gin_study/api/task_api"
 	userapi "gin_study/api/user_api"
 	"gin_study/config"
+	"gin_study/logger"
 	"os"
 
 	knife "gitee.com/youbeiwuhuan/knife4go/gin-swagger-knife"
@@ -53,7 +53,7 @@ func Start() {
 func getFileContent(fpath string) string {
 	bytes, err := os.ReadFile(fpath)
 	if nil != err {
-		fmt.Errorf(" %s getFileBase64 error: %v", fpath, err)
+		logger.Error(map[string]interface{}{"Error opening file": err.Error()})
 		return ""
 	}
 

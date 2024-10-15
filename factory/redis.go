@@ -24,7 +24,7 @@ func RedisStart() error {
 	})
 	_, err := redisClient.Ping(ctx).Result()
 	if err != nil {
-		logger.Error(map[string]interface{}{"redis init error": err.Error})
+		logger.Error(map[string]interface{}{"redis init error": err.Error()})
 		return err
 	}
 	return nil

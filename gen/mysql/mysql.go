@@ -21,7 +21,7 @@ func Start() error {
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		logger.Error(map[string]interface{}{"sqlDB error": err.Error})
+		logger.Error(map[string]interface{}{"sqlDB error": err.Error()})
 		return err
 	}
 	sqlDB.SetMaxIdleConns(config.Config.Mysql.MaxIdle)

@@ -53,7 +53,7 @@ func GetConfig(env string) {
 	// 打开 YAML 文件
 	file, err := os.Open("./config/config-" + env + ".yaml")
 	if err != nil {
-		logger.Error(map[string]interface{}{"Error opening file": err.Error})
+		logger.Error(map[string]interface{}{"Error opening file": err.Error()})
 		return
 	}
 	defer file.Close()
@@ -62,7 +62,7 @@ func GetConfig(env string) {
 	// 解析 YAML 数据
 	err = decoder.Decode(&Config)
 	if err != nil {
-		logger.Error(map[string]interface{}{"Error decoding YAML": err.Error})
+		logger.Error(map[string]interface{}{"Error decoding YAML": err.Error()})
 		return
 	}
 }
