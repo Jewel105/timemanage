@@ -14,12 +14,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// swag init --parseDependency --parseInternal
+// swag init --parseDependency --parseInternal ---swagger json生成命令
+// export PATH=$(go env GOPATH)/bin:$PATH
 func Start() {
 	r := gin.Default()
 	r.Use(gin.LoggerWithConfig(api.LoggerToFile()))
 	r.Use(api.Recover)
 
+	// 引入swagger
 	swaggerJson := getFileContent("./docs/swagger.json")
 	knife.InitSwaggerKnife(r, swaggerJson)
 

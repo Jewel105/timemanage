@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Id Login
+// @Summary 登录
+// @Description 登录
+// @Tags COMMON API
+// @Accept  json
+// @Produce application/json
+// @Param req body request.LoginRequest true "Json"
+// @Success 200 {string} string "token"
+// @Router  /common/user/login [post]
 func Login(c *gin.Context) {
 	req := request.LoginRequest{}
 	if !api.ParseJson(c, &req) {
@@ -17,6 +26,15 @@ func Login(c *gin.Context) {
 	api.DealResponse(c, token, e)
 }
 
+// @Id Register
+// @Summary 注册
+// @Description 注册
+// @Tags COMMON API
+// @Accept  json
+// @Produce application/json
+// @Param req body request.RegisterRequest true "Json"
+// @Success 200 {int} int "1"
+// @Router  /common/user/register [post]
 func Register(c *gin.Context) {
 	req := request.RegisterRequest{}
 	if !api.ParseJson(c, &req) {

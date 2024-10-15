@@ -15,20 +15,15 @@ func init() {
 	flag.StringVar(&env, "env", "dev", "Specify the environment: dev, pro")
 }
 
-// @title 这里写标题
+// @title time manage
 // @version 1.0
-// @description 这里写描述信息
-// @termsOfService http://swagger.io/terms/
+// @description time manage
+// @termsOfService http://127.0.0.1
 
-// @contact.name 这里写联系人信息
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
+// @contact.name jewel
 
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host 这里写接口服务的host
-// @BasePath 这里写base path
+// @host 127.0.0.1
+// @BasePath /api/v1
 func main() {
 	flag.Parse()
 	config.GetConfig(env)

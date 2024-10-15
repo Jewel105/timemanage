@@ -1,4 +1,4 @@
-basePath: 这里写base path
+basePath: /api/v1
 definitions:
   gorm.DeletedAt:
     properties:
@@ -20,6 +20,7 @@ definitions:
         description: 分类等级
         type: integer
       name:
+        description: 分类名称
         type: string
       parentID:
         description: 上级分类ID
@@ -33,34 +34,136 @@ definitions:
         description: 创建该分类的用户ID
         type: integer
     type: object
-host: 这里写接口服务的host
+  models.Task:
+    properties:
+      categoryID:
+        description: 任务所属分类ID
+        type: integer
+      createdTime:
+        type: string
+      deleteTime:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        description: 任务描述
+        type: string
+      endTime:
+        description: 任务结束时间
+        type: integer
+      id:
+        type: integer
+      spentTime:
+        description: 花费时间
+        type: integer
+      startTime:
+        description: 任务开始时间
+        type: integer
+      updatedTime:
+        type: string
+      userID:
+        description: 创建该任务的用户ID
+        type: integer
+    type: object
+  request.LoginRequest:
+    properties:
+      name:
+        description: 用户名
+        type: string
+      password:
+        description: 密码
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  request.RegisterRequest:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  request.SaveCategoryRequest:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      parentID:
+        description: 上级分类ID
+        type: integer
+    required:
+    - name
+    type: object
+  request.SaveTaskRequest:
+    properties:
+      categoryID:
+        type: integer
+      description:
+        type: string
+      endTime:
+        type: integer
+      id:
+        type: integer
+      startTime:
+        type: integer
+    required:
+    - categoryID
+    - description
+    - endTime
+    - startTime
+    type: object
+host: 127.0.0.1
 info:
   contact:
-    email: support@swagger.io
-    name: 这里写联系人信息
-    url: http://www.swagger.io/support
-  description: 这里写描述信息
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: 这里写标题
+    name: jewel
+  description: time manage
+  termsOfService: http://127.0.0.1
+  title: time manage
   version: "1.0"
 paths:
-  /brc20/trade/detail:
-    get:
+  /categories/delete/:id:
+    post:
       consumes:
       - application/json
-      description: 查询brc20铭刻详情
-      operationId: GetList
+      description: 删除分类
+      operationId: DeleteCategory
       parameters:
-      - description: "869099058070000"
+      - description: enjmcvhdwernxhcuvyudfdjfhpq
         in: header
         name: token
         type: string
-      - description: "1"
+      - description: 分类ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: boolean
+      summary: 删除分类
+      tags:
+      - 分类API
+  /categories/list:
+    get:
+      consumes:
+      - application/json
+      description: 查询分类列表
+      operationId: CategoryGetList
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhpq
+        in: header
+        name: token
+        type: string
+      - description: "11"
         in: query
-        name: parentID
+        name: ParentID
         type: integer
       produces:
       - application/json
@@ -71,9 +174,164 @@ paths:
             items:
               $ref: '#/definitions/models.Category'
             type: array
-      security:
-      - Bearer: []
-      summary: 查询brc20铭刻详情
+      summary: 查询分类列表
       tags:
-      - BRC20API
+      - 分类API
+  /categories/save:
+    post:
+      consumes:
+      - application/json
+      description: 保存或修改分类
+      operationId: SaveCategory
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhpq
+        in: header
+        name: token
+        type: string
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.SaveCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: int64
+      summary: 保存或修改分类
+      tags:
+      - 分类API
+  /common/user/login:
+    post:
+      consumes:
+      - application/json
+      description: 登录
+      operationId: Login
+      parameters:
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+      summary: 登录
+      tags:
+      - COMMON API
+  /common/user/register:
+    post:
+      consumes:
+      - application/json
+      description: 注册
+      operationId: Register
+      parameters:
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: "1"
+          schema:
+            type: int
+      summary: 注册
+      tags:
+      - COMMON API
+  /tasks/delete/:id:
+    post:
+      consumes:
+      - application/json
+      description: 删除任务
+      operationId: DeleteTask
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhpq
+        in: header
+        name: token
+        type: string
+      - description: 任务ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: boolean
+      summary: 删除任务
+      tags:
+      - 任务API
+  /tasks/list:
+    get:
+      consumes:
+      - application/json
+      description: 查询任务列表
+      operationId: TaskGetList
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
+        in: header
+        name: token
+        type: string
+      - description: "1"
+        in: query
+        name: page
+        type: integer
+      - description: "10"
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: 查询任务列表
+      tags:
+      - 任务API
+  /tasks/save:
+    post:
+      consumes:
+      - application/json
+      description: 保存或修改任务
+      operationId: SaveTask
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhpq
+        in: header
+        name: token
+        type: string
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.SaveTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: int64
+      summary: 保存或修改任务
+      tags:
+      - 任务API
 swagger: "2.0"

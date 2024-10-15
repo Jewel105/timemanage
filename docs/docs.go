@@ -9,29 +9,18 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
+        "termsOfService": "http://127.0.0.1",
         "contact": {
-            "name": "这里写联系人信息",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "name": "jewel"
         },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/brc20/trade/detail": {
-            "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "description": "查询brc20铭刻详情",
+        "/categories/delete/:id": {
+            "post": {
+                "description": "删除分类",
                 "consumes": [
                     "application/json"
                 ],
@@ -39,21 +28,60 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "BRC20API"
+                    "分类API"
                 ],
-                "summary": "查询brc20铭刻详情",
-                "operationId": "GetList",
+                "summary": "删除分类",
+                "operationId": "DeleteCategory",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "869099058070000",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhpq",
                         "name": "token",
                         "in": "header"
                     },
                     {
                         "type": "integer",
-                        "description": "1",
-                        "name": "parentID",
+                        "description": "分类ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/list": {
+            "get": {
+                "description": "查询分类列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分类API"
+                ],
+                "summary": "查询分类列表",
+                "operationId": "CategoryGetList",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhpq",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "11",
+                        "name": "ParentID",
                         "in": "query"
                     }
                 ],
@@ -65,6 +93,244 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.Category"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/save": {
+            "post": {
+                "description": "保存或修改分类",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分类API"
+                ],
+                "summary": "保存或修改分类",
+                "operationId": "SaveCategory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhpq",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SaveCategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "int64"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/user/login": {
+            "post": {
+                "description": "登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "登录",
+                "operationId": "Login",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/user/register": {
+            "post": {
+                "description": "注册",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "注册",
+                "operationId": "Register",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "1",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/delete/:id": {
+            "post": {
+                "description": "删除任务",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "任务API"
+                ],
+                "summary": "删除任务",
+                "operationId": "DeleteTask",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhpq",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "任务ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/list": {
+            "get": {
+                "description": "查询任务列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "任务API"
+                ],
+                "summary": "查询任务列表",
+                "operationId": "TaskGetList",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "1",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "10",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/save": {
+            "post": {
+                "description": "保存或修改任务",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "任务API"
+                ],
+                "summary": "保存或修改任务",
+                "operationId": "SaveTask",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhpq",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SaveTaskRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "int64"
                         }
                     }
                 }
@@ -101,6 +367,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "description": "分类名称",
                     "type": "string"
                 },
                 "parentID": {
@@ -119,6 +386,123 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
+        },
+        "models.Task": {
+            "type": "object",
+            "properties": {
+                "categoryID": {
+                    "description": "任务所属分类ID",
+                    "type": "integer"
+                },
+                "createdTime": {
+                    "type": "string"
+                },
+                "deleteTime": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "description": "任务描述",
+                    "type": "string"
+                },
+                "endTime": {
+                    "description": "任务结束时间",
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "spentTime": {
+                    "description": "花费时间",
+                    "type": "integer"
+                },
+                "startTime": {
+                    "description": "任务开始时间",
+                    "type": "integer"
+                },
+                "updatedTime": {
+                    "type": "string"
+                },
+                "userID": {
+                    "description": "创建该任务的用户ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "request.LoginRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "description": "用户名",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "request.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SaveCategoryRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parentID": {
+                    "description": "上级分类ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "request.SaveTaskRequest": {
+            "type": "object",
+            "required": [
+                "categoryID",
+                "description",
+                "endTime",
+                "startTime"
+            ],
+            "properties": {
+                "categoryID": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "endTime": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "integer"
+                }
+            }
         }
     }
 }`
@@ -126,11 +510,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "这里写接口服务的host",
-	BasePath:         "这里写base path",
+	Host:             "127.0.0.1",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "这里写标题",
-	Description:      "这里写描述信息",
+	Title:            "time manage",
+	Description:      "time manage",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

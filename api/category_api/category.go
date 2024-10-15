@@ -8,17 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Id GetList
-// @Summary 查询brc20铭刻详情
-// @Description 查询brc20铭刻详情
-// @Tags BRC20API
+// @Id CategoryGetList
+// @Summary 查询分类列表
+// @Description 查询分类列表
+// @Tags 分类API
 // @Accept  json
 // @Produce application/json
-// @Param token header string false "869099058070000"
-// @Param parentID query int64 false "1"
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhpq"
+// @Param ParentID query int64 false "11"
 // @success 200 {object} []models.Category "success"
-// @Router /brc20/trade/detail [get]
-// @Security Bearer
+// @Router /categories/list [get]
 func GetList(c *gin.Context) {
 	userID := api.GetUserID(c)
 	if userID == 0 {
@@ -31,6 +30,17 @@ func GetList(c *gin.Context) {
 	categories, err := categoryservice.GetList(userID, &req)
 	api.DealResponse(c, categories, err)
 }
+
+// @Id SaveCategory
+// @Summary 保存或修改分类
+// @Description 保存或修改分类
+// @Tags 分类API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhpq"
+// @Param req body request.SaveCategoryRequest true "Json"
+// @success 200 int64 categoryID "success"
+// @Router  /categories/save [post]
 func SaveCategory(c *gin.Context) {
 	userID := api.GetUserID(c)
 	if userID == 0 {
@@ -44,6 +54,16 @@ func SaveCategory(c *gin.Context) {
 	api.DealResponse(c, categoryID, err)
 }
 
+// @Id DeleteCategory
+// @Summary 删除分类
+// @Description 删除分类
+// @Tags 分类API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhpq"
+// @Param id path int true "分类ID"
+// @success 200 boolean ture "success"
+// @Router  /categories/delete/:id [post]
 func DeleteCategory(c *gin.Context) {
 	userID := api.GetUserID(c)
 	if userID == 0 {

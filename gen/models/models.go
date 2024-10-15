@@ -12,10 +12,10 @@ type User struct {
 	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
 	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
 
-	Name       string     `gorm:"column:name;size:64" json:"name"`
-	Password   string     `gorm:"column:password;size:128" json:"password"`
-	Tasks      []Task     `json:"tasks"`
-	Categories []Category `json:"categories"`
+	Name       string     `gorm:"column:name;size:64" json:"name"`          // 用户名
+	Password   string     `gorm:"column:password;size:128" json:"password"` // 密码
+	Tasks      []Task     `json:"tasks"`                                    // 任务
+	Categories []Category `json:"categories"`                               // 分类
 }
 
 type Task struct {
@@ -28,8 +28,8 @@ type Task struct {
 	Description string `gorm:"column:description;size:200" json:"description"` // 任务描述
 	SpentTime   int64  `gorm:"column:spent_time" json:"spentTime"`             // 花费时间
 	CategoryID  int64  `gorm:"column:category_id" json:"categoryID"`           // 任务所属分类ID
-	StartTime   int64  `gorm:"column:start_time" json:"startTime"`
-	EndTime     int64  `gorm:"column:end_time" json:"endTime"`
+	StartTime   int64  `gorm:"column:start_time" json:"startTime"`             // 任务开始时间
+	EndTime     int64  `gorm:"column:end_time" json:"endTime"`                 // 任务结束时间
 }
 
 type Category struct {
@@ -38,7 +38,7 @@ type Category struct {
 	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
 	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
 
-	Name     string `gorm:"column:name;size:64" json:"name"`
+	Name     string `gorm:"column:name;size:64" json:"name"`   // 分类名称
 	ParentID int64  `gorm:"column:parent_id" json:"parentID"`  // 上级分类ID
 	UserID   int64  `gorm:"column:user_id" json:"userID"`      // 创建该分类的用户ID
 	Path     string `gorm:"column:path" json:"path"`           // 分类路径
