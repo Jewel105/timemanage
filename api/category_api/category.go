@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Id GetList
+// @Summary 查询brc20铭刻详情
+// @Description 查询brc20铭刻详情
+// @Tags BRC20API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "869099058070000"
+// @Param parentID query int64 false "1"
+// @success 200 {object} []models.Category "success"
+// @Router /brc20/trade/detail [get]
+// @Security Bearer
 func GetList(c *gin.Context) {
 	userID := api.GetUserID(c)
 	if userID == 0 {
@@ -20,7 +31,6 @@ func GetList(c *gin.Context) {
 	categories, err := categoryservice.GetList(userID, &req)
 	api.DealResponse(c, categories, err)
 }
-
 func SaveCategory(c *gin.Context) {
 	userID := api.GetUserID(c)
 	if userID == 0 {

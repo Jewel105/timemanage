@@ -1,23 +1,28 @@
 package router
 
 import (
+	"fmt"
 	"gin_study/api"
 	categoryapi "gin_study/api/category_api"
 	taskapi "gin_study/api/task_api"
 	userapi "gin_study/api/user_api"
 	"gin_study/config"
-	"net/http"
+	"os"
+
+	knife "gitee.com/youbeiwuhuan/knife4go/gin-swagger-knife"
 
 	"github.com/gin-gonic/gin"
 )
 
+// swag init --parseDependency --parseInternal
 func Start() {
 	r := gin.Default()
 	r.Use(gin.LoggerWithConfig(api.LoggerToFile()))
 	r.Use(api.Recover)
-	r.GET("/hello", func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "hello world")
-	})
+
+	swaggerJson := getFileContent("./docs/swagger.json")
+	knife.InitSwaggerKnife(r, swaggerJson)
+
 	apiV1 := r.Group("/api/v1")
 	common := apiV1.Group("/common")
 	user := common.Group("/user")
@@ -43,4 +48,14 @@ func Start() {
 	}
 
 	r.Run(":" + config.Config.Server.Port)
+}
+
+func getFileContent(fpath string) string {
+	bytes, err := os.ReadFile(fpath)
+	if nil != err {
+		fmt.Errorf(" %s getFileBase64 error: %v", fpath, err)
+		return ""
+	}
+
+	return string(bytes)
 }

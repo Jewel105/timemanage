@@ -1,0 +1,79 @@
+basePath: 这里写base path
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Category:
+    properties:
+      createdTime:
+        type: string
+      deleteTime:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      level:
+        description: 分类等级
+        type: integer
+      name:
+        type: string
+      parentID:
+        description: 上级分类ID
+        type: integer
+      path:
+        description: 分类路径
+        type: string
+      updatedTime:
+        type: string
+      userID:
+        description: 创建该分类的用户ID
+        type: integer
+    type: object
+host: 这里写接口服务的host
+info:
+  contact:
+    email: support@swagger.io
+    name: 这里写联系人信息
+    url: http://www.swagger.io/support
+  description: 这里写描述信息
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: 这里写标题
+  version: "1.0"
+paths:
+  /brc20/trade/detail:
+    get:
+      consumes:
+      - application/json
+      description: 查询brc20铭刻详情
+      operationId: GetList
+      parameters:
+      - description: "869099058070000"
+        in: header
+        name: token
+        type: string
+      - description: "1"
+        in: query
+        name: parentID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      security:
+      - Bearer: []
+      summary: 查询brc20铭刻详情
+      tags:
+      - BRC20API
+swagger: "2.0"

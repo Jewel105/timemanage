@@ -1,8 +1,8 @@
 package request
 
 type LoginRequest struct {
-	Name     string `json:"name" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Name     string `json:"name" binding:"required"`     // 用户名
+	Password string `json:"password" binding:"required"` // 密码
 }
 
 type RegisterRequest struct {
