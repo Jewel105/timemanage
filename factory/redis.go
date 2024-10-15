@@ -29,7 +29,7 @@ func RedisStart() {
 }
 
 // RedisSet 设置
-func RedisSet(ctx context.Context, key, value string, expiration time.Duration) error {
+func RedisSet(key, value string, expiration time.Duration) error {
 	return redisClient.Set(ctx, key, value, expiration).Err()
 }
 

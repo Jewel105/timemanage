@@ -21,5 +21,6 @@ func main() {
 	config.GetConfig(env)
 	mysql.Start()
 	factory.RedisStart()
+	factory.RedisSet("name", "gin_study", 30000)
 	router.Start()
 }
