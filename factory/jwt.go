@@ -42,7 +42,7 @@ func CreateToken(username string, userID int64) (string, error) {
 	}
 	// 存储token到Redis中,需要支持多平台登录
 	tokenKey := config.Config.Jwt.RedisKey + strconv.FormatInt(userID, 10) + claims.TokenId.String()
-	err = RedisSet(tokenKey, s, 60*time.Second)
+	err = RedisSet(tokenKey, s, 24*time.Hour)
 	return s, err
 }
 
@@ -60,7 +60,7 @@ func DecodeToken(tokenstring string) (*UserClaims, error) {
 			return nil, fmt.Errorf("token invalid")
 		}
 		// 延长token的过期时间
-		err = RedisExpire(tokenKey, 60*time.Second)
+		err = RedisExpire(tokenKey, 24*time.Hour)
 		if err != nil {
 			return nil, err
 		}
