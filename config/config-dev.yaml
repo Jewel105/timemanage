@@ -15,7 +15,7 @@ jwt:
 redis:
   host: 127.0.0.1
   port: 6379
-  db: 5
+  db: 0
   password: Redis1234.
   maxIdle: 2
   maxActive: 5

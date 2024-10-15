@@ -14,7 +14,7 @@ import (
 var ctx = context.Background()
 var redisClient *redis.Client
 
-func RedisStart() {
+func RedisStart() error {
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:         config.Config.Redis.Host + ":" + strconv.Itoa(config.Config.Redis.Port),
 		Password:     config.Config.Redis.Password,
@@ -25,7 +25,9 @@ func RedisStart() {
 	_, err := redisClient.Ping(ctx).Result()
 	if err != nil {
 		logger.Error(map[string]interface{}{"redis init error": err.Error})
+		return err
 	}
+	return nil
 }
 
 // RedisSet 设置
@@ -34,37 +36,37 @@ func RedisSet(key, value string, expiration time.Duration) error {
 }
 
 // RedisGet 读取
-func RedisGet(ctx context.Context, key string) (string, error) {
+func RedisGet(key string) (string, error) {
 	return redisClient.Get(ctx, key).Result()
 }
 
 // RedisDel 删除
-func RedisDel(ctx context.Context, key string) error {
+func RedisDel(key string) error {
 	return redisClient.Del(ctx, key).Err()
 }
 
 // RedisHSet 设置
-func RedisHSet(ctx context.Context, key, field, value string) error {
+func RedisHSet(key, field, value string) error {
 	return redisClient.HSet(ctx, key, field, value).Err()
 }
 
 // RedisHGet 读取
-func RedisHGet(ctx context.Context, key, field string) (string, error) {
+func RedisHGet(key, field string) (string, error) {
 	return redisClient.HGet(ctx, key, field).Result()
 }
 
 // RedisHGetAll 读取全部数据
-func RedisHGetAll(ctx context.Context, key string) (map[string]string, error) {
+func RedisHGetAll(key string) (map[string]string, error) {
 	return redisClient.HGetAll(ctx, key).Result()
 }
 
 // RedisHDel 删除
-func RedisHDel(ctx context.Context, key, field string) error {
+func RedisHDel(key, field string) error {
 	return redisClient.HDel(ctx, key, field).Err()
 }
 
 // RedisExpire 续期
-func RedisExpire(ctx context.Context, key string, expiration time.Duration) error {
+func RedisExpire(key string, expiration time.Duration) error {
 	result, err := redisClient.Expire(ctx, key, expiration).Result()
 	if err != nil || !result {
 		return fmt.Errorf("failed to set expiration: %w", err)
