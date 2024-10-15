@@ -34,7 +34,8 @@ type Certificate struct {
 }
 
 type Jwt struct {
-	Secret string `yaml:"secret"`
+	Secret   string `yaml:"secret"`
+	RedisKey string `yaml:"redisKey"`
 }
 
 type Redis struct {
