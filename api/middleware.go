@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"fmt"
 	"gin_study/api/consts"
 	"gin_study/factory"
@@ -32,15 +33,27 @@ func LoggerToFile() gin.LoggerConfig {
 
 	var conf = gin.LoggerConfig{
 		Formatter: func(params gin.LogFormatterParams) string {
-			return fmt.Sprintf("%s - %s \"%s %s %s %d \"%s\" %s\"%s\"\n",
+
+			// 读取请求体
+			bodyBytes, err := io.ReadAll(params.Request.Body)
+			if err != nil {
+				return fmt.Sprintf("Error reading body: %v", err)
+			}
+
+			// 将请求体重新写入以供后续中间件读取
+			params.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+			return fmt.Sprintf("%s - %s \"%s %s %s\n%v\n%d \"%s\" %s\" \n%v\n %s\"\n",
 				params.TimeStamp.Format("2006-01-02 15:04:06"),
 				params.ClientIP,
 				params.Method,
 				params.Path,
 				params.Request.Proto,
+				params.Request.Header,
 				params.StatusCode,
 				params.Latency,
 				params.Request.UserAgent(),
+				params.Request.Body,
 				params.ErrorMessage,
 			)
 		},
