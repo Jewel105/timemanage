@@ -5,6 +5,7 @@ import (
 	"gin_study/config"
 	"gin_study/factory"
 	"gin_study/gen/mysql"
+	"gin_study/logger"
 	"gin_study/router"
 	"sync"
 )
@@ -41,6 +42,14 @@ func main() {
 		defer wg.Done()
 		factory.RedisStart()
 	}()
+	// 启动 Logger
+	defer logger.Sync()
+	logger.InitLogger(logger.LogConfig{
+		FileName:   "./log/timemanage.log",
+		MaxSize:    100,
+		MaxAge:     30,
+		MaxBackups: 100,
+	})
 
 	// 等待 MySQL 和 Redis 初始化完成
 	wg.Wait()

@@ -5,6 +5,6 @@
 *.test
 __debug_bin*
 
-/runtime/log/
+log
 .vscode
 .idea

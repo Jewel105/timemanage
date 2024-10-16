@@ -5,6 +5,7 @@ import (
 	"gin_study/gen/query"
 	"gin_study/logger"
 
+	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -12,16 +13,18 @@ import (
 func Start() error {
 	db, err := gorm.Open(mysql.Open(config.Config.Mysql.Dsn), &gorm.Config{})
 	if err != nil {
-		logger.Error(map[string]interface{}{"mysql connect error": err.Error()})
+		logger.Error(zap.Any("Error mysql", err))
+
 		return err
 	}
 	if db.Error != nil {
-		logger.Error(map[string]interface{}{"database error": db.Error})
+		logger.Error(zap.Any("Error db", err))
+
 		return err
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		logger.Error(map[string]interface{}{"sqlDB error": err.Error()})
+		logger.Error(zap.Any("Error db", err))
 		return err
 	}
 	sqlDB.SetMaxIdleConns(config.Config.Mysql.MaxIdle)

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 var ctx = context.Background()
@@ -24,7 +25,7 @@ func RedisStart() error {
 	})
 	_, err := redisClient.Ping(ctx).Result()
 	if err != nil {
-		logger.Error(map[string]interface{}{"redis init error": err.Error()})
+		logger.Error(zap.Any("Error redis", err))
 		return err
 	}
 	return nil

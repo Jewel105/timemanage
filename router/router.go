@@ -10,15 +10,16 @@ import (
 	"os"
 
 	knife "gitee.com/youbeiwuhuan/knife4go/gin-swagger-knife"
+	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 )
 
 // swag init --parseDependency --parseInternal ---swagger json生成命令
-// export PATH=$(go env GOPATH)/bin:$PATH
+// export PATH=$(go env GOPATH)/bin:$PATH // 找不到swag
 func Start() {
 	r := gin.Default()
-	r.Use(gin.LoggerWithConfig(api.LoggerToFile()))
+	r.Use(api.RecordLog)
 	r.Use(api.Recover)
 
 	// 引入swagger
@@ -55,7 +56,9 @@ func Start() {
 func getFileContent(fpath string) string {
 	bytes, err := os.ReadFile(fpath)
 	if nil != err {
-		logger.Error(map[string]interface{}{"Error opening file": err.Error()})
+
+		logger.Error(zap.Any("Error file", err))
+
 		return ""
 	}
 
