@@ -53,7 +53,7 @@ func DeleteCategory(userID int64, idStr string) error {
 		return err
 	}
 	if count == 0 {
-		return &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Category not exists."}
+		return &consts.ApiErr{Code: consts.NO_DATA, Msg: "Category not exists."}
 	}
 
 	//  在子分类，则不删除
@@ -62,7 +62,7 @@ func DeleteCategory(userID int64, idStr string) error {
 		return err
 	}
 	if count > 0 {
-		return &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Category has subcategories."}
+		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: "Category has subcategories."}
 	}
 
 	// 任务列表中存在该分类，不删除
@@ -71,7 +71,7 @@ func DeleteCategory(userID int64, idStr string) error {
 		return err
 	}
 	if count > 0 {
-		return &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Category is used in tasks."}
+		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: "Category is used in tasks."}
 	}
 
 	tx := query.Q.Begin()

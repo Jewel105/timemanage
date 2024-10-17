@@ -8,6 +8,9 @@ const (
 	PARAMS_INVALID = "300"
 	TOKEN_INVALID  = "301"
 	LOGIN_FAILED   = "302"
+	TOO_FREQUENTLY = "303"
+	NO_DATA        = "304"
+	DELETE_FAILED  = "305"
 )
 
 const (
@@ -22,6 +25,9 @@ var MsgFlags = map[string]string{
 	PARAMS_INVALID: "PARAMS_INVALID",
 	TOKEN_INVALID:  "TOKEN_INVALID",
 	LOGIN_FAILED:   "LOGIN_FAILED",
+	TOO_FREQUENTLY: "TOO_FREQUENTLY",
+	NO_DATA:        "NO_DATA",
+	DELETE_FAILED:  "DELETE_FAILED",
 }
 
 type ApiErr struct {

@@ -44,9 +44,9 @@ func Register(c *gin.Context) {
 	api.DealResponse(c, userID, err)
 }
 
-// @Id Register
-// @Summary 注册
-// @Description 注册
+// @Id SendMail
+// @Summary 发送验证码
+// @Description 发送验证码
 // @Tags COMMON API
 // @Accept json
 // @Produce application/json

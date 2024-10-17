@@ -46,7 +46,7 @@ func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 	// Category not found.
 	category, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
 	if err != nil {
-		return 0, &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Category not found."}
+		return 0, &consts.ApiErr{Code: consts.NO_DATA, Msg: "Category not found."}
 	}
 
 	task := models.Task{
@@ -81,7 +81,7 @@ func DeleteTask(userID int64, idStr string) error {
 		return err
 	}
 	if count == 0 {
-		return &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Task not exists."}
+		return &consts.ApiErr{Code: consts.NO_DATA, Msg: "Task not exists."}
 	}
 	_, err = taskQuery.Delete()
 	err = mysql.DeferTx(tx, err)

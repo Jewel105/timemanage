@@ -9,22 +9,22 @@ import (
 )
 
 type AppConfig struct {
-	Server    *Server `yaml:"server" valid:"required"`
-	Mysql     *Mysql  `yaml:"mysql" valid:"required"`
-	Jwt       *Jwt    `yaml:"jwt" valid:"required"`
-	Redis     *Redis  `yaml:"redis" valid:"required"`
-	EmailSmpt *Email  `yaml:"emailSmpt" valid:"required"`
+	Server    *Server `yaml:"server"`
+	Mysql     *Mysql  `yaml:"mysql"`
+	Jwt       *Jwt    `yaml:"jwt"`
+	Redis     *Redis  `yaml:"redis"`
+	EmailSmpt *Email  `yaml:"emailSmpt"`
 }
 
 type Mysql struct {
-	Dsn         string `yaml:"dsn" valid:"required"`
-	MaxIdle     int    `yaml:"maxIdle" valid:"required"`
-	MaxOpenConn int    `yaml:"maxOpenConn" valid:"required"`
+	Dsn         string `yaml:"dsn"`
+	MaxIdle     int    `yaml:"maxIdle"`
+	MaxOpenConn int    `yaml:"maxOpenConn"`
 }
 
 type Server struct {
-	Ip          string       `yaml:"ip" valid:"required"`
-	Port        string       `yaml:"port" valid:"required"`
+	Ip          string       `yaml:"ip"`
+	Port        string       `yaml:"port"`
 	EnableSSL   bool         `yaml:"enableSSL"`
 	Certificate *Certificate `yaml:"certificate"`
 	EnableH2C   bool         `yaml:"enableH2C"`
@@ -41,18 +41,19 @@ type Jwt struct {
 }
 
 type Redis struct {
-	Host        string `yaml:"host" valid:"required"`
-	Port        int    `yaml:"port" valid:"required"`
-	Db          int    `yaml:"db" valid:"required"`
-	Password    string `yaml:"password" valid:"required"`
-	IdleTimeout int64  `yaml:"idleTimeout" valid:"required"`
+	Host        string `yaml:"host"`
+	Port        int    `yaml:"port"`
+	Db          int    `yaml:"db"`
+	Password    string `yaml:"password"`
+	IdleTimeout int64  `yaml:"idleTimeout"`
 }
 
 type Email struct {
-	Email    string `yaml:"email" valid:"required"`
-	Password string `yaml:"password" valid:"required"`
-	Host     string `yaml:"host" valid:"required"`
-	Port     int    `yaml:"port" valid:"required"`
+	Email    string `yaml:"email"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	RedisKey string `yaml:"redisKey"`
 }
 
 // 配置对象

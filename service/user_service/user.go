@@ -10,6 +10,7 @@ import (
 	"gin_study/gen/request"
 	"net/smtp"
 	"strconv"
+	"time"
 )
 
 func Login(req *request.LoginRequest) (string, error) {
@@ -43,6 +44,14 @@ func Register(req *request.RegisterRequest) (int64, error) {
 }
 
 func SendMail(to *request.SendCodeRequest) error {
+	key := config.Config.EmailSmpt.RedisKey + to.Email
+
+	// 避免验证码过期
+	code, err := factory.RedisGet(key)
+	if err == nil || len(code) == 6 {
+		return &consts.ApiErr{Code: consts.TOO_FREQUENTLY, Msg: "The email code have already been sent."}
+	}
+
 	from := config.Config.EmailSmpt.Email
 	password := config.Config.EmailSmpt.Password
 
@@ -59,17 +68,20 @@ func SendMail(to *request.SendCodeRequest) error {
 	message := []byte("Subject: Code" + "\r\n" +
 		"MIME-Version: 1.0\r\n" +
 		"Content-Type: text/plain; charset=\"UTF-8\"\r\n" +
-		"\r\n" + "To finish signing up, please input the verification code:" +
+		"\r\n" + "TimeManage Support System:" +
 		"\r\n" + randomCode + "\r\n")
 
 	// 认证信息
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 
 	// 发送邮件
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, recipients, message)
+	err = smtp.SendMail(smtpHost+":"+smtpPort, auth, from, recipients, message)
 	if err != nil {
 		return err
 	}
-
+	err = factory.RedisSet(key, randomCode, time.Minute*2)
+	if err != nil {
+		return err
+	}
 	return nil
 }

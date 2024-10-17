@@ -12,8 +12,9 @@ type User struct {
 	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
 	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
 
-	Name     string `gorm:"column:name;size:64" json:"name"`          // 用户名
-	Password string `gorm:"column:password;size:128" json:"password"` // 密码
+	Name     string `gorm:"column:name;size:64" json:"name"`           // 用户名
+	Password string `gorm:"column:password;size:128" json:"password"`  // 密码
+	Email    string `gorm:"column:email;size:255;unique" json:"email"` // 邮箱
 }
 
 type Task struct {
