@@ -58,6 +58,7 @@ type Email struct {
 
 // 配置对象
 var Config AppConfig
+var Env string
 
 func GetConfig(env string) {
 	// 打开 YAML 文件
@@ -75,4 +76,5 @@ func GetConfig(env string) {
 		logger.Error(zap.Any("Error decoding YAML", err))
 		return
 	}
+	Env = env
 }

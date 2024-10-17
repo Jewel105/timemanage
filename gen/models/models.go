@@ -14,7 +14,7 @@ type User struct {
 
 	Name     string `gorm:"column:name;size:64" json:"name"`           // 用户名
 	Password string `gorm:"column:password;size:128" json:"password"`  // 密码
-	Email    string `gorm:"column:email;size:255;unique" json:"email"` // 邮箱
+	Email    string `gorm:"column:email;size:128;unique" json:"email"` // 邮箱
 }
 
 type Task struct {

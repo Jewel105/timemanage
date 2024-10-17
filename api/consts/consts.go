@@ -11,6 +11,7 @@ const (
 	TOO_FREQUENTLY = "303"
 	NO_DATA        = "304"
 	DELETE_FAILED  = "305"
+	CODE_INVALID   = "306"
 )
 
 const (
@@ -28,6 +29,7 @@ var MsgFlags = map[string]string{
 	TOO_FREQUENTLY: "TOO_FREQUENTLY",
 	NO_DATA:        "NO_DATA",
 	DELETE_FAILED:  "DELETE_FAILED",
+	CODE_INVALID:   "CODE_INVALID",
 }
 
 type ApiErr struct {
