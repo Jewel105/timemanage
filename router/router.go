@@ -28,27 +28,11 @@ func Start() {
 
 	apiV1 := r.Group("/api/v1")
 	common := apiV1.Group("/common")
-	user := common.Group("/user")
-	{
-		user.POST("/login", userapi.Login)
-		user.POST("/register", userapi.Register)
-	}
 
-	tasks := apiV1.Group("/tasks")
-	tasks.Use(api.VerifyToken)
-	{
-		tasks.GET("/list", taskapi.GetList)
-		tasks.POST("/save", taskapi.SaveTask)
-		tasks.POST("/delete/:id", taskapi.DeleteTask)
-	}
-
-	categories := apiV1.Group("/categories")
-	categories.Use(api.VerifyToken)
-	{
-		categories.GET("/list", categoryapi.GetList)
-		categories.POST("/save", categoryapi.SaveCategory)
-		categories.POST("/delete/:id", categoryapi.DeleteCategory)
-	}
+	// 引入api
+	userapi.AddRouter(common)
+	taskapi.AddRouter(apiV1)
+	categoryapi.AddRouter(apiV1)
 
 	r.Run(":" + config.Config.Server.Port)
 }
