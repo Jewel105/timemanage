@@ -3,7 +3,7 @@ definitions:
   request.LoginRequest:
     properties:
       name:
-        description: 用户名
+        description: 用户名或邮箱
         type: string
       password:
         description: 密码
@@ -14,19 +14,33 @@ definitions:
     type: object
   request.RegisterRequest:
     properties:
+      code:
+        description: 验证码
+        example: "888888"
+        type: string
+      email:
+        description: 邮箱
+        example: test@mail.com
+        type: string
       name:
+        description: 用户名
         type: string
       password:
+        description: 新密码
         type: string
     required:
+    - code
+    - email
     - name
     - password
     type: object
   request.SaveCategoryRequest:
     properties:
       id:
+        description: 分类ID
         type: integer
       name:
+        description: 分类名称
         type: string
       parentID:
         description: 上级分类ID
@@ -37,20 +51,34 @@ definitions:
   request.SaveTaskRequest:
     properties:
       categoryID:
+        description: 任务所属分类ID
         type: integer
       description:
+        description: 任务描述
         type: string
       endTime:
+        description: 任务结束时间
         type: integer
       id:
+        description: 任务ID
         type: integer
       startTime:
+        description: 任务开始时间
         type: integer
     required:
     - categoryID
     - description
     - endTime
     - startTime
+    type: object
+  request.SendCodeRequest:
+    properties:
+      email:
+        description: 邮箱
+        example: test@mail.com
+        type: string
+    required:
+    - email
     type: object
   response.CategoriesRespose:
     properties:
@@ -160,7 +188,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 保存或修改分类
+      description: 创建或修改分类
       operationId: SaveCategory
       parameters:
       - description: enjmcvhdwernxhcuvyudfdjfhpq
@@ -180,9 +208,32 @@ paths:
           description: success
           schema:
             type: int64
-      summary: 保存或修改分类
+      summary: 创建或修改分类
       tags:
       - 分类API
+  /common/user/forget/password:
+    post:
+      consumes:
+      - application/json
+      description: 忘记密码
+      operationId: ForgetPassword
+      parameters:
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: "1"
+          schema:
+            type: int
+      summary: 忘记密码
+      tags:
+      - COMMON API
   /common/user/login:
     post:
       consumes:
@@ -227,6 +278,29 @@ paths:
           schema:
             type: int
       summary: 注册
+      tags:
+      - COMMON API
+  /common/user/send/code:
+    post:
+      consumes:
+      - application/json
+      description: 发送验证码
+      operationId: SendCode
+      parameters:
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.SendCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: boolean
+      summary: 发送验证码
       tags:
       - COMMON API
   /tasks/delete/:id:

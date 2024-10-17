@@ -1,15 +1,15 @@
 package request
 
 type LoginRequest struct {
-	Name     string `json:"name" binding:"required"`     // 用户名
+	Name     string `json:"name" binding:"required"`     // 用户名或邮箱
 	Password string `json:"password" binding:"required"` // 密码
 }
 
 type RegisterRequest struct {
-	Name     string `json:"name" binding:"required"`                                        // 用户名
-	Password string `json:"password" binding:"required"`                                    // 密码
-	Email    string `json:"email" example:"test@mail.com" binding:"required,email,max=255"` // 邮箱
-	Code     string `json:"code" example:"888888" binding:"required,len=6"`                 // 验证码
+	Name     string `json:"name" binding:"required"`                                // 用户名
+	Password string `json:"password" binding:"required"`                            // 新密码
+	Email    string `json:"email" example:"test@mail.com" binding:"required,email"` // 邮箱
+	Code     string `json:"code" example:"888888" binding:"required,len=6"`         // 验证码
 }
 
 type GetTasksRequest struct {
@@ -18,7 +18,7 @@ type GetTasksRequest struct {
 }
 
 type SaveTaskRequest struct {
-	ID          int64  `json:"id"`
+	ID          int64  `json:"id"`                             // 任务ID
 	Description string `json:"description" binding:"required"` // 任务描述
 	CategoryID  int64  `json:"categoryID" binding:"required"`  // 任务所属分类ID
 	StartTime   int64  `json:"startTime" binding:"required"`   // 任务开始时间
@@ -26,15 +26,15 @@ type SaveTaskRequest struct {
 }
 
 type GetCategoriesRequest struct {
-	ParentID int64 `form:"parentID,default=0"`
+	ParentID int64 `form:"parentID,default=0"` // 上级分类ID，默认0
 }
 
 type SaveCategoryRequest struct {
-	ID       int64  `json:"id"`
+	ID       int64  `json:"id"`                      // 分类ID
 	Name     string `json:"name" binding:"required"` // 分类名称
 	ParentID int64  `json:"parentID"`                // 上级分类ID
 }
 
 type SendCodeRequest struct {
-	Email string `json:"email" example:"test@mail.com" binding:"required,email,max=255"` // 邮箱
+	Email string `json:"email" example:"test@mail.com" binding:"required,email"` // 邮箱
 }

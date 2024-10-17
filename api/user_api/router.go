@@ -9,6 +9,7 @@ func AddRouter(router *gin.RouterGroup) {
 	{
 		user.POST("/login", Login)
 		user.POST("/register", Register)
-		user.POST("/sendCode", SendMail)
+		user.POST("/send/code", SendCode)
+		user.POST("/forget/password", ForgetPassword)
 	}
 }

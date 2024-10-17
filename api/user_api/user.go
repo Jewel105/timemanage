@@ -44,7 +44,7 @@ func Register(c *gin.Context) {
 	api.DealResponse(c, userID, err)
 }
 
-// @Id SendMail
+// @Id SendCode
 // @Summary 发送验证码
 // @Description 发送验证码
 // @Tags COMMON API
@@ -52,12 +52,30 @@ func Register(c *gin.Context) {
 // @Produce application/json
 // @Param req body request.SendCodeRequest true "Json"
 // @success 200 boolean ture "success"
-// @Router  /common/user/sendCode [post]
-func SendMail(c *gin.Context) {
+// @Router  /common/user/send/code [post]
+func SendCode(c *gin.Context) {
 	req := request.SendCodeRequest{}
 	if !api.ParseJson(c, &req) {
 		return
 	}
-	err := userservice.SendMail(&req)
+	err := userservice.SendCode(&req)
 	api.DealResponse(c, true, err)
+}
+
+// @Id ForgetPassword
+// @Summary 忘记密码
+// @Description 忘记密码
+// @Tags COMMON API
+// @Accept json
+// @Produce application/json
+// @Param req body request.RegisterRequest true "Json"
+// @Success 200 {int} int "1"
+// @Router  /common/user/forget/password [post]
+func ForgetPassword(c *gin.Context) {
+	req := request.RegisterRequest{}
+	if !api.ParseJson(c, &req) {
+		return
+	}
+	userID, err := userservice.ForgetPassword(&req)
+	api.DealResponse(c, userID, err)
 }

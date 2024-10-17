@@ -100,7 +100,7 @@ const docTemplate = `{
         },
         "/categories/save": {
             "post": {
-                "description": "保存或修改分类",
+                "description": "创建或修改分类",
                 "consumes": [
                     "application/json"
                 ],
@@ -110,7 +110,7 @@ const docTemplate = `{
                 "tags": [
                     "分类API"
                 ],
-                "summary": "保存或修改分类",
+                "summary": "创建或修改分类",
                 "operationId": "SaveCategory",
                 "parameters": [
                     {
@@ -134,6 +134,41 @@ const docTemplate = `{
                         "description": "success",
                         "schema": {
                             "type": "int64"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/user/forget/password": {
+            "post": {
+                "description": "忘记密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "忘记密码",
+                "operationId": "ForgetPassword",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "1",
+                        "schema": {
+                            "type": "int"
                         }
                     }
                 }
@@ -204,6 +239,41 @@ const docTemplate = `{
                         "description": "1",
                         "schema": {
                             "type": "int"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/user/send/code": {
+            "post": {
+                "description": "发送验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "发送验证码",
+                "operationId": "SendCode",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SendCodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "boolean"
                         }
                     }
                 }
@@ -346,7 +416,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "name": {
-                    "description": "用户名",
+                    "description": "用户名或邮箱",
                     "type": "string"
                 },
                 "password": {
@@ -358,14 +428,28 @@ const docTemplate = `{
         "request.RegisterRequest": {
             "type": "object",
             "required": [
+                "code",
+                "email",
                 "name",
                 "password"
             ],
             "properties": {
+                "code": {
+                    "description": "验证码",
+                    "type": "string",
+                    "example": "888888"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string",
+                    "example": "test@mail.com"
+                },
                 "name": {
+                    "description": "用户名",
                     "type": "string"
                 },
                 "password": {
+                    "description": "新密码",
                     "type": "string"
                 }
             }
@@ -377,9 +461,11 @@ const docTemplate = `{
             ],
             "properties": {
                 "id": {
+                    "description": "分类ID",
                     "type": "integer"
                 },
                 "name": {
+                    "description": "分类名称",
                     "type": "string"
                 },
                 "parentID": {
@@ -398,19 +484,37 @@ const docTemplate = `{
             ],
             "properties": {
                 "categoryID": {
+                    "description": "任务所属分类ID",
                     "type": "integer"
                 },
                 "description": {
+                    "description": "任务描述",
                     "type": "string"
                 },
                 "endTime": {
+                    "description": "任务结束时间",
                     "type": "integer"
                 },
                 "id": {
+                    "description": "任务ID",
                     "type": "integer"
                 },
                 "startTime": {
+                    "description": "任务开始时间",
                     "type": "integer"
+                }
+            }
+        },
+        "request.SendCodeRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "邮箱",
+                    "type": "string",
+                    "example": "test@mail.com"
                 }
             }
         },

@@ -32,8 +32,8 @@ func GetList(c *gin.Context) {
 }
 
 // @Id SaveCategory
-// @Summary 保存或修改分类
-// @Description 保存或修改分类
+// @Summary 创建或修改分类
+// @Description 创建或修改分类
 // @Tags 分类API
 // @Accept  json
 // @Produce application/json

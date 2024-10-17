@@ -37,7 +37,7 @@ func Register(req *request.RegisterRequest) (int64, error) {
 		return 0,
 			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "name already exists."}
 	}
-	emailExists, _ := query.User.Select(query.User.ID).Where(query.User.Name.Eq(req.Name)).First()
+	emailExists, _ := query.User.Select(query.User.ID).Where(query.User.Email.Eq(req.Email)).First()
 	if emailExists != nil {
 		return 0,
 			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "email already exists."}
@@ -68,7 +68,7 @@ func Register(req *request.RegisterRequest) (int64, error) {
 	return user.ID, err
 }
 
-func SendMail(to *request.SendCodeRequest) error {
+func SendCode(to *request.SendCodeRequest) error {
 	key := config.Config.EmailSmpt.RedisKey + to.Email
 
 	// 避免验证码过于频繁
@@ -120,4 +120,39 @@ func sendMailOnline(email string, code string) error {
 	// 发送邮件
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, recipients, message)
 	return err
+}
+
+func ForgetPassword(req *request.RegisterRequest) (int64, error) {
+	user, err := query.User.Where(query.User.Name.Eq(req.Name), query.User.Email.Eq(req.Email)).First()
+	if err != nil {
+		return 0,
+			&consts.ApiErr{Code: consts.NO_DATA, Msg: "user not found."}
+	}
+
+	if user.Password == factory.Md5Hash(req.Password) {
+		return 0,
+			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "The new password is the same as the old password."}
+	}
+
+	// 获取验证码并检查
+	key := config.Config.EmailSmpt.RedisKey + req.Email
+	code, err := factory.RedisGet(key)
+	if err != nil || code != req.Code {
+		return 0,
+			&consts.ApiErr{Code: consts.CODE_INVALID, Msg: "email code is invalid."}
+	}
+	err = factory.RedisDel(key)
+	if err != nil {
+		return 0, err
+	}
+
+	user.Password = factory.Md5Hash(req.Password)
+
+	tx := query.Q.Begin()
+	err = query.User.Save(user)
+	if err != nil {
+		return 0, err
+	}
+	err = mysql.DeferTx(tx, err)
+	return user.ID, err
 }
