@@ -32,17 +32,6 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	_user.DeleteTime = field.NewField(tableName, "delete_time")
 	_user.Name = field.NewString(tableName, "name")
 	_user.Password = field.NewString(tableName, "password")
-	_user.Tasks = userHasManyTasks{
-		db: db.Session(&gorm.Session{}),
-
-		RelationField: field.NewRelation("Tasks", "models.Task"),
-	}
-
-	_user.Categories = userHasManyCategories{
-		db: db.Session(&gorm.Session{}),
-
-		RelationField: field.NewRelation("Categories", "models.Category"),
-	}
 
 	_user.fillFieldMap()
 
@@ -59,9 +48,6 @@ type user struct {
 	DeleteTime  field.Field
 	Name        field.String
 	Password    field.String
-	Tasks       userHasManyTasks
-
-	Categories userHasManyCategories
 
 	fieldMap map[string]field.Expr
 }
@@ -100,14 +86,13 @@ func (u *user) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (u *user) fillFieldMap() {
-	u.fieldMap = make(map[string]field.Expr, 8)
+	u.fieldMap = make(map[string]field.Expr, 6)
 	u.fieldMap["id"] = u.ID
 	u.fieldMap["create_time"] = u.CreatedTime
 	u.fieldMap["update_time"] = u.UpdatedTime
 	u.fieldMap["delete_time"] = u.DeleteTime
 	u.fieldMap["name"] = u.Name
 	u.fieldMap["password"] = u.Password
-
 }
 
 func (u user) clone(db *gorm.DB) user {
@@ -118,148 +103,6 @@ func (u user) clone(db *gorm.DB) user {
 func (u user) replaceDB(db *gorm.DB) user {
 	u.userDo.ReplaceDB(db)
 	return u
-}
-
-type userHasManyTasks struct {
-	db *gorm.DB
-
-	field.RelationField
-}
-
-func (a userHasManyTasks) Where(conds ...field.Expr) *userHasManyTasks {
-	if len(conds) == 0 {
-		return &a
-	}
-
-	exprs := make([]clause.Expression, 0, len(conds))
-	for _, cond := range conds {
-		exprs = append(exprs, cond.BeCond().(clause.Expression))
-	}
-	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
-	return &a
-}
-
-func (a userHasManyTasks) WithContext(ctx context.Context) *userHasManyTasks {
-	a.db = a.db.WithContext(ctx)
-	return &a
-}
-
-func (a userHasManyTasks) Session(session *gorm.Session) *userHasManyTasks {
-	a.db = a.db.Session(session)
-	return &a
-}
-
-func (a userHasManyTasks) Model(m *models.User) *userHasManyTasksTx {
-	return &userHasManyTasksTx{a.db.Model(m).Association(a.Name())}
-}
-
-type userHasManyTasksTx struct{ tx *gorm.Association }
-
-func (a userHasManyTasksTx) Find() (result []*models.Task, err error) {
-	return result, a.tx.Find(&result)
-}
-
-func (a userHasManyTasksTx) Append(values ...*models.Task) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Append(targetValues...)
-}
-
-func (a userHasManyTasksTx) Replace(values ...*models.Task) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Replace(targetValues...)
-}
-
-func (a userHasManyTasksTx) Delete(values ...*models.Task) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Delete(targetValues...)
-}
-
-func (a userHasManyTasksTx) Clear() error {
-	return a.tx.Clear()
-}
-
-func (a userHasManyTasksTx) Count() int64 {
-	return a.tx.Count()
-}
-
-type userHasManyCategories struct {
-	db *gorm.DB
-
-	field.RelationField
-}
-
-func (a userHasManyCategories) Where(conds ...field.Expr) *userHasManyCategories {
-	if len(conds) == 0 {
-		return &a
-	}
-
-	exprs := make([]clause.Expression, 0, len(conds))
-	for _, cond := range conds {
-		exprs = append(exprs, cond.BeCond().(clause.Expression))
-	}
-	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
-	return &a
-}
-
-func (a userHasManyCategories) WithContext(ctx context.Context) *userHasManyCategories {
-	a.db = a.db.WithContext(ctx)
-	return &a
-}
-
-func (a userHasManyCategories) Session(session *gorm.Session) *userHasManyCategories {
-	a.db = a.db.Session(session)
-	return &a
-}
-
-func (a userHasManyCategories) Model(m *models.User) *userHasManyCategoriesTx {
-	return &userHasManyCategoriesTx{a.db.Model(m).Association(a.Name())}
-}
-
-type userHasManyCategoriesTx struct{ tx *gorm.Association }
-
-func (a userHasManyCategoriesTx) Find() (result []*models.Category, err error) {
-	return result, a.tx.Find(&result)
-}
-
-func (a userHasManyCategoriesTx) Append(values ...*models.Category) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Append(targetValues...)
-}
-
-func (a userHasManyCategoriesTx) Replace(values ...*models.Category) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Replace(targetValues...)
-}
-
-func (a userHasManyCategoriesTx) Delete(values ...*models.Category) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Delete(targetValues...)
-}
-
-func (a userHasManyCategoriesTx) Clear() error {
-	return a.tx.Clear()
-}
-
-func (a userHasManyCategoriesTx) Count() int64 {
-	return a.tx.Count()
 }
 
 type userDo struct{ gen.DO }

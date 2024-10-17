@@ -33,9 +33,10 @@ func newTask(db *gorm.DB, opts ...gen.DOOption) task {
 	_task.UserID = field.NewInt64(tableName, "user_id")
 	_task.Description = field.NewString(tableName, "description")
 	_task.SpentTime = field.NewInt64(tableName, "spent_time")
-	_task.CategoryID = field.NewInt64(tableName, "category_id")
+	_task.CategoryPath = field.NewString(tableName, "category_path")
 	_task.StartTime = field.NewInt64(tableName, "start_time")
 	_task.EndTime = field.NewInt64(tableName, "end_time")
+	_task.CategoryID = field.NewInt64(tableName, "categor_id")
 
 	_task.fillFieldMap()
 
@@ -45,17 +46,18 @@ func newTask(db *gorm.DB, opts ...gen.DOOption) task {
 type task struct {
 	taskDo
 
-	ALL         field.Asterisk
-	ID          field.Int64
-	CreatedTime field.Time
-	UpdatedTime field.Time
-	DeleteTime  field.Field
-	UserID      field.Int64
-	Description field.String
-	SpentTime   field.Int64
-	CategoryID  field.Int64
-	StartTime   field.Int64
-	EndTime     field.Int64
+	ALL          field.Asterisk
+	ID           field.Int64
+	CreatedTime  field.Time
+	UpdatedTime  field.Time
+	DeleteTime   field.Field
+	UserID       field.Int64
+	Description  field.String
+	SpentTime    field.Int64
+	CategoryPath field.String
+	StartTime    field.Int64
+	EndTime      field.Int64
+	CategoryID   field.Int64
 
 	fieldMap map[string]field.Expr
 }
@@ -79,9 +81,10 @@ func (t *task) updateTableName(table string) *task {
 	t.UserID = field.NewInt64(table, "user_id")
 	t.Description = field.NewString(table, "description")
 	t.SpentTime = field.NewInt64(table, "spent_time")
-	t.CategoryID = field.NewInt64(table, "category_id")
+	t.CategoryPath = field.NewString(table, "category_path")
 	t.StartTime = field.NewInt64(table, "start_time")
 	t.EndTime = field.NewInt64(table, "end_time")
+	t.CategoryID = field.NewInt64(table, "categor_id")
 
 	t.fillFieldMap()
 
@@ -98,7 +101,7 @@ func (t *task) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (t *task) fillFieldMap() {
-	t.fieldMap = make(map[string]field.Expr, 10)
+	t.fieldMap = make(map[string]field.Expr, 11)
 	t.fieldMap["id"] = t.ID
 	t.fieldMap["create_time"] = t.CreatedTime
 	t.fieldMap["update_time"] = t.UpdatedTime
@@ -106,9 +109,10 @@ func (t *task) fillFieldMap() {
 	t.fieldMap["user_id"] = t.UserID
 	t.fieldMap["description"] = t.Description
 	t.fieldMap["spent_time"] = t.SpentTime
-	t.fieldMap["category_id"] = t.CategoryID
+	t.fieldMap["category_path"] = t.CategoryPath
 	t.fieldMap["start_time"] = t.StartTime
 	t.fieldMap["end_time"] = t.EndTime
+	t.fieldMap["categor_id"] = t.CategoryID
 }
 
 func (t task) clone(db *gorm.DB) task {

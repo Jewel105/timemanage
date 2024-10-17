@@ -91,7 +91,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Category"
+                                "$ref": "#/definitions/response.CategoriesRespose"
                             }
                         }
                     }
@@ -288,7 +288,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Task"
+                                "$ref": "#/definitions/response.TasksRespose"
                             }
                         }
                     }
@@ -338,96 +338,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "models.Category": {
-            "type": "object",
-            "properties": {
-                "createdTime": {
-                    "type": "string"
-                },
-                "deleteTime": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "level": {
-                    "description": "分类等级",
-                    "type": "integer"
-                },
-                "name": {
-                    "description": "分类名称",
-                    "type": "string"
-                },
-                "parentID": {
-                    "description": "上级分类ID",
-                    "type": "integer"
-                },
-                "path": {
-                    "description": "分类路径",
-                    "type": "string"
-                },
-                "updatedTime": {
-                    "type": "string"
-                },
-                "userID": {
-                    "description": "创建该分类的用户ID",
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Task": {
-            "type": "object",
-            "properties": {
-                "categoryID": {
-                    "description": "任务所属分类ID",
-                    "type": "integer"
-                },
-                "createdTime": {
-                    "type": "string"
-                },
-                "deleteTime": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "description": {
-                    "description": "任务描述",
-                    "type": "string"
-                },
-                "endTime": {
-                    "description": "任务结束时间",
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "spentTime": {
-                    "description": "花费时间",
-                    "type": "integer"
-                },
-                "startTime": {
-                    "description": "任务开始时间",
-                    "type": "integer"
-                },
-                "updatedTime": {
-                    "type": "string"
-                },
-                "userID": {
-                    "description": "创建该任务的用户ID",
-                    "type": "integer"
-                }
-            }
-        },
         "request.LoginRequest": {
             "type": "object",
             "required": [
@@ -500,6 +410,64 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "startTime": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.CategoriesRespose": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "分类ID",
+                    "type": "integer"
+                },
+                "level": {
+                    "description": "分类等级",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "分类名称",
+                    "type": "string"
+                },
+                "parentID": {
+                    "description": "上级分类ID",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "分类路径",
+                    "type": "string"
+                },
+                "userID": {
+                    "description": "创建该分类的用户ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "response.TasksRespose": {
+            "type": "object",
+            "properties": {
+                "categories": {
+                    "description": "任务所属分类",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "任务描述",
+                    "type": "string"
+                },
+                "endTime": {
+                    "description": "任务结束时间",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "任务ID",
+                    "type": "integer"
+                },
+                "spentTime": {
+                    "description": "花费时间",
+                    "type": "integer"
+                },
+                "startTime": {
+                    "description": "任务开始时间",
                     "type": "integer"
                 }
             }

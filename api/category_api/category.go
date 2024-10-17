@@ -16,7 +16,7 @@ import (
 // @Produce application/json
 // @Param token header string false "enjmcvhdwernxhcuvyudfdjfhpq"
 // @Param ParentID query int64 false "11"
-// @success 200 {object} []models.Category "success"
+// @success 200 {object} []response.CategoriesRespose "success"
 // @Router /categories/list [get]
 func GetList(c *gin.Context) {
 	userID := api.GetUserID(c)

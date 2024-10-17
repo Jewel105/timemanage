@@ -1,68 +1,5 @@
 basePath: /api/v1
 definitions:
-  gorm.DeletedAt:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
-    type: object
-  models.Category:
-    properties:
-      createdTime:
-        type: string
-      deleteTime:
-        $ref: '#/definitions/gorm.DeletedAt'
-      id:
-        type: integer
-      level:
-        description: 分类等级
-        type: integer
-      name:
-        description: 分类名称
-        type: string
-      parentID:
-        description: 上级分类ID
-        type: integer
-      path:
-        description: 分类路径
-        type: string
-      updatedTime:
-        type: string
-      userID:
-        description: 创建该分类的用户ID
-        type: integer
-    type: object
-  models.Task:
-    properties:
-      categoryID:
-        description: 任务所属分类ID
-        type: integer
-      createdTime:
-        type: string
-      deleteTime:
-        $ref: '#/definitions/gorm.DeletedAt'
-      description:
-        description: 任务描述
-        type: string
-      endTime:
-        description: 任务结束时间
-        type: integer
-      id:
-        type: integer
-      spentTime:
-        description: 花费时间
-        type: integer
-      startTime:
-        description: 任务开始时间
-        type: integer
-      updatedTime:
-        type: string
-      userID:
-        description: 创建该任务的用户ID
-        type: integer
-    type: object
   request.LoginRequest:
     properties:
       name:
@@ -114,6 +51,48 @@ definitions:
     - description
     - endTime
     - startTime
+    type: object
+  response.CategoriesRespose:
+    properties:
+      id:
+        description: 分类ID
+        type: integer
+      level:
+        description: 分类等级
+        type: integer
+      name:
+        description: 分类名称
+        type: string
+      parentID:
+        description: 上级分类ID
+        type: integer
+      path:
+        description: 分类路径
+        type: string
+      userID:
+        description: 创建该分类的用户ID
+        type: integer
+    type: object
+  response.TasksRespose:
+    properties:
+      categories:
+        description: 任务所属分类
+        type: string
+      description:
+        description: 任务描述
+        type: string
+      endTime:
+        description: 任务结束时间
+        type: integer
+      id:
+        description: 任务ID
+        type: integer
+      spentTime:
+        description: 花费时间
+        type: integer
+      startTime:
+        description: 任务开始时间
+        type: integer
     type: object
 host: 127.0.0.1
 info:
@@ -172,7 +151,7 @@ paths:
           description: success
           schema:
             items:
-              $ref: '#/definitions/models.Category'
+              $ref: '#/definitions/response.CategoriesRespose'
             type: array
       summary: 查询分类列表
       tags:
@@ -302,7 +281,7 @@ paths:
           description: success
           schema:
             items:
-              $ref: '#/definitions/models.Task'
+              $ref: '#/definitions/response.TasksRespose'
             type: array
       summary: 查询任务列表
       tags:

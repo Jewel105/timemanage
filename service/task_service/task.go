@@ -1,6 +1,7 @@
 package taskservice
 
 import (
+	"fmt"
 	"gin_study/api/consts"
 	"gin_study/gen/models"
 	"gin_study/gen/mysql"
@@ -12,10 +13,27 @@ import (
 
 func GetList(userID int64, req *request.GetTasksRequest) (*response.PageResponse, error) {
 	offset := (req.Page - 1) * req.Size
-	tasks, err := query.Task.Where(query.Task.UserID.Eq(userID)).Limit(req.Size).Offset(offset).Find()
-	if err != nil {
-		return nil, err
-	}
+	tasks := []response.TasksRespose{}
+	sql := fmt.Sprintf(
+		`
+		SELECT 
+			tasks.*,
+			GROUP_CONCAT(categories.name ORDER BY categories.id) AS categories
+		FROM 
+				tasks 
+		LEFT JOIN 
+				categories ON FIND_IN_SET(categories.id, tasks.category_path) 
+		WHERE 
+				tasks.user_id = %d AND tasks.delete_time IS NULL
+		GROUP BY 
+				tasks.id
+		LIMIT %d
+		OFFSET %d
+			`, userID, req.Size, offset,
+	)
+
+	query.Task.UnderlyingDB().Raw(sql).Scan(&tasks)
+
 	res := response.PageResponse{
 		Page: req.Page,
 		Size: req.Size,
@@ -26,23 +44,21 @@ func GetList(userID int64, req *request.GetTasksRequest) (*response.PageResponse
 
 func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 	// Category not found.
-	count, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).Count()
+	category, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
 	if err != nil {
-		return 0, err
-	}
-
-	if count == 0 {
 		return 0, &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Category not found."}
 	}
 
 	task := models.Task{
-		ID:          req.ID,
-		UserID:      userID,
-		Description: req.Description,
-		CategoryID:  req.CategoryID,
-		StartTime:   req.StartTime,
-		EndTime:     req.EndTime,
+		ID:           req.ID,
+		UserID:       userID,
+		Description:  req.Description,
+		CategoryPath: fmt.Sprintf("%s,%d", category.Path, req.CategoryID),
+		CategoryID:   req.CategoryID,
+		StartTime:    req.StartTime,
+		EndTime:      req.EndTime,
 	}
+
 	task.SpentTime = task.EndTime - task.StartTime
 
 	tx := query.Q.Begin()

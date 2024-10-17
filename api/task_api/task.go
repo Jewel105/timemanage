@@ -17,7 +17,7 @@ import (
 // @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
 // @Param page query int false "1"
 // @Param size query int false "10"
-// @success 200 {object} []models.Task "success"
+// @success 200 {object} []response.TasksRespose "success"
 // @Router /tasks/list [get]
 func GetList(c *gin.Context) {
 	userID := api.GetUserID(c)
