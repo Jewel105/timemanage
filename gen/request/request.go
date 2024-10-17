@@ -6,8 +6,8 @@ type LoginRequest struct {
 }
 
 type RegisterRequest struct {
-	Name     string `json:"name" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Name     string `json:"name" binding:"required"`     // 用户名
+	Password string `json:"password" binding:"required"` // 密码
 }
 
 type GetTasksRequest struct {
@@ -17,10 +17,10 @@ type GetTasksRequest struct {
 
 type SaveTaskRequest struct {
 	ID          int64  `json:"id"`
-	Description string `json:"description" binding:"required"`
-	CategoryID  int64  `json:"categoryID" binding:"required"`
-	StartTime   int64  `json:"startTime" binding:"required"`
-	EndTime     int64  `json:"endTime" binding:"required"`
+	Description string `json:"description" binding:"required"` // 任务描述
+	CategoryID  int64  `json:"categoryID" binding:"required"`  // 任务所属分类ID
+	StartTime   int64  `json:"startTime" binding:"required"`   // 任务开始时间
+	EndTime     int64  `json:"endTime" binding:"required"`     // 任务结束时间
 }
 
 type GetCategoriesRequest struct {
@@ -29,6 +29,10 @@ type GetCategoriesRequest struct {
 
 type SaveCategoryRequest struct {
 	ID       int64  `json:"id"`
-	Name     string `json:"name" binding:"required"`
-	ParentID int64  `json:"parentID"` // 上级分类ID
+	Name     string `json:"name" binding:"required"` // 分类名称
+	ParentID int64  `json:"parentID"`                // 上级分类ID
+}
+
+type SendCodeRequest struct {
+	Email string `json:"email" example:"test@mail.com" binding:"required,email,max=255"` // 邮箱
 }

@@ -43,3 +43,21 @@ func Register(c *gin.Context) {
 	userID, err := userservice.Register(&req)
 	api.DealResponse(c, userID, err)
 }
+
+// @Id Register
+// @Summary 注册
+// @Description 注册
+// @Tags COMMON API
+// @Accept json
+// @Produce application/json
+// @Param req body request.SendCodeRequest true "Json"
+// @success 200 boolean ture "success"
+// @Router  /common/user/sendCode [post]
+func SendMail(c *gin.Context) {
+	req := request.SendCodeRequest{}
+	if !api.ParseJson(c, &req) {
+		return
+	}
+	err := userservice.SendMail(&req)
+	api.DealResponse(c, true, err)
+}

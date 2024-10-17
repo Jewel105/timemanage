@@ -9,10 +9,11 @@ import (
 )
 
 type AppConfig struct {
-	Server *Server `yaml:"server" valid:"required"`
-	Mysql  *Mysql  `yaml:"mysql" valid:"required"`
-	Jwt    *Jwt    `yaml:"jwt" valid:"required"`
-	Redis  *Redis  `yaml:"redis" valid:"required"`
+	Server    *Server `yaml:"server" valid:"required"`
+	Mysql     *Mysql  `yaml:"mysql" valid:"required"`
+	Jwt       *Jwt    `yaml:"jwt" valid:"required"`
+	Redis     *Redis  `yaml:"redis" valid:"required"`
+	EmailSmpt *Email  `yaml:"emailSmpt" valid:"required"`
 }
 
 type Mysql struct {
@@ -47,12 +48,19 @@ type Redis struct {
 	IdleTimeout int64  `yaml:"idleTimeout" valid:"required"`
 }
 
+type Email struct {
+	Email    string `yaml:"email" valid:"required"`
+	Password string `yaml:"password" valid:"required"`
+	Host     string `yaml:"host" valid:"required"`
+	Port     int    `yaml:"port" valid:"required"`
+}
+
 // 配置对象
 var Config AppConfig
 
 func GetConfig(env string) {
 	// 打开 YAML 文件
-	file, err := os.Open("./config/config-" + env + ".yaml")
+	file, err := os.Open("./config/application-" + env + ".yaml")
 	if err != nil {
 		logger.Error(zap.Any("Error opening file", err))
 		return

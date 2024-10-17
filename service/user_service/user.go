@@ -2,11 +2,14 @@ package userservice
 
 import (
 	"gin_study/api/consts"
+	"gin_study/config"
 	"gin_study/factory"
 	"gin_study/gen/models"
 	"gin_study/gen/mysql"
 	"gin_study/gen/query"
 	"gin_study/gen/request"
+	"net/smtp"
+	"strconv"
 )
 
 func Login(req *request.LoginRequest) (string, error) {
@@ -37,4 +40,36 @@ func Register(req *request.RegisterRequest) (int64, error) {
 	err := query.User.Save(&user)
 	err = mysql.DeferTx(tx, err)
 	return user.ID, err
+}
+
+func SendMail(to *request.SendCodeRequest) error {
+	from := config.Config.EmailSmpt.Email
+	password := config.Config.EmailSmpt.Password
+
+	// 发送给多个收件人
+	recipients := []string{to.Email}
+
+	// SMTP服务器配置
+	smtpHost := config.Config.EmailSmpt.Host
+	smtpPort := strconv.Itoa(config.Config.EmailSmpt.Port)
+
+	randomCode := factory.GenerateRandomString(6)
+
+	// 邮件内容：包含标题和正文
+	message := []byte("Subject: Code" + "\r\n" +
+		"MIME-Version: 1.0\r\n" +
+		"Content-Type: text/plain; charset=\"UTF-8\"\r\n" +
+		"\r\n" + "To finish signing up, please input the verification code:" +
+		"\r\n" + randomCode + "\r\n")
+
+	// 认证信息
+	auth := smtp.PlainAuth("", from, password, smtpHost)
+
+	// 发送邮件
+	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, recipients, message)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

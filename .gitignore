@@ -3,6 +3,7 @@
 *.so
 *.dylib
 *.test
+*.yaml
 __debug_bin*
 
 log
