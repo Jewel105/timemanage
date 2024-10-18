@@ -1,4 +1,4 @@
-# time manager
+# Go time manager
 
 ## 主要功能
 - gorm对接mysql，自动迁移创建表，gen自动生成curd
