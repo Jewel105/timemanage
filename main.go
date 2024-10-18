@@ -23,13 +23,14 @@ func init() {
 
 // @contact.name jewel
 
-// @host 127.0.0.1
+// @host 127.0.0.1:8081
 // @BasePath /api/v1
 func main() {
 	flag.Parse()
 	config.GetConfig(env)
+
 	var wg sync.WaitGroup
-	wg.Add(2) // 有两个并发任务需要等待
+	wg.Add(3) // 有3个并发任务需要等待
 
 	// 启动 MySQL
 	go func() {
@@ -42,16 +43,20 @@ func main() {
 		defer wg.Done()
 		factory.RedisStart()
 	}()
+
 	// 启动 Logger
 	defer logger.Sync()
-	logger.InitLogger(logger.LogConfig{
-		FileName:   "./log/timemanage.log",
-		MaxSize:    100,
-		MaxAge:     30,
-		MaxBackups: 100,
-	})
+	go func() {
+		defer wg.Done()
+		logger.InitLogger(logger.LogConfig{
+			FileName:   "./log/timemanage.log",
+			MaxSize:    100,
+			MaxAge:     30,
+			MaxBackups: 100,
+		})
+	}()
 
-	// 等待 MySQL 和 Redis 初始化完成
+	// 等待 MySQL ， Redis ，logger初始化完成
 	wg.Wait()
 	router.Start()
 }
