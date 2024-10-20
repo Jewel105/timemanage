@@ -51,7 +51,9 @@ func DecodeToken(tokenstring string) (*UserClaims, error) {
 	t, err := jwt.ParseWithClaims(tokenstring, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtSecret), nil
 	})
-
+	if err != nil {
+		return nil, err
+	}
 	if claims, ok := t.Claims.(*UserClaims); ok && t.Valid {
 		// 从Redis中获取token
 		tokenKey := config.Config.Jwt.RedisKey + strconv.FormatInt(claims.UserID, 10) + claims.TokenId.String()

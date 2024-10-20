@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
+	"runtime"
+
 	"gin_study/api/consts"
 	"gin_study/factory"
 	"gin_study/logger"
@@ -36,7 +39,14 @@ type TokenHeader struct {
 func Recover(c *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Error(zap.Any("gin recover error", err))
+			// 获取调用栈信息
+			stack := make([]byte, 4*1024)
+			stack = stack[:runtime.Stack(stack, false)]
+			// 记录错误和stack trace
+			logger.Error(
+				zap.Any("gin recover error", err),
+				zap.ByteString("stack", stack),
+			)
 			ReturnResponse(c, consts.SYSTEM_ERROR, fmt.Sprintf("%v", err))
 			//终止后续接口调用，不加的话recover异常之后，还会继续执行后续代码
 			c.Abort()
