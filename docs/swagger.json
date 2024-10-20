@@ -9,7 +9,7 @@
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1",
+    "host": "127.0.0.1:8081",
     "basePath": "/api/v1",
     "paths": {
         "/categories/delete/:id": {
@@ -133,6 +133,76 @@
                 }
             }
         },
+        "/common/system/log/error": {
+            "post": {
+                "description": "记录前端日志错误",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "记录前端日志错误",
+                "operationId": "LogError",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LogErrorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/system/register/equipment": {
+            "post": {
+                "description": "注册设备",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "注册设备",
+                "operationId": "RegisterEquipment",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterEquipmentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
         "/common/user/forget/password": {
             "post": {
                 "description": "忘记密码",
@@ -183,6 +253,12 @@
                 "summary": "登录",
                 "operationId": "Login",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "3425243",
+                        "name": "equipment",
+                        "in": "header"
+                    },
                     {
                         "description": "Json",
                         "name": "req",
@@ -416,6 +492,23 @@
         }
     },
     "definitions": {
+        "request.LogErrorRequest": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "description": "错误信息",
+                    "type": "string"
+                },
+                "stack": {
+                    "description": "堆栈",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "版本",
+                    "type": "string"
+                }
+            }
+        },
         "request.LoginRequest": {
             "type": "object",
             "required": [
@@ -429,6 +522,35 @@
                 },
                 "password": {
                     "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "request.RegisterEquipmentRequest": {
+            "type": "object",
+            "properties": {
+                "imei0": {
+                    "description": "IMEI0",
+                    "type": "string"
+                },
+                "imei1": {
+                    "description": "IMEI1",
+                    "type": "string"
+                },
+                "os": {
+                    "description": "所属操作系统",
+                    "type": "string"
+                },
+                "sn": {
+                    "description": "序列号",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "设备类型",
+                    "type": "string"
+                },
+                "vender": {
+                    "description": "供应商",
                     "type": "string"
                 }
             }

@@ -22,3 +22,17 @@ func RegisterEquipment(req *request.RegisterEquipmentRequest) (int64, error) {
 	err = mysql.DeferTx(tx, err)
 	return equipment.ID, err
 }
+
+func LogError(userID int64, equipmentID int64, req *request.LogErrorRequest) (int64, error) {
+	errorLog := models.FontLogs{
+		EquipmentID: equipmentID,
+		UserID:      userID,
+		Version:     req.Version,
+		Stack:       req.Stack,
+		Error:       req.Error,
+	}
+	tx := query.Q.Begin()
+	err := query.FontLogs.Save(&errorLog)
+	err = mysql.DeferTx(tx, err)
+	return errorLog.ID, err
+}

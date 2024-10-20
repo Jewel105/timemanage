@@ -139,6 +139,76 @@ const docTemplate = `{
                 }
             }
         },
+        "/common/system/log/error": {
+            "post": {
+                "description": "记录前端日志错误",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "记录前端日志错误",
+                "operationId": "LogError",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LogErrorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/system/register/equipment": {
+            "post": {
+                "description": "注册设备",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "注册设备",
+                "operationId": "RegisterEquipment",
+                "parameters": [
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterEquipmentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
         "/common/user/forget/password": {
             "post": {
                 "description": "忘记密码",
@@ -189,6 +259,12 @@ const docTemplate = `{
                 "summary": "登录",
                 "operationId": "Login",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "3425243",
+                        "name": "equipment",
+                        "in": "header"
+                    },
                     {
                         "description": "Json",
                         "name": "req",
@@ -422,6 +498,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "request.LogErrorRequest": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "description": "错误信息",
+                    "type": "string"
+                },
+                "stack": {
+                    "description": "堆栈",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "版本",
+                    "type": "string"
+                }
+            }
+        },
         "request.LoginRequest": {
             "type": "object",
             "required": [
@@ -435,6 +528,35 @@ const docTemplate = `{
                 },
                 "password": {
                     "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "request.RegisterEquipmentRequest": {
+            "type": "object",
+            "properties": {
+                "imei0": {
+                    "description": "IMEI0",
+                    "type": "string"
+                },
+                "imei1": {
+                    "description": "IMEI1",
+                    "type": "string"
+                },
+                "os": {
+                    "description": "所属操作系统",
+                    "type": "string"
+                },
+                "sn": {
+                    "description": "序列号",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "设备类型",
+                    "type": "string"
+                },
+                "vender": {
+                    "description": "供应商",
                     "type": "string"
                 }
             }
@@ -596,7 +718,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1",
+	Host:             "127.0.0.1:8081",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "time manage",
