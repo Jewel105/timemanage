@@ -3,6 +3,7 @@ package router
 import (
 	"gin_study/api"
 	categoryapi "gin_study/api/category_api"
+	systemapi "gin_study/api/system_api"
 	taskapi "gin_study/api/task_api"
 	userapi "gin_study/api/user_api"
 	"gin_study/config"
@@ -21,6 +22,7 @@ func Start() {
 	r := gin.Default()
 	r.Use(api.RecordLog)
 	r.Use(api.Recover)
+	r.Use(api.SaveEquipmentID)
 
 	// 引入swagger
 	swaggerJson := getFileContent("./docs/swagger.json")
@@ -31,6 +33,7 @@ func Start() {
 
 	// 引入api
 	userapi.AddRouter(common)
+	systemapi.AddRouter(common)
 	taskapi.AddRouter(apiV1)
 	categoryapi.AddRouter(apiV1)
 

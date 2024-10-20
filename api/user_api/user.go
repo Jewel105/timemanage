@@ -2,6 +2,7 @@ package userapi
 
 import (
 	"gin_study/api"
+	"gin_study/api/consts"
 	"gin_study/gen/request"
 	userservice "gin_study/service/user_service"
 
@@ -14,6 +15,7 @@ import (
 // @Tags COMMON API
 // @Accept  json
 // @Produce application/json
+// @Param equipment header string false "3425243"
 // @Param req body request.LoginRequest true "Json"
 // @Success 200 {string} string "token"
 // @Router  /common/user/login [post]
@@ -22,7 +24,8 @@ func Login(c *gin.Context) {
 	if !api.ParseJson(c, &req) {
 		return
 	}
-	token, e := userservice.Login(&req)
+	equipmentID := c.GetInt64(consts.EQUIPMENT_ID)
+	token, e := userservice.Login(equipmentID, &req)
 	api.DealResponse(c, token, e)
 }
 

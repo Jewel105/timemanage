@@ -1,6 +1,7 @@
 package userservice
 
 import (
+	"fmt"
 	"gin_study/api/consts"
 	"gin_study/config"
 	"gin_study/factory"
@@ -11,12 +12,13 @@ import (
 	"gin_study/logger"
 	"net/smtp"
 	"strconv"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
 )
 
-func Login(req *request.LoginRequest) (string, error) {
+func Login(equipmentID int64, req *request.LoginRequest) (string, error) {
 	// 用户名或密码都可以登录
 	user, err := query.User.Where(query.User.Name.Eq(req.Name)).Or(query.User.Email.Eq(req.Name)).First()
 	if err != nil {
@@ -26,8 +28,26 @@ func Login(req *request.LoginRequest) (string, error) {
 	if reqPass != user.Password {
 		return "", &consts.ApiErr{Code: consts.LOGIN_FAILED, Msg: "user and password are incorrect"}
 	}
+
+	// 记录设备
+	if equipmentID != 0 {
+		queryEquipment := query.Equipment.Where(query.Equipment.ID.Eq(equipmentID))
+		equipment, _ := queryEquipment.Select(query.Equipment.UserIDs).First()
+		if equipment != nil {
+			// 用户中已经有该设备，不再记录
+			userIDStr := strconv.FormatInt(user.ID, 10)
+			if !strings.Contains(equipment.UserIDs, userIDStr) {
+				userIDs := fmt.Sprintf("%s,%d", equipment.UserIDs, user.ID)
+				tx := query.Q.Begin()
+				_, err = queryEquipment.UpdateColumn(query.Equipment.UserIDs, userIDs)
+				mysql.DeferTx(tx, err)
+			}
+		}
+	}
+
 	// get token
 	token, e := factory.CreateToken(user.Name, user.ID)
+
 	return token, e
 }
 

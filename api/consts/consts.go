@@ -15,7 +15,8 @@ const (
 )
 
 const (
-	USER_ID = "userID"
+	USER_ID      = "userID"
+	EQUIPMENT_ID = "equipmentID"
 )
 
 var MsgFlags = map[string]string{

@@ -16,44 +16,54 @@ import (
 )
 
 var (
-	Q        = new(Query)
-	Category *category
-	Task     *task
-	User     *user
+	Q         = new(Query)
+	Category  *category
+	Equipment *equipment
+	FontLogs  *fontLogs
+	Task      *task
+	User      *user
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 	Category = &Q.Category
+	Equipment = &Q.Equipment
+	FontLogs = &Q.FontLogs
 	Task = &Q.Task
 	User = &Q.User
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:       db,
-		Category: newCategory(db, opts...),
-		Task:     newTask(db, opts...),
-		User:     newUser(db, opts...),
+		db:        db,
+		Category:  newCategory(db, opts...),
+		Equipment: newEquipment(db, opts...),
+		FontLogs:  newFontLogs(db, opts...),
+		Task:      newTask(db, opts...),
+		User:      newUser(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Category category
-	Task     task
-	User     user
+	Category  category
+	Equipment equipment
+	FontLogs  fontLogs
+	Task      task
+	User      user
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:       db,
-		Category: q.Category.clone(db),
-		Task:     q.Task.clone(db),
-		User:     q.User.clone(db),
+		db:        db,
+		Category:  q.Category.clone(db),
+		Equipment: q.Equipment.clone(db),
+		FontLogs:  q.FontLogs.clone(db),
+		Task:      q.Task.clone(db),
+		User:      q.User.clone(db),
 	}
 }
 
@@ -67,24 +77,30 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:       db,
-		Category: q.Category.replaceDB(db),
-		Task:     q.Task.replaceDB(db),
-		User:     q.User.replaceDB(db),
+		db:        db,
+		Category:  q.Category.replaceDB(db),
+		Equipment: q.Equipment.replaceDB(db),
+		FontLogs:  q.FontLogs.replaceDB(db),
+		Task:      q.Task.replaceDB(db),
+		User:      q.User.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Category ICategoryDo
-	Task     ITaskDo
-	User     IUserDo
+	Category  ICategoryDo
+	Equipment IEquipmentDo
+	FontLogs  IFontLogsDo
+	Task      ITaskDo
+	User      IUserDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Category: q.Category.WithContext(ctx),
-		Task:     q.Task.WithContext(ctx),
-		User:     q.User.WithContext(ctx),
+		Category:  q.Category.WithContext(ctx),
+		Equipment: q.Equipment.WithContext(ctx),
+		FontLogs:  q.FontLogs.WithContext(ctx),
+		Task:      q.Task.WithContext(ctx),
+		User:      q.User.WithContext(ctx),
 	}
 }
 

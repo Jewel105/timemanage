@@ -40,3 +40,18 @@ type SaveCategoryRequest struct {
 type SendCodeRequest struct {
 	Email string `json:"email" example:"test@mail.com" binding:"required,email"` // 邮箱
 }
+
+type RegisterEquipmentRequest struct {
+	Vender string `json:"vender"` // 供应商
+	Type   string `json:"type"`   // 设备类型
+	Sn     string `json:"sn"`     // 序列号
+	Imei1  string `json:"imei1"`  // IMEI1
+	Imei0  string `json:"imei0"`  // IMEI0
+	Os     string `json:"os"`     // 所属操作系统
+}
+
+type LogErrorRequest struct {
+	Version string `json:"version"` // 版本
+	Stack   string `json:"stack"`   // 堆栈
+	Error   string `json:"error"`   // 错误信息
+}

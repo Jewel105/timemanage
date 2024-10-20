@@ -19,7 +19,7 @@ func main() {
 	if db.Error != nil {
 		fmt.Println("database error", db.Error)
 	}
-	e := db.AutoMigrate(&models.User{}, &models.Task{}, &models.Category{})
+	e := db.AutoMigrate(&models.User{}, &models.Task{}, &models.Category{}, &models.Equipment{}, &models.FontLogs{})
 	if e != nil {
 		fmt.Println("mysql migrate error", e.Error())
 	}
@@ -32,6 +32,6 @@ func main() {
 		Mode: gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
 	})
 	g.UseDB(db)
-	g.ApplyBasic(&models.User{}, &models.Task{}, &models.Category{})
+	g.ApplyBasic(&models.User{}, &models.Task{}, &models.Category{}, &models.Equipment{}, &models.FontLogs{})
 	g.Execute()
 }

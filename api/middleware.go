@@ -8,6 +8,7 @@ import (
 	"gin_study/factory"
 	"gin_study/logger"
 	"io"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -59,6 +60,21 @@ func VerifyToken(c *gin.Context) {
 	}
 
 	c.Set(consts.USER_ID, userClaims.UserID)
+	c.Next()
+}
+
+func SaveEquipmentID(c *gin.Context) {
+	equipmentIDStr := c.GetHeader("Equipment")
+	if equipmentIDStr == "" {
+		c.Next()
+		return
+	}
+	equipmentID, err := strconv.ParseInt(equipmentIDStr, 10, 64)
+	if err != nil {
+		c.Next()
+		return
+	}
+	c.Set(consts.EQUIPMENT_ID, equipmentID)
 	c.Next()
 }
 

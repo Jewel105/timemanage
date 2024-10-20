@@ -44,3 +44,31 @@ type Category struct {
 	Path     string `gorm:"column:path;size:128" json:"path"`  // 分类路径
 	Level    int    `gorm:"column:level;size:10" json:"level"` // 分类等级
 }
+
+type Equipment struct {
+	ID          int64          `gorm:"column:id;primarykey;autoIncrement" json:"id"`
+	CreatedTime time.Time      `gorm:"column:create_time;autoCreateTime:milli" json:"createdTime"`
+	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
+	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
+
+	Vender  string `gorm:"column:vender;size:128" json:"vender"`    // 供应商
+	Type    string `gorm:"column:type;size:128" json:"type"`        // 设备类型
+	Sn      string `gorm:"column:sn;size:128" json:"sn"`            // 序列号
+	Imei1   string `gorm:"column:imei1;size:128" json:"imei1"`      // IMEI1
+	Imei0   string `gorm:"column:imei0;size:128" json:"imei0"`      // IMEI0
+	Os      string `gorm:"column:os;size:128" json:"os"`            // 所属操作系统
+	UserIDs string `gorm:"column:user_ids;size:256" json:"userIDs"` // 所属所有用户ID
+}
+
+type FontLogs struct {
+	ID          int64          `gorm:"column:id;primarykey;autoIncrement" json:"id"`
+	CreatedTime time.Time      `gorm:"column:create_time;autoCreateTime:milli" json:"createdTime"`
+	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
+	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
+
+	EquipmentID int64  `gorm:"column:equipment_id" json:"equipment_id"` // 所属设备ID
+	UserID      int64  `gorm:"column:user_id" json:"userID"`            // 所属用户ID
+	Version     string `gorm:"column:version;size:32" json:"version"`   // 版本
+	Stack       string `gorm:"column:stack" json:"stack"`               // 堆栈
+	Error       string `gorm:"column:error;size:256" json:"error"`      // 错误信息
+}

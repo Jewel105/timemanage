@@ -65,10 +65,9 @@ func ParseQuery(c *gin.Context, obj any) bool {
 }
 
 func GetUserID(c *gin.Context) int64 {
-	userID, exists := c.Get(consts.USER_ID)
-	if !exists {
+	userID := c.GetInt64(consts.USER_ID)
+	if userID == 0 {
 		ReturnResponse(c, consts.TOKEN_INVALID, "user not found")
-		return 0
 	}
-	return userID.(int64)
+	return userID
 }
