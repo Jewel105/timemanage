@@ -348,6 +348,16 @@ paths:
         in: query
         name: size
         type: integer
+      - description: 开始时间
+        in: query
+        name: startTime
+        required: true
+        type: integer
+      - description: 结束时间
+        in: query
+        name: endTime
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

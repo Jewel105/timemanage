@@ -126,7 +126,7 @@ func ForgetPassword(req *request.RegisterRequest) (int64, error) {
 	user, err := query.User.Where(query.User.Name.Eq(req.Name), query.User.Email.Eq(req.Email)).First()
 	if err != nil {
 		return 0,
-			&consts.ApiErr{Code: consts.NO_DATA, Msg: "user not found."}
+			&consts.ApiErr{Code: consts.NO_DATA, Msg: "Username or email error."}
 	}
 
 	if user.Password == factory.Md5Hash(req.Password) {

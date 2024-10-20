@@ -29,7 +29,7 @@ type Task struct {
 	CategoryPath string `gorm:"column:category_path;size:128" json:"categoryPath"` // 任务路径上的所有ID
 	StartTime    int64  `gorm:"column:start_time" json:"startTime"`                // 任务开始时间
 	EndTime      int64  `gorm:"column:end_time" json:"endTime"`                    // 任务结束时间
-	CategoryID   int64  `gorm:"column:categor_id" json:"categoryID"`               // 任务所属分类ID
+	CategoryID   int64  `gorm:"column:category_id" json:"categoryID"`              // 任务所属分类ID
 }
 
 type Category struct {

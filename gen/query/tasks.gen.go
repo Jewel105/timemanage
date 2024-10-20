@@ -36,7 +36,7 @@ func newTask(db *gorm.DB, opts ...gen.DOOption) task {
 	_task.CategoryPath = field.NewString(tableName, "category_path")
 	_task.StartTime = field.NewInt64(tableName, "start_time")
 	_task.EndTime = field.NewInt64(tableName, "end_time")
-	_task.CategoryID = field.NewInt64(tableName, "categor_id")
+	_task.CategoryID = field.NewInt64(tableName, "category_id")
 
 	_task.fillFieldMap()
 
@@ -84,7 +84,7 @@ func (t *task) updateTableName(table string) *task {
 	t.CategoryPath = field.NewString(table, "category_path")
 	t.StartTime = field.NewInt64(table, "start_time")
 	t.EndTime = field.NewInt64(table, "end_time")
-	t.CategoryID = field.NewInt64(table, "categor_id")
+	t.CategoryID = field.NewInt64(table, "category_id")
 
 	t.fillFieldMap()
 
@@ -112,7 +112,7 @@ func (t *task) fillFieldMap() {
 	t.fieldMap["category_path"] = t.CategoryPath
 	t.fieldMap["start_time"] = t.StartTime
 	t.fieldMap["end_time"] = t.EndTime
-	t.fieldMap["categor_id"] = t.CategoryID
+	t.fieldMap["category_id"] = t.CategoryID
 }
 
 func (t task) clone(db *gorm.DB) task {

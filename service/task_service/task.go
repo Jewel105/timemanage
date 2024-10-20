@@ -24,12 +24,14 @@ func GetList(userID int64, req *request.GetTasksRequest) (*response.PageResponse
 		LEFT JOIN 
 				categories ON FIND_IN_SET(categories.id, tasks.category_path) 
 		WHERE 
-				tasks.user_id = %d AND tasks.delete_time IS NULL
+				tasks.user_id = %d AND tasks.delete_time IS NULL AND start_time >= %d AND start_time <= %d
 		GROUP BY 
 				tasks.id
 		LIMIT %d
 		OFFSET %d
-			`, userID, req.Size, offset,
+			`, userID,
+		req.StartTime, req.EndTime,
+		req.Size, offset,
 	)
 
 	query.Task.UnderlyingDB().Raw(sql).Scan(&tasks)

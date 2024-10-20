@@ -17,6 +17,8 @@ import (
 // @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
 // @Param page query int false "1"
 // @Param size query int false "10"
+// @Param startTime query int true "开始时间"
+// @Param endTime query int true  "结束时间"
 // @success 200 {object} []response.TasksRespose "success"
 // @Router /tasks/list [get]
 func GetList(c *gin.Context) {

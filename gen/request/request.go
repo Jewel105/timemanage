@@ -13,8 +13,10 @@ type RegisterRequest struct {
 }
 
 type GetTasksRequest struct {
-	Page int `form:"page,default=1" binding:"gte=1"`          // 页码
-	Size int `form:"size,default=10" binding:"gte=1,lte=100"` // 每页数量
+	Page      int `form:"page,default=1" binding:"gte=1"`          // 页码
+	Size      int `form:"size,default=10" binding:"gte=1,lte=100"` // 每页数量
+	StartTime int `form:"startTime" binding:"required"`            // 开始时间
+	EndTime   int `form:"endTime" binding:"required"`              // 开始时间
 }
 
 type SaveTaskRequest struct {
