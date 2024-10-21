@@ -38,6 +38,7 @@ func newEquipment(db *gorm.DB, opts ...gen.DOOption) equipment {
 	_equipment.Os = field.NewString(tableName, "os")
 	_equipment.UserIDs = field.NewString(tableName, "user_ids")
 	_equipment.IsPhysicalDevice = field.NewInt(tableName, "is_physical_device")
+	_equipment.Fingerprint = field.NewString(tableName, "fingerprint")
 
 	_equipment.fillFieldMap()
 
@@ -60,6 +61,7 @@ type equipment struct {
 	Os               field.String
 	UserIDs          field.String
 	IsPhysicalDevice field.Int
+	Fingerprint      field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -88,6 +90,7 @@ func (e *equipment) updateTableName(table string) *equipment {
 	e.Os = field.NewString(table, "os")
 	e.UserIDs = field.NewString(table, "user_ids")
 	e.IsPhysicalDevice = field.NewInt(table, "is_physical_device")
+	e.Fingerprint = field.NewString(table, "fingerprint")
 
 	e.fillFieldMap()
 
@@ -104,7 +107,7 @@ func (e *equipment) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (e *equipment) fillFieldMap() {
-	e.fieldMap = make(map[string]field.Expr, 12)
+	e.fieldMap = make(map[string]field.Expr, 13)
 	e.fieldMap["id"] = e.ID
 	e.fieldMap["create_time"] = e.CreatedTime
 	e.fieldMap["update_time"] = e.UpdatedTime
@@ -117,6 +120,7 @@ func (e *equipment) fillFieldMap() {
 	e.fieldMap["os"] = e.Os
 	e.fieldMap["user_ids"] = e.UserIDs
 	e.fieldMap["is_physical_device"] = e.IsPhysicalDevice
+	e.fieldMap["fingerprint"] = e.Fingerprint
 }
 
 func (e equipment) clone(db *gorm.DB) equipment {

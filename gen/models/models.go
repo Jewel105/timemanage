@@ -59,6 +59,7 @@ type Equipment struct {
 	Os               string `gorm:"column:os;size:128" json:"os"`                              // 所属操作系统
 	UserIDs          string `gorm:"column:user_ids;size:256" json:"userIDs"`                   // 所属所有用户ID
 	IsPhysicalDevice int    `gorm:"column:is_physical_device;size:10" json:"isPhysicalDevice"` // 是否为物理设备
+	Fingerprint      string `gorm:"column:fingerprint;size:256" json:"fingerprint"`            // 设备的指纹
 }
 
 type FontLogs struct {
