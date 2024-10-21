@@ -543,6 +543,10 @@ const docTemplate = `{
                     "description": "IMEI1",
                     "type": "string"
                 },
+                "isPhysicalDevice": {
+                    "description": "是否为物理设备",
+                    "type": "integer"
+                },
                 "os": {
                     "description": "所属操作系统",
                     "type": "string"

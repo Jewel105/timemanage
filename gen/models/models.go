@@ -51,13 +51,14 @@ type Equipment struct {
 	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
 	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
 
-	Vender  string `gorm:"column:vender;size:128" json:"vender"`    // 供应商
-	Type    string `gorm:"column:type;size:128" json:"type"`        // 设备类型
-	Sn      string `gorm:"column:sn;size:128" json:"sn"`            // 序列号
-	Imei1   string `gorm:"column:imei1;size:128" json:"imei1"`      // IMEI1
-	Imei0   string `gorm:"column:imei0;size:128" json:"imei0"`      // IMEI0
-	Os      string `gorm:"column:os;size:128" json:"os"`            // 所属操作系统
-	UserIDs string `gorm:"column:user_ids;size:256" json:"userIDs"` // 所属所有用户ID
+	Vender           string `gorm:"column:vender;size:128" json:"vender"`                      // 供应商
+	Type             string `gorm:"column:type;size:128" json:"type"`                          // 设备类型
+	Sn               string `gorm:"column:sn;size:128" json:"sn"`                              // 序列号
+	Imei1            string `gorm:"column:imei1;size:128" json:"imei1"`                        // IMEI1
+	Imei0            string `gorm:"column:imei0;size:128" json:"imei0"`                        // IMEI0
+	Os               string `gorm:"column:os;size:128" json:"os"`                              // 所属操作系统
+	UserIDs          string `gorm:"column:user_ids;size:256" json:"userIDs"`                   // 所属所有用户ID
+	IsPhysicalDevice int    `gorm:"column:is_physical_device;size:10" json:"isPhysicalDevice"` // 是否为物理设备
 }
 
 type FontLogs struct {

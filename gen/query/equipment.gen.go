@@ -37,6 +37,7 @@ func newEquipment(db *gorm.DB, opts ...gen.DOOption) equipment {
 	_equipment.Imei0 = field.NewString(tableName, "imei0")
 	_equipment.Os = field.NewString(tableName, "os")
 	_equipment.UserIDs = field.NewString(tableName, "user_ids")
+	_equipment.IsPhysicalDevice = field.NewInt(tableName, "is_physical_device")
 
 	_equipment.fillFieldMap()
 
@@ -46,18 +47,19 @@ func newEquipment(db *gorm.DB, opts ...gen.DOOption) equipment {
 type equipment struct {
 	equipmentDo
 
-	ALL         field.Asterisk
-	ID          field.Int64
-	CreatedTime field.Time
-	UpdatedTime field.Time
-	DeleteTime  field.Field
-	Vender      field.String
-	Type        field.String
-	Sn          field.String
-	Imei1       field.String
-	Imei0       field.String
-	Os          field.String
-	UserIDs     field.String
+	ALL              field.Asterisk
+	ID               field.Int64
+	CreatedTime      field.Time
+	UpdatedTime      field.Time
+	DeleteTime       field.Field
+	Vender           field.String
+	Type             field.String
+	Sn               field.String
+	Imei1            field.String
+	Imei0            field.String
+	Os               field.String
+	UserIDs          field.String
+	IsPhysicalDevice field.Int
 
 	fieldMap map[string]field.Expr
 }
@@ -85,6 +87,7 @@ func (e *equipment) updateTableName(table string) *equipment {
 	e.Imei0 = field.NewString(table, "imei0")
 	e.Os = field.NewString(table, "os")
 	e.UserIDs = field.NewString(table, "user_ids")
+	e.IsPhysicalDevice = field.NewInt(table, "is_physical_device")
 
 	e.fillFieldMap()
 
@@ -101,7 +104,7 @@ func (e *equipment) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (e *equipment) fillFieldMap() {
-	e.fieldMap = make(map[string]field.Expr, 11)
+	e.fieldMap = make(map[string]field.Expr, 12)
 	e.fieldMap["id"] = e.ID
 	e.fieldMap["create_time"] = e.CreatedTime
 	e.fieldMap["update_time"] = e.UpdatedTime
@@ -113,6 +116,7 @@ func (e *equipment) fillFieldMap() {
 	e.fieldMap["imei0"] = e.Imei0
 	e.fieldMap["os"] = e.Os
 	e.fieldMap["user_ids"] = e.UserIDs
+	e.fieldMap["is_physical_device"] = e.IsPhysicalDevice
 }
 
 func (e equipment) clone(db *gorm.DB) equipment {

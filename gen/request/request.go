@@ -42,12 +42,13 @@ type SendCodeRequest struct {
 }
 
 type RegisterEquipmentRequest struct {
-	Vender string `json:"vender"` // 供应商
-	Type   string `json:"type"`   // 设备类型
-	Sn     string `json:"sn"`     // 序列号
-	Imei1  string `json:"imei1"`  // IMEI1
-	Imei0  string `json:"imei0"`  // IMEI0
-	Os     string `json:"os"`     // 所属操作系统
+	Vender           string `json:"vender"`           // 供应商
+	Type             string `json:"type"`             // 设备类型
+	Sn               string `json:"sn"`               // 序列号
+	Imei1            string `json:"imei1"`            // IMEI1
+	Imei0            string `json:"imei0"`            // IMEI0
+	Os               string `json:"os"`               // 所属操作系统
+	IsPhysicalDevice int    `json:"isPhysicalDevice"` // 是否为物理设备
 }
 
 type LogErrorRequest struct {
