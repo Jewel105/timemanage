@@ -7,12 +7,15 @@ import (
 	"gin_study/gen/mysql"
 	"gin_study/gen/query"
 	"gin_study/gen/request"
+	"gin_study/gen/response"
 	"strconv"
 	"strings"
 )
 
-func GetList(userID int64, req *request.GetCategoriesRequest) ([]*models.Category, error) {
-	return query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ParentID.Eq(req.ParentID)).Find()
+func GetList(userID int64, req *request.GetCategoriesRequest) (*[]response.CategoriesRespose, error) {
+	category := []response.CategoriesRespose{}
+	query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ParentID.Eq(req.ParentID)).Scan(&category)
+	return &category, nil
 }
 
 func SaveCategory(userID int64, req *request.SaveCategoryRequest) (int64, error) {
