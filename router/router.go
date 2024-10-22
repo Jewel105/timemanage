@@ -20,24 +20,43 @@ import (
 // export PATH=$(go env GOPATH)/bin:$PATH // 找不到swag
 func Start() {
 	r := gin.Default()
+	// 中间件
 	r.Use(api.RecordLog)
 	r.Use(api.Recover)
 	r.Use(api.SaveEquipmentID)
+	// 查看http协议
+	// r.Use(func(c *gin.Context) {
+	// 	protocol := c.Request.Proto
+	// 	fmt.Printf("Protocol: %s\n", protocol)
+	// 	c.Next()
+	// })
 
 	// 引入swagger
 	swaggerJson := getFileContent("./docs/swagger.json")
 	knife.InitSwaggerKnife(r, swaggerJson)
 
+	// 引入api
 	apiV1 := r.Group("/api/v1")
 	common := apiV1.Group("/common")
-
-	// 引入api
 	userapi.AddRouter(common)
 	systemapi.AddRouter(common)
 	taskapi.AddRouter(apiV1)
 	categoryapi.AddRouter(apiV1)
 
-	r.Run(":" + config.Config.Server.Port)
+	// 是否启用 H2C（HTTP/2 Cleartext）
+	r.UseH2C = config.Config.Server.EnableH2C
+	// 是否开启 HTTPS
+	if config.Config.Server.EnableSSL {
+		err := r.RunTLS(":"+config.Config.Server.Port, config.Config.Server.Certificate.Cert, config.Config.Server.Certificate.Key)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		err := r.Run(":" + config.Config.Server.Port)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func getFileContent(fpath string) string {
