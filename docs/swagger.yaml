@@ -206,7 +206,7 @@ paths:
         type: string
       - description: "11"
         in: query
-        name: ParentID
+        name: parentID
         type: integer
       produces:
       - application/json

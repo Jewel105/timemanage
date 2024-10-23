@@ -1,11 +1,5 @@
 package response
 
-type PageResponse struct {
-	Page int         `json:"page"`
-	Size int         `json:"size"`
-	Data interface{} `json:"data"`
-}
-
 type TasksRespose struct {
 	ID          int64  `json:"id"`          // 任务ID
 	Description string `json:"description"` // 任务描述

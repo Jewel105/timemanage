@@ -81,7 +81,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "11",
-                        "name": "ParentID",
+                        "name": "parentID",
                         "in": "query"
                     }
                 ],

@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func GetList(userID int64, req *request.GetTasksRequest) (*response.PageResponse, error) {
+func GetList(userID int64, req *request.GetTasksRequest) (*[]response.TasksRespose, error) {
 	offset := (req.Page - 1) * req.Size
 	tasks := []response.TasksRespose{}
 	sql := fmt.Sprintf(
@@ -36,12 +36,7 @@ func GetList(userID int64, req *request.GetTasksRequest) (*response.PageResponse
 
 	query.Task.UnderlyingDB().Raw(sql).Scan(&tasks)
 
-	res := response.PageResponse{
-		Page: req.Page,
-		Size: req.Size,
-		Data: tasks,
-	}
-	return &res, nil
+	return &tasks, nil
 }
 
 func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
