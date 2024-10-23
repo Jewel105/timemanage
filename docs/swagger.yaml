@@ -416,6 +416,27 @@ paths:
       summary: 删除任务
       tags:
       - 任务API
+  /tasks/last/time:
+    get:
+      consumes:
+      - application/json
+      description: 获取最后一个结束时间
+      operationId: GetLastEndTime
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
+        in: header
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: integer
+      summary: 获取最后一个结束时间
+      tags:
+      - 任务API
   /tasks/list:
     get:
       consumes:

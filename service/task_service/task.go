@@ -27,6 +27,7 @@ func GetList(userID int64, req *request.GetTasksRequest) (*[]response.TasksRespo
 				tasks.user_id = %d AND tasks.delete_time IS NULL AND start_time >= %d AND start_time <= %d
 		GROUP BY 
 				tasks.id
+		ORDER BY start_time
 		LIMIT %d
 		OFFSET %d
 			`, userID,
@@ -49,9 +50,10 @@ func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 	if req.StartTime == 0 {
 		lastTask, err := query.Task.Select(query.Task.EndTime).Where(query.Task.UserID.Eq(userID)).Order(query.Task.StartTime.Desc()).First()
 		if err != nil {
-			return 0, err
+			req.StartTime = req.EndTime
+		} else {
+			req.StartTime = lastTask.EndTime
 		}
-		req.StartTime = lastTask.EndTime
 	}
 
 	task := models.Task{
@@ -91,4 +93,13 @@ func DeleteTask(userID int64, idStr string) error {
 	_, err = taskQuery.Delete()
 	err = mysql.DeferTx(tx, err)
 	return err
+}
+
+func GetLastEndTime(userID int64) (int64, error) {
+	tasks := response.TasksResponse{}
+	err := query.Task.Select(query.Task.EndTime).Where(query.Task.UserID.Eq(userID)).Order(query.Task.StartTime.Desc()).Scan(&tasks)
+	if err != nil {
+		return 0, nil
+	}
+	return tasks.EndTime, nil
 }

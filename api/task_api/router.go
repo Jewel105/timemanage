@@ -13,5 +13,6 @@ func AddRouter(router *gin.RouterGroup) {
 		tasks.GET("/list", GetList)
 		tasks.POST("/save", SaveTask)
 		tasks.POST("/delete/:id", DeleteTask)
+		tasks.GET("/last/time", GetLastEndTime)
 	}
 }

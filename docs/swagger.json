@@ -388,6 +388,38 @@
                 }
             }
         },
+        "/tasks/last/time": {
+            "get": {
+                "description": "获取最后一个结束时间",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "任务API"
+                ],
+                "summary": "获取最后一个结束时间",
+                "operationId": "GetLastEndTime",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
+                        "name": "token",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/list": {
             "get": {
                 "description": "查询任务列表",

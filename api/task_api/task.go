@@ -76,3 +76,21 @@ func DeleteTask(c *gin.Context) {
 	err := taskservice.DeleteTask(userID, idStr)
 	api.DealResponse(c, true, err)
 }
+
+// @Id GetLastEndTime
+// @Summary 获取最后一个结束时间
+// @Description 获取最后一个结束时间
+// @Tags 任务API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
+// @success 200 {integer} int64 "success"
+// @Router /tasks/last/time [get]
+func GetLastEndTime(c *gin.Context) {
+	userID := api.GetUserID(c)
+	if userID == 0 {
+		return
+	}
+	res, err := taskservice.GetLastEndTime(userID)
+	api.DealResponse(c, res, err)
+}
