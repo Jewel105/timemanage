@@ -91,7 +91,7 @@ func DeleteTask(userID int64, idStr string) error {
 
 func GetLastEndTime(userID int64) (int64, error) {
 	tasks := response.TasksResponse{}
-	err := query.Task.Select(query.Task.EndTime).Where(query.Task.UserID.Eq(userID)).Order(query.Task.StartTime.Desc()).Scan(&tasks)
+	err := query.Task.Select(query.Task.EndTime).Where(query.Task.UserID.Eq(userID)).Order(query.Task.EndTime.Desc()).Scan(&tasks)
 	if err != nil {
 		return 0, nil
 	}
