@@ -650,7 +650,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "categoryID",
-                "endTime"
+                "endTime",
+                "startTime"
             ],
             "properties": {
                 "categoryID": {
