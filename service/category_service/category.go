@@ -12,8 +12,8 @@ import (
 	"strings"
 )
 
-func GetList(userID int64, req *request.GetCategoriesRequest) (*[]response.CategoriesRespose, error) {
-	category := []response.CategoriesRespose{}
+func GetList(userID int64, req *request.GetCategoriesRequest) (*[]response.CategoriesResponse, error) {
+	category := []response.CategoriesResponse{}
 	query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ParentID.Eq(req.ParentID)).Scan(&category)
 	return &category, nil
 }

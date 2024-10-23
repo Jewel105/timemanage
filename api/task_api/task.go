@@ -19,7 +19,7 @@ import (
 // @Param size query int false "10"
 // @Param startTime query int true "开始时间"
 // @Param endTime query int true  "结束时间"
-// @success 200 {object} []response.TasksRespose "success"
+// @success 200 {object} []response.TasksResponse "success"
 // @Router /tasks/list [get]
 func GetList(c *gin.Context) {
 	userID := api.GetUserID(c)

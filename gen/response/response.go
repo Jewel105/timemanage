@@ -1,6 +1,6 @@
 package response
 
-type TasksRespose struct {
+type TasksResponse struct {
 	ID          int64  `json:"id"`          // 任务ID
 	Description string `json:"description"` // 任务描述
 	SpentTime   int64  `json:"spentTime"`   // 花费时间
@@ -10,7 +10,7 @@ type TasksRespose struct {
 	EndTime     int64  `json:"endTime"`     // 任务结束时间
 }
 
-type CategoriesRespose struct {
+type CategoriesResponse struct {
 	ID       int64  `json:"id"`       // 分类ID
 	Name     string `json:"name"`     // 分类名称
 	ParentID int64  `json:"parentID"` // 上级分类ID

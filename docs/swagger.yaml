@@ -103,7 +103,6 @@ definitions:
         type: integer
     required:
     - categoryID
-    - description
     - endTime
     type: object
   request.SendCodeRequest:
@@ -115,7 +114,7 @@ definitions:
     required:
     - email
     type: object
-  response.CategoriesRespose:
+  response.CategoriesResponse:
     properties:
       id:
         description: 分类ID
@@ -136,7 +135,7 @@ definitions:
         description: 创建该分类的用户ID
         type: integer
     type: object
-  response.TasksRespose:
+  response.TasksResponse:
     properties:
       categories:
         description: 任务所属分类
@@ -217,7 +216,7 @@ paths:
           description: success
           schema:
             items:
-              $ref: '#/definitions/response.CategoriesRespose'
+              $ref: '#/definitions/response.CategoriesResponse'
             type: array
       summary: 查询分类列表
       tags:
@@ -453,7 +452,7 @@ paths:
           description: success
           schema:
             items:
-              $ref: '#/definitions/response.TasksRespose'
+              $ref: '#/definitions/response.TasksResponse'
             type: array
       summary: 查询任务列表
       tags:

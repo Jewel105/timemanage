@@ -85,7 +85,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/response.CategoriesRespose"
+                                "$ref": "#/definitions/response.CategoriesResponse"
                             }
                         }
                     }
@@ -442,7 +442,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/response.TasksRespose"
+                                "$ref": "#/definitions/response.TasksResponse"
                             }
                         }
                     }
@@ -612,7 +612,6 @@
             "type": "object",
             "required": [
                 "categoryID",
-                "description",
                 "endTime"
             ],
             "properties": {
@@ -651,7 +650,7 @@
                 }
             }
         },
-        "response.CategoriesRespose": {
+        "response.CategoriesResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -680,7 +679,7 @@
                 }
             }
         },
-        "response.TasksRespose": {
+        "response.TasksResponse": {
             "type": "object",
             "properties": {
                 "categories": {

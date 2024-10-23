@@ -11,9 +11,9 @@ import (
 	"strconv"
 )
 
-func GetList(userID int64, req *request.GetTasksRequest) (*[]response.TasksRespose, error) {
+func GetList(userID int64, req *request.GetTasksRequest) (*[]response.TasksResponse, error) {
 	offset := (req.Page - 1) * req.Size
-	tasks := []response.TasksRespose{}
+	tasks := []response.TasksResponse{}
 	sql := fmt.Sprintf(
 		`
 		SELECT 
