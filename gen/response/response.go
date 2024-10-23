@@ -5,6 +5,7 @@ type TasksRespose struct {
 	Description string `json:"description"` // 任务描述
 	SpentTime   int64  `json:"spentTime"`   // 花费时间
 	Categories  string `json:"categories"`  // 任务所属分类
+	CategoryID  int64  `json:"categoryID"`  // 任务所属分类ID
 	StartTime   int64  `json:"startTime"`   // 任务开始时间
 	EndTime     int64  `json:"endTime"`     // 任务结束时间
 }

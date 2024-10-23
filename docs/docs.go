@@ -619,8 +619,7 @@ const docTemplate = `{
             "required": [
                 "categoryID",
                 "description",
-                "endTime",
-                "startTime"
+                "endTime"
             ],
             "properties": {
                 "categoryID": {
@@ -693,6 +692,10 @@ const docTemplate = `{
                 "categories": {
                     "description": "任务所属分类",
                     "type": "string"
+                },
+                "categoryID": {
+                    "description": "任务所属分类ID",
+                    "type": "integer"
                 },
                 "description": {
                     "description": "任务描述",

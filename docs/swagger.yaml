@@ -105,7 +105,6 @@ definitions:
     - categoryID
     - description
     - endTime
-    - startTime
     type: object
   request.SendCodeRequest:
     properties:
@@ -142,6 +141,9 @@ definitions:
       categories:
         description: 任务所属分类
         type: string
+      categoryID:
+        description: 任务所属分类ID
+        type: integer
       description:
         description: 任务描述
         type: string
