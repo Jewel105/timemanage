@@ -46,6 +46,14 @@ func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 		return 0, &consts.ApiErr{Code: consts.NO_DATA, Msg: "Category not found."}
 	}
 
+	if req.StartTime == 0 {
+		lastTask, err := query.Task.Select(query.Task.EndTime).Where(query.Task.UserID.Eq(userID)).Order(query.Task.StartTime.Desc()).First()
+		if err != nil {
+			return 0, err
+		}
+		req.StartTime = lastTask.EndTime
+	}
+
 	task := models.Task{
 		ID:           req.ID,
 		UserID:       userID,

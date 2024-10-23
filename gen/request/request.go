@@ -23,7 +23,7 @@ type SaveTaskRequest struct {
 	ID          int64  `json:"id"`                             // 任务ID
 	Description string `json:"description" binding:"required"` // 任务描述
 	CategoryID  int64  `json:"categoryID" binding:"required"`  // 任务所属分类ID
-	StartTime   int64  `json:"startTime" binding:"required"`   // 任务开始时间
+	StartTime   int64  `json:"startTime"`                      // 任务开始时间
 	EndTime     int64  `json:"endTime" binding:"required"`     // 任务结束时间
 }
 
