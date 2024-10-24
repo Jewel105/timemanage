@@ -78,8 +78,8 @@ func DeleteCategory(userID int64, idStr string) error {
 	}
 
 	tx := query.Q.Begin()
-	_, err = categoryQuery.Delete()
+	info, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(id)).Delete()
+	fmt.Println(info)
 	err = mysql.DeferTx(tx, err)
-
 	return err
 }
