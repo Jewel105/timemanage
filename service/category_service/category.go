@@ -60,7 +60,7 @@ func DeleteCategory(userID int64, idStr string) error {
 	}
 
 	//  在子分类，则不删除
-	count, err = userCategoryQuery.Where(query.Category.ParentID.Eq(id)).Count()
+	count, err = query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ParentID.Eq(id)).Count()
 	if err != nil {
 		return err
 	}
