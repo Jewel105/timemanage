@@ -10,12 +10,12 @@ import (
 	"gin_study/gen/query"
 	"gin_study/gen/request"
 	"gin_study/logger"
-	"net/smtp"
 	"strconv"
 	"strings"
 	"time"
 
 	"go.uber.org/zap"
+	"gopkg.in/gomail.v2"
 )
 
 func Login(equipmentID int64, req *request.LoginRequest) (string, error) {
@@ -117,28 +117,22 @@ func SendCode(to *request.SendCodeRequest) error {
 	return nil
 }
 
-func sendMailOnline(email string, code string) error {
+func sendMailOnline(toEmail string, code string) error {
 	from := config.Config.EmailSmpt.Email
 	password := config.Config.EmailSmpt.Password
-
-	// 发送给多个收件人
-	recipients := []string{email}
 	// SMTP服务器配置
 	smtpHost := config.Config.EmailSmpt.Host
-	smtpPort := strconv.Itoa(config.Config.EmailSmpt.Port)
+	smtpPort := config.Config.EmailSmpt.Port
 
-	// 邮件内容：包含标题和正文
-	message := []byte("Subject: Code" + "\r\n" +
-		"MIME-Version: 1.0\r\n" +
-		"Content-Type: text/plain; charset=\"UTF-8\"\r\n" +
-		"\r\n" + "TimeManage Support System:" +
-		"\r\n" + code + "\r\n")
+	msg := gomail.NewMessage()
+	msg.SetHeader("From", "TimeManage <"+from+">")
+	msg.SetHeader("To", toEmail)
+	msg.SetHeader("Subject", "TimeManage Support")
+	msg.SetBody("text/html", "Verification code: "+
+		"\r\n"+code+"\r\n")
 
-	// 认证信息
-	auth := smtp.PlainAuth("", from, password, smtpHost)
-
-	// 发送邮件
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, recipients, message)
+	d := gomail.NewDialer(smtpHost, smtpPort, from, password)
+	err := d.DialAndSend(msg)
 	return err
 }
 
