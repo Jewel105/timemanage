@@ -24,7 +24,7 @@ func GetList(userID int64, req *request.GetTasksRequest) (*[]response.TasksRespo
 		LEFT JOIN 
 				categories ON FIND_IN_SET(categories.id, tasks.category_path) 
 		WHERE 
-				tasks.user_id = %d AND tasks.delete_time IS NULL AND start_time >= %d AND start_time <= %d
+				tasks.user_id = %d AND tasks.delete_time IS NULL AND end_time >= %d AND end_time <= %d
 		GROUP BY 
 				tasks.id
 		ORDER BY start_time
