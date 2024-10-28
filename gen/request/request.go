@@ -56,3 +56,9 @@ type LogErrorRequest struct {
 	Stack   string `json:"stack"`   // 堆栈
 	Error   string `json:"error"`   // 错误信息
 }
+
+type GetPieValueRequest struct {
+	CategoryIDs []int64 `json:"categoryIDs"`                  // 所需查询的分类ID
+	StartTime   int64   `json:"startTime" binding:"required"` // 开始时间
+	EndTime     int64   `json:"endTime" binding:"required"`   // 结束时间
+}

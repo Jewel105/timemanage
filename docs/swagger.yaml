@@ -1,5 +1,22 @@
 basePath: /api/v1
 definitions:
+  request.GetPieValueRequest:
+    properties:
+      categoryIDs:
+        description: 所需查询的分类ID
+        items:
+          type: integer
+        type: array
+      endTime:
+        description: 结束时间
+        type: integer
+      startTime:
+        description: 开始时间
+        type: integer
+    required:
+    - endTime
+    - startTime
+    type: object
   request.LogErrorRequest:
     properties:
       error:
@@ -134,6 +151,18 @@ definitions:
         type: string
       userID:
         description: 创建该分类的用户ID
+        type: integer
+    type: object
+  response.PieValueResponse:
+    properties:
+      categoryID:
+        description: 所需查询的分类ID
+        type: integer
+      categoryName:
+        description: 所需查询的分类名称
+        type: string
+      value:
+        description: 值
         type: integer
     type: object
   response.TasksResponse:
@@ -391,6 +420,39 @@ paths:
       summary: 发送验证码
       tags:
       - COMMON API
+  /statistic/pie:
+    post:
+      consumes:
+      - application/json
+      description: 查询分类占比饼图
+      operationId: GetPieValue
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhpq
+        in: header
+        name: token
+        type: string
+      - description: "1234"
+        in: header
+        name: equipment
+        type: string
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetPieValueRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/response.PieValueResponse'
+            type: array
+      summary: 查询分类占比饼图
+      tags:
+      - 统计API
   /tasks/delete/:id:
     post:
       consumes:

@@ -355,6 +355,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/statistic/pie": {
+            "post": {
+                "description": "查询分类占比饼图",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "统计API"
+                ],
+                "summary": "查询分类占比饼图",
+                "operationId": "GetPieValue",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhpq",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "1234",
+                        "name": "equipment",
+                        "in": "header"
+                    },
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetPieValueRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.PieValueResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/delete/:id": {
             "post": {
                 "description": "删除任务",
@@ -530,6 +580,30 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "request.GetPieValueRequest": {
+            "type": "object",
+            "required": [
+                "endTime",
+                "startTime"
+            ],
+            "properties": {
+                "categoryIDs": {
+                    "description": "所需查询的分类ID",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "endTime": {
+                    "description": "结束时间",
+                    "type": "integer"
+                },
+                "startTime": {
+                    "description": "开始时间",
+                    "type": "integer"
+                }
+            }
+        },
         "request.LogErrorRequest": {
             "type": "object",
             "properties": {
@@ -714,6 +788,23 @@ const docTemplate = `{
                 },
                 "userID": {
                     "description": "创建该分类的用户ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "response.PieValueResponse": {
+            "type": "object",
+            "properties": {
+                "categoryID": {
+                    "description": "所需查询的分类ID",
+                    "type": "integer"
+                },
+                "categoryName": {
+                    "description": "所需查询的分类名称",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "值",
                     "type": "integer"
                 }
             }

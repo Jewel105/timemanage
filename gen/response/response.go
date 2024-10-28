@@ -18,3 +18,9 @@ type CategoriesResponse struct {
 	Path     string `json:"path"`     // 分类路径
 	Level    int    `json:"level"`    // 分类等级
 }
+
+type PieValueResponse struct {
+	CategoryID   int64  `json:"categoryID"`   // 所需查询的分类ID
+	CategoryName string `json:"categoryName"` // 所需查询的分类名称
+	Value        int64  `json:"value"`        // 值
+}

@@ -12,6 +12,11 @@ import (
 
 var env string
 
+// 定义一个结构体来接收结果
+type SumResult struct {
+	SumSpentTime int64 `gorm:"column:SUM"`
+}
+
 func init() {
 	flag.StringVar(&env, "env", "dev", "Specify the environment: dev, pro")
 }
@@ -59,4 +64,13 @@ func main() {
 	// 等待 MySQL ， Redis ，logger初始化完成
 	wg.Wait()
 	router.Start()
+	//
+
+	// whereCommon1 := query.Task.Where(query.Task.UserID.Eq(2))
+	// whereCommon2 := query.Task.Where(query.Task.UserID.Eq(2))
+	// likeStr1 := fmt.Sprintf("%%,%d", 1)
+	// likeStr2 := fmt.Sprintf("%%,%d,%%", 1)
+	// var result SumResult
+	// whereCommon1.Where(query.Task.CategoryPath.Like(likeStr1)).Or(whereCommon2.Where(query.Task.CategoryPath.Like(likeStr2))).Select(query.Task.SpentTime.Sum().As("SUM")).Scan(&result)
+	// fmt.Print(result.SumSpentTime)
 }

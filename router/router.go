@@ -3,6 +3,7 @@ package router
 import (
 	"gin_study/api"
 	categoryapi "gin_study/api/category_api"
+	statisticapi "gin_study/api/statistic_api"
 	systemapi "gin_study/api/system_api"
 	taskapi "gin_study/api/task_api"
 	userapi "gin_study/api/user_api"
@@ -42,6 +43,7 @@ func Start() {
 	systemapi.AddRouter(common)
 	taskapi.AddRouter(apiV1)
 	categoryapi.AddRouter(apiV1)
+	statisticapi.AddRouter(apiV1)
 
 	// 是否启用 H2C（HTTP/2 Cleartext）
 	r.UseH2C = config.Config.Server.EnableH2C
