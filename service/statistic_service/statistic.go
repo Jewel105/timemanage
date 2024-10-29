@@ -17,11 +17,13 @@ func GetPieValue(userID int64, req *request.GetPieValueRequest) (*[]response.Pie
 	categories := req.Categories
 
 	if len(categories) == 0 {
-		query.Category.Select(query.Category.ID, query.Category.Name).Where(query.Category.UserID.Eq(userID)).Where(query.Category.Level.Eq(1)).Scan(categories)
+		err := query.Category.Select(query.Category.ID, query.Category.Name).Where(query.Category.UserID.Eq(userID)).Where(query.Category.Level.Eq(1)).Scan(&categories)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	for _, category := range categories {
-
 		c := make(chan int64)
 		// 查询该分类下的任务，计算花费时间总和
 		go func() {
