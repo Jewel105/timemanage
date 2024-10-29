@@ -587,11 +587,11 @@ const docTemplate = `{
                 "startTime"
             ],
             "properties": {
-                "categoryIDs": {
-                    "description": "所需查询的分类ID",
+                "categories": {
+                    "description": "所需查询的分类",
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "$ref": "#/definitions/response.CategoriesResponse"
                     }
                 },
                 "endTime": {

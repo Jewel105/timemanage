@@ -1,5 +1,7 @@
 package request
 
+import "gin_study/gen/response"
+
 type LoginRequest struct {
 	Name     string `json:"name" binding:"required"`     // 用户名或邮箱
 	Password string `json:"password" binding:"required"` // 密码
@@ -58,7 +60,7 @@ type LogErrorRequest struct {
 }
 
 type GetPieValueRequest struct {
-	CategoryIDs []int64 `json:"categoryIDs"`                  // 所需查询的分类ID
-	StartTime   int64   `json:"startTime" binding:"required"` // 开始时间
-	EndTime     int64   `json:"endTime" binding:"required"`   // 结束时间
+	Categories []response.CategoriesResponse `json:"categories"`                   // 所需查询的分类
+	StartTime  int64                         `json:"startTime" binding:"required"` // 开始时间
+	EndTime    int64                         `json:"endTime" binding:"required"`   // 结束时间
 }

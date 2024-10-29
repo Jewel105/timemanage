@@ -2,7 +2,6 @@ package statisticservice
 
 import (
 	"fmt"
-	"gin_study/api/consts"
 	"gin_study/gen/query"
 	"gin_study/gen/request"
 	"gin_study/gen/response"
@@ -15,13 +14,18 @@ type SumResult struct {
 
 func GetPieValue(userID int64, req *request.GetPieValueRequest) (*[]response.PieValueResponse, error) {
 	respons := []response.PieValueResponse{}
+	categories := req.Categories
 
-	for _, categoryID := range req.CategoryIDs {
+	if len(categories) == 0 {
+		query.Category.Select(query.Category.ID, query.Category.Name).Where(query.Category.UserID.Eq(userID)).Where(query.Category.Level.Eq(1)).Scan(categories)
+	}
+
+	for _, category := range categories {
 
 		c := make(chan int64)
 		// 查询该分类下的任务，计算花费时间总和
 		go func() {
-			sumSpent, err := getSum(categoryID, userID, req)
+			sumSpent, err := getSum(category.ID, userID, req)
 			if err != nil {
 				c <- 0
 			} else {
@@ -29,17 +33,11 @@ func GetPieValue(userID int64, req *request.GetPieValueRequest) (*[]response.Pie
 			}
 		}()
 
-		// 查询该分类名称
-		category, err := query.Category.Select(query.Category.Name).Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(categoryID)).First()
-		if err != nil {
-			return nil, &consts.ApiErr{Code: consts.NO_DATA, Msg: "categories not found"}
-		}
-
 		sumSpent := <-c
 		respons = append(respons, response.PieValueResponse{
 			Value:        sumSpent,
 			CategoryName: category.Name,
-			CategoryID:   categoryID,
+			CategoryID:   category.ID,
 		})
 	}
 	return &respons, nil

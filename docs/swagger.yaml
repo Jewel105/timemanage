@@ -2,10 +2,10 @@ basePath: /api/v1
 definitions:
   request.GetPieValueRequest:
     properties:
-      categoryIDs:
-        description: 所需查询的分类ID
+      categories:
+        description: 所需查询的分类
         items:
-          type: integer
+          $ref: '#/definitions/response.CategoriesResponse'
         type: array
       endTime:
         description: 结束时间
