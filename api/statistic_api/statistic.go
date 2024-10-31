@@ -31,3 +31,27 @@ func GetPieValue(c *gin.Context) {
 	data, err := statisticservice.GetPieValue(userID, &req)
 	api.DealResponse(c, data, err)
 }
+
+// @Id GetLineValue
+// @Summary 查询分类折线图
+// @Description 查询分类折线图
+// @Tags 统计API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhpq"
+// @Param equipment header string false "1234"
+// @Param req body request.GetLineValueRequest true "Json"
+// @success 200 {object} []response.LineValueResponse "success"
+// @Router /statistic/line [post]
+func GetLineValue(c *gin.Context) {
+	userID := api.GetUserID(c)
+	if userID == 0 {
+		return
+	}
+	req := request.GetLineValueRequest{}
+	if !api.ParseJson(c, &req) {
+		return
+	}
+	data, err := statisticservice.GetLineValue(userID, &req)
+	api.DealResponse(c, data, err)
+}

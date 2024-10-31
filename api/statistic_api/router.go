@@ -11,5 +11,6 @@ func AddRouter(router *gin.RouterGroup) {
 	categories.Use(api.VerifyToken)
 	{
 		categories.POST("/pie", GetPieValue)
+		categories.POST("/line", GetLineValue)
 	}
 }

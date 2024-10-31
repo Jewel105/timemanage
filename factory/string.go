@@ -18,3 +18,8 @@ func GenerateRandomString(length int) string {
 	}
 	return string(result)
 }
+
+// 获取时间的毫秒级时间戳
+func GetMillis(date time.Time) int64 {
+	return date.UnixNano() / int64(time.Millisecond)
+}

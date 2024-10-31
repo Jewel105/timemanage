@@ -64,3 +64,8 @@ type GetPieValueRequest struct {
 	StartTime  int64                         `json:"startTime" binding:"required"` // 开始时间
 	EndTime    int64                         `json:"endTime" binding:"required"`   // 结束时间
 }
+
+type GetLineValueRequest struct {
+	Categories []response.CategoriesResponse `json:"categories"`                  // 所需查询的分类
+	TimeType   string                        `json:"timeType" binding:"required"` // 时间类型：day/week/month/year
+}

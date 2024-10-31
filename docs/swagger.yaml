@@ -1,5 +1,18 @@
 basePath: /api/v1
 definitions:
+  request.GetLineValueRequest:
+    properties:
+      categories:
+        description: 所需查询的分类
+        items:
+          $ref: '#/definitions/response.CategoriesResponse'
+        type: array
+      timeType:
+        description: 时间类型：day/week/month/year
+        type: string
+    required:
+    - timeType
+    type: object
   request.GetPieValueRequest:
     properties:
       categories:
@@ -152,6 +165,29 @@ definitions:
       userID:
         description: 创建该分类的用户ID
         type: integer
+    type: object
+  response.LineSpots:
+    properties:
+      x:
+        description: x轴值
+        type: integer
+      "y":
+        description: y轴值
+        type: integer
+    type: object
+  response.LineValueResponse:
+    properties:
+      categoryID:
+        description: 所需查询的分类ID
+        type: integer
+      categoryName:
+        description: 所需查询的分类名称
+        type: string
+      value:
+        description: 值
+        items:
+          $ref: '#/definitions/response.LineSpots'
+        type: array
     type: object
   response.PieValueResponse:
     properties:
@@ -420,6 +456,39 @@ paths:
       summary: 发送验证码
       tags:
       - COMMON API
+  /statistic/line:
+    post:
+      consumes:
+      - application/json
+      description: 查询分类折线图
+      operationId: GetLineValue
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhpq
+        in: header
+        name: token
+        type: string
+      - description: "1234"
+        in: header
+        name: equipment
+        type: string
+      - description: Json
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetLineValueRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/response.LineValueResponse'
+            type: array
+      summary: 查询分类折线图
+      tags:
+      - 统计API
   /statistic/pie:
     post:
       consumes:

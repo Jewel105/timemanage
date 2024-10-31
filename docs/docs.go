@@ -355,6 +355,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/statistic/line": {
+            "post": {
+                "description": "查询分类折线图",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "统计API"
+                ],
+                "summary": "查询分类折线图",
+                "operationId": "GetLineValue",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhpq",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "1234",
+                        "name": "equipment",
+                        "in": "header"
+                    },
+                    {
+                        "description": "Json",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetLineValueRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.LineValueResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/statistic/pie": {
             "post": {
                 "description": "查询分类占比饼图",
@@ -580,6 +630,25 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "request.GetLineValueRequest": {
+            "type": "object",
+            "required": [
+                "timeType"
+            ],
+            "properties": {
+                "categories": {
+                    "description": "所需查询的分类",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.CategoriesResponse"
+                    }
+                },
+                "timeType": {
+                    "description": "时间类型：day/week/month/year",
+                    "type": "string"
+                }
+            }
+        },
         "request.GetPieValueRequest": {
             "type": "object",
             "required": [
@@ -789,6 +858,39 @@ const docTemplate = `{
                 "userID": {
                     "description": "创建该分类的用户ID",
                     "type": "integer"
+                }
+            }
+        },
+        "response.LineSpots": {
+            "type": "object",
+            "properties": {
+                "x": {
+                    "description": "x轴值",
+                    "type": "integer"
+                },
+                "y": {
+                    "description": "y轴值",
+                    "type": "integer"
+                }
+            }
+        },
+        "response.LineValueResponse": {
+            "type": "object",
+            "properties": {
+                "categoryID": {
+                    "description": "所需查询的分类ID",
+                    "type": "integer"
+                },
+                "categoryName": {
+                    "description": "所需查询的分类名称",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "值",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.LineSpots"
+                    }
                 }
             }
         },

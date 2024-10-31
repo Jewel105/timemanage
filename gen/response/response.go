@@ -24,3 +24,14 @@ type PieValueResponse struct {
 	CategoryName string `json:"categoryName"` // 所需查询的分类名称
 	Value        int64  `json:"value"`        // 值
 }
+
+type LineValueResponse struct {
+	CategoryID   int64        `json:"categoryID"`   // 所需查询的分类ID
+	CategoryName string       `json:"categoryName"` // 所需查询的分类名称
+	Value        *[]LineSpots `json:"value"`        // 值
+}
+
+type LineSpots struct {
+	X int64 `json:"x"` // x轴值
+	Y int64 `json:"y"` // y轴值
+}
