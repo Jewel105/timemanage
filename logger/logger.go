@@ -46,10 +46,16 @@ func getLogWriter(filename string, maxsize, maxBackup, maxAge int) zapcore.Write
 	// 每天分割一次日志
 	go func() {
 		for {
-			now := time.Now()
+			// 使用北京时区
+			beijingLocation, err := time.LoadLocation("Asia/Shanghai")
+			if err != nil {
+				return
+			}
+			// 获取当前时间（使用北京时区）
+			now := time.Now().In(beijingLocation)
 			//计算下一个零点
-			next := now.Add(time.Hour * 60)
-			next = time.Date(next.Year(), next.Month(), next.Day(), 0, 0, 0, 0, next.Location())
+			next := now.Add(time.Hour * 60).In(beijingLocation)
+			next = time.Date(next.Year(), next.Month(), next.Day(), 0, 0, 0, 0, beijingLocation)
 			t := time.NewTimer(next.Sub(now))
 			<-t.C
 			lumberJackLogger.Rotate()
