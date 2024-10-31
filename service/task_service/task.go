@@ -47,7 +47,7 @@ func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 		return 0, &consts.ApiErr{Code: consts.NO_DATA, Msg: "Category not found."}
 	}
 	if req.StartTime > req.EndTime {
-		return 0, &consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "Start time must be earlier than end time."}
+		return 0, &consts.ApiErr{Code: consts.PARAMS_INVALID, Msg: "Start time must be earlier than end time."}
 	}
 
 	task := models.Task{
