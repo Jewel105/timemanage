@@ -151,8 +151,8 @@ func getWeekSpots(now time.Time, categoryID int64, userID int64, yCounts int, lo
 			X: startTimeMillis,
 			Y: spendTime,
 		})
-		startTime = startTime.AddDate(0, 0, -6)
-		endTime = endTime.AddDate(0, 0, -6)
+		startTime = startTime.AddDate(0, 0, -7)
+		endTime = endTime.AddDate(0, 0, -7)
 		yCounts--
 	}
 	return &spots
