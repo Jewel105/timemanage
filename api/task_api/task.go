@@ -2,6 +2,7 @@ package taskapi
 
 import (
 	"gin_study/api"
+	"gin_study/api/consts"
 	"gin_study/gen/request"
 	taskservice "gin_study/service/task_service"
 
@@ -53,7 +54,9 @@ func SaveTask(c *gin.Context) {
 	if !api.ParseJson(c, &req) {
 		return
 	}
-	taskID, err := taskservice.SaveTask(userID, &req)
+	lang := c.GetString(consts.LANG)
+
+	taskID, err := taskservice.SaveTask(userID, &req, lang)
 	api.DealResponse(c, taskID, err)
 }
 
@@ -73,7 +76,9 @@ func DeleteTask(c *gin.Context) {
 		return
 	}
 	idStr := c.Param("id")
-	err := taskservice.DeleteTask(userID, idStr)
+	lang := c.GetString(consts.LANG)
+
+	err := taskservice.DeleteTask(userID, idStr, lang)
 	api.DealResponse(c, true, err)
 }
 

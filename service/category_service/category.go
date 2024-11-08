@@ -8,6 +8,7 @@ import (
 	"gin_study/gen/query"
 	"gin_study/gen/request"
 	"gin_study/gen/response"
+	"gin_study/language"
 	"strconv"
 	"strings"
 )
@@ -44,7 +45,7 @@ func SaveCategory(userID int64, req *request.SaveCategoryRequest) (int64, error)
 	return category.ID, err
 }
 
-func DeleteCategory(userID int64, idStr string) error {
+func DeleteCategory(userID int64, idStr, lang string) error {
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
 		return err
@@ -56,7 +57,7 @@ func DeleteCategory(userID int64, idStr string) error {
 		return err
 	}
 	if count == 0 {
-		return &consts.ApiErr{Code: consts.NO_DATA, Msg: "Category not exists."}
+		return &consts.ApiErr{Code: consts.NO_DATA, Msg: language.GetLocale(lang, "NoCategory")}
 	}
 
 	//  在子分类，则不删除
@@ -65,7 +66,7 @@ func DeleteCategory(userID int64, idStr string) error {
 		return err
 	}
 	if count > 0 {
-		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: "Category has subcategories."}
+		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: language.GetLocale(lang, "CategoryHasSub")}
 	}
 
 	// 任务列表中存在该分类，不删除
@@ -74,7 +75,7 @@ func DeleteCategory(userID int64, idStr string) error {
 		return err
 	}
 	if count > 0 {
-		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: "Category is used in tasks."}
+		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: language.GetLocale(lang, "CategoryUsed")}
 	}
 
 	tx := query.Q.Begin()

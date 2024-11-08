@@ -25,7 +25,9 @@ func Login(c *gin.Context) {
 		return
 	}
 	equipmentID := c.GetInt64(consts.EQUIPMENT_ID)
-	token, e := userservice.Login(equipmentID, &req)
+	lang := c.GetString(consts.LANG)
+
+	token, e := userservice.Login(equipmentID, &req, lang)
 	api.DealResponse(c, token, e)
 }
 
@@ -43,7 +45,9 @@ func Register(c *gin.Context) {
 	if !api.ParseJson(c, &req) {
 		return
 	}
-	userID, err := userservice.Register(&req)
+	lang := c.GetString(consts.LANG)
+
+	userID, err := userservice.Register(&req, lang)
 	api.DealResponse(c, userID, err)
 }
 
@@ -61,7 +65,9 @@ func SendCode(c *gin.Context) {
 	if !api.ParseJson(c, &req) {
 		return
 	}
-	err := userservice.SendCode(&req)
+	lang := c.GetString(consts.LANG)
+
+	err := userservice.SendCode(&req, lang)
 	api.DealResponse(c, true, err)
 }
 
@@ -79,6 +85,8 @@ func ForgetPassword(c *gin.Context) {
 	if !api.ParseJson(c, &req) {
 		return
 	}
-	userID, err := userservice.ForgetPassword(&req)
+	lang := c.GetString(consts.LANG)
+
+	userID, err := userservice.ForgetPassword(&req, lang)
 	api.DealResponse(c, userID, err)
 }

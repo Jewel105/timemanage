@@ -2,6 +2,7 @@ package statisticapi
 
 import (
 	"gin_study/api"
+	"gin_study/api/consts"
 	"gin_study/gen/request"
 	statisticservice "gin_study/service/statistic_service"
 
@@ -28,7 +29,9 @@ func GetPieValue(c *gin.Context) {
 	if !api.ParseJson(c, &req) {
 		return
 	}
-	data, err := statisticservice.GetPieValue(userID, &req)
+	lang := c.GetString(consts.LANG)
+
+	data, err := statisticservice.GetPieValue(userID, &req, lang)
 	api.DealResponse(c, data, err)
 }
 

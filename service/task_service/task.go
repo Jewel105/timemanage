@@ -8,6 +8,7 @@ import (
 	"gin_study/gen/query"
 	"gin_study/gen/request"
 	"gin_study/gen/response"
+	"gin_study/language"
 	"strconv"
 )
 
@@ -40,14 +41,14 @@ func GetList(userID int64, req *request.GetTasksRequest) (*[]response.TasksRespo
 	return &tasks, nil
 }
 
-func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
+func SaveTask(userID int64, req *request.SaveTaskRequest, lang string) (int64, error) {
 	// Category not found.
 	category, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(req.CategoryID)).First()
 	if err != nil {
-		return 0, &consts.ApiErr{Code: consts.NO_DATA, Msg: "Category not found."}
+		return 0, &consts.ApiErr{Code: consts.NO_DATA, Msg: language.GetLocale(lang, "NoCategory")}
 	}
 	if req.StartTime > req.EndTime {
-		return 0, &consts.ApiErr{Code: consts.PARAMS_INVALID, Msg: "Start time must be earlier than end time."}
+		return 0, &consts.ApiErr{Code: consts.PARAMS_INVALID, Msg: language.GetLocale(lang, "TimeError")}
 	}
 
 	task := models.Task{
@@ -68,7 +69,7 @@ func SaveTask(userID int64, req *request.SaveTaskRequest) (int64, error) {
 	return task.ID, err
 }
 
-func DeleteTask(userID int64, idStr string) error {
+func DeleteTask(userID int64, idStr, lang string) error {
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
 		return err
@@ -82,7 +83,7 @@ func DeleteTask(userID int64, idStr string) error {
 		return err
 	}
 	if count == 0 {
-		return &consts.ApiErr{Code: consts.NO_DATA, Msg: "Task not exists."}
+		return &consts.ApiErr{Code: consts.NO_DATA, Msg: language.GetLocale(lang, "NoTask")}
 	}
 	_, err = taskQuery.Delete()
 	err = mysql.DeferTx(tx, err)

@@ -2,6 +2,7 @@ package categoryapi
 
 import (
 	"gin_study/api"
+	"gin_study/api/consts"
 	"gin_study/gen/request"
 	categoryservice "gin_study/service/category_service"
 
@@ -66,10 +67,12 @@ func SaveCategory(c *gin.Context) {
 // @Router  /categories/delete/:id [post]
 func DeleteCategory(c *gin.Context) {
 	userID := api.GetUserID(c)
+	lang := c.GetString(consts.LANG)
+
 	if userID == 0 {
 		return
 	}
 	idStr := c.Param("id")
-	err := categoryservice.DeleteCategory(userID, idStr)
+	err := categoryservice.DeleteCategory(userID, idStr, lang)
 	api.DealResponse(c, true, err)
 }

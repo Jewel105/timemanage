@@ -9,6 +9,7 @@ import (
 	"gin_study/gen/mysql"
 	"gin_study/gen/query"
 	"gin_study/gen/request"
+	"gin_study/language"
 	"gin_study/logger"
 	"strconv"
 	"strings"
@@ -18,15 +19,15 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-func Login(equipmentID int64, req *request.LoginRequest) (string, error) {
+func Login(equipmentID int64, req *request.LoginRequest, lang string) (string, error) {
 	// 用户名或密码都可以登录
 	user, err := query.User.Where(query.User.Name.Eq(req.Name)).Or(query.User.Email.Eq(req.Name)).First()
 	if err != nil {
-		return "", &consts.ApiErr{Code: consts.LOGIN_FAILED, Msg: "user and password are incorrect"}
+		return "", &consts.ApiErr{Code: consts.LOGIN_FAILED, Msg: language.GetLocale(lang, "UserOrPasswordError")}
 	}
 	reqPass := factory.Md5Hash(req.Password)
 	if reqPass != user.Password {
-		return "", &consts.ApiErr{Code: consts.LOGIN_FAILED, Msg: "user and password are incorrect"}
+		return "", &consts.ApiErr{Code: consts.LOGIN_FAILED, Msg: language.GetLocale(lang, "UserOrPasswordError")}
 	}
 
 	// 记录设备
@@ -51,23 +52,23 @@ func Login(equipmentID int64, req *request.LoginRequest) (string, error) {
 	return token, e
 }
 
-func Register(req *request.RegisterRequest) (int64, error) {
+func Register(req *request.RegisterRequest, lang string) (int64, error) {
 	nameExists, _ := query.User.Select(query.User.ID).Where(query.User.Name.Eq(req.Name)).First()
 	if nameExists != nil {
 		return 0,
-			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "name already exists."}
+			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: language.GetLocale(lang, "NameExits")}
 	}
 	emailExists, _ := query.User.Select(query.User.ID).Where(query.User.Email.Eq(req.Email)).First()
 	if emailExists != nil {
 		return 0,
-			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "email already exists."}
+			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: language.GetLocale(lang, "EmailExits")}
 	}
 	// 获取验证码并检查
 	key := config.Config.EmailSmpt.RedisKey + req.Email
 	code, err := factory.RedisGet(key)
 	if err != nil || code != req.Code {
 		return 0,
-			&consts.ApiErr{Code: consts.CODE_INVALID, Msg: "email code is invalid."}
+			&consts.ApiErr{Code: consts.CODE_INVALID, Msg: language.GetLocale(lang, "EmailCodeError")}
 	}
 	err = factory.RedisDel(key)
 	if err != nil {
@@ -88,13 +89,13 @@ func Register(req *request.RegisterRequest) (int64, error) {
 	return user.ID, err
 }
 
-func SendCode(to *request.SendCodeRequest) error {
+func SendCode(to *request.SendCodeRequest, lang string) error {
 	key := config.Config.EmailSmpt.RedisKey + to.Email
 
 	// 避免验证码过于频繁
 	code, err := factory.RedisGet(key)
 	if err == nil || len(code) == 6 {
-		return &consts.ApiErr{Code: consts.TOO_FREQUENTLY, Msg: "The email code have already been sent."}
+		return &consts.ApiErr{Code: consts.TOO_FREQUENTLY, Msg: language.GetLocale(lang, "CodeSent")}
 	}
 	randomCode := factory.GenerateRandomString(6)
 
@@ -136,16 +137,16 @@ func sendMailOnline(toEmail string, code string) error {
 	return err
 }
 
-func ForgetPassword(req *request.RegisterRequest) (int64, error) {
+func ForgetPassword(req *request.RegisterRequest, lang string) (int64, error) {
 	user, err := query.User.Where(query.User.Name.Eq(req.Name), query.User.Email.Eq(req.Email)).First()
 	if err != nil {
 		return 0,
-			&consts.ApiErr{Code: consts.NO_DATA, Msg: "Username or email error."}
+			&consts.ApiErr{Code: consts.NO_DATA, Msg: language.GetLocale(lang, "UserOrEmailError")}
 	}
 
 	if user.Password == factory.Md5Hash(req.Password) {
 		return 0,
-			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: "The new password is the same as the old password."}
+			&consts.ApiErr{Code: consts.BAD_REQUEST, Msg: language.GetLocale(lang, "PasswordEqual")}
 	}
 
 	// 获取验证码并检查
@@ -153,7 +154,7 @@ func ForgetPassword(req *request.RegisterRequest) (int64, error) {
 	code, err := factory.RedisGet(key)
 	if err != nil || code != req.Code {
 		return 0,
-			&consts.ApiErr{Code: consts.CODE_INVALID, Msg: "email code is invalid."}
+			&consts.ApiErr{Code: consts.CODE_INVALID, Msg: language.GetLocale(lang, "EmailInvalid")}
 	}
 	err = factory.RedisDel(key)
 	if err != nil {

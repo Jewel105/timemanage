@@ -7,6 +7,7 @@ import (
 	"gin_study/gen/query"
 	"gin_study/gen/request"
 	"gin_study/gen/response"
+	"gin_study/language"
 	"sync"
 	"time"
 )
@@ -16,9 +17,9 @@ type SumResult struct {
 	SumSpentTime int64 `gorm:"column:sum"`
 }
 
-func GetPieValue(userID int64, req *request.GetPieValueRequest) (*[]response.PieValueResponse, error) {
+func GetPieValue(userID int64, req *request.GetPieValueRequest, lang string) (*[]response.PieValueResponse, error) {
 	if req.StartTime > req.EndTime {
-		return nil, &consts.ApiErr{Code: consts.PARAMS_INVALID, Msg: "Start time must be earlier than end time."}
+		return nil, &consts.ApiErr{Code: consts.PARAMS_INVALID, Msg: language.GetLocale(lang, "TimeError")}
 	}
 
 	respons := []response.PieValueResponse{}
