@@ -25,6 +25,8 @@ func Start() {
 	r.Use(api.RecordLog)
 	r.Use(api.Recover)
 	r.Use(api.SaveEquipmentID)
+	r.Use(api.SaveLanguage)
+
 	// 查看http协议
 	// r.Use(func(c *gin.Context) {
 	// 	protocol := c.Request.Proto

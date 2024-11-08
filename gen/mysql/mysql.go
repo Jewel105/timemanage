@@ -14,12 +14,10 @@ func Start() error {
 	db, err := gorm.Open(mysql.Open(config.Config.Mysql.Dsn), &gorm.Config{})
 	if err != nil {
 		logger.Error(zap.Any("Error mysql", err))
-
 		return err
 	}
 	if db.Error != nil {
 		logger.Error(zap.Any("Error db", err))
-
 		return err
 	}
 	sqlDB, err := db.DB()

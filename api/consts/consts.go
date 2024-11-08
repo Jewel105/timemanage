@@ -17,21 +17,8 @@ const (
 const (
 	USER_ID      = "userID"
 	EQUIPMENT_ID = "equipmentID"
+	LANG         = "lang"
 )
-
-var MsgFlags = map[string]string{
-	SUCCESS:      "SUCCESS",
-	SYSTEM_ERROR: "SYSTEM_ERROR",
-	BAD_REQUEST:  "BAD_REQUEST",
-
-	PARAMS_INVALID: "PARAMS_INVALID",
-	TOKEN_INVALID:  "TOKEN_INVALID",
-	LOGIN_FAILED:   "LOGIN_FAILED",
-	TOO_FREQUENTLY: "TOO_FREQUENTLY",
-	NO_DATA:        "NO_DATA",
-	DELETE_FAILED:  "DELETE_FAILED",
-	CODE_INVALID:   "CODE_INVALID",
-}
 
 type ApiErr struct {
 	Code string

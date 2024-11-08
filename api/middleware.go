@@ -88,6 +88,16 @@ func SaveEquipmentID(c *gin.Context) {
 	c.Next()
 }
 
+func SaveLanguage(c *gin.Context) {
+	lang := c.GetHeader("Language")
+	if lang == "" {
+		c.Set(consts.LANG, "en")
+	} else {
+		c.Set(consts.LANG, lang)
+	}
+	c.Next()
+}
+
 func RecordLog(c *gin.Context) {
 	// 开始时间
 	startTime := time.Now()

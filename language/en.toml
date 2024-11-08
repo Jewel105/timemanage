@@ -1,0 +1,62 @@
+[200]
+other = "Success"
+
+[300]
+other = "Params Invalid"
+
+[301]
+other = "Token Invalid"
+
+[302]
+other = "Login Failed"
+
+[303]
+other = "Too Frequently"
+
+[304]
+other = "No Data"
+
+[400]
+other = "Bad Request"
+
+[500]
+other = "System Error"
+
+[CategoryHasSub]
+other = "Category has subcategories."
+
+[CategoryUsed]
+other = "Category is used in tasks."
+
+[CodeSent]
+other = "The email code have already been sent."
+
+[EmailCodeError]
+other = "Email code is invalid."
+
+[EmailExits]
+other = "Email already exists."
+
+[EmailInvalid]
+other = "Email code is invalid."
+
+[NameExits]
+other = "Name already exists."
+
+[NoCategory]
+other = "Category not exists."
+
+[NoTask]
+other = "Task not exists."
+
+[PasswordEqual]
+other = "The new password is the same as the old password."
+
+[TimeError]
+other = "Start time must be earlier than end time."
+
+[UserOrEmailError]
+other = "Username or email error."
+
+[UserOrPasswordError]
+other = "User and password are incorrect"

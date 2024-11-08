@@ -3,7 +3,7 @@ package api
 import (
 	"errors"
 	"gin_study/api/consts"
-	"strings"
+	"gin_study/language"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,9 +16,10 @@ type JsonStruct struct {
 }
 
 func ReturnResponse(c *gin.Context, code string, data interface{}) {
+	lang := c.GetString(consts.LANG)
 	json := &JsonStruct{
 		Code:    code,
-		Msg:     GetMsg(code),
+		Msg:     language.GetLocale(lang, code),
 		Data:    data,
 		Success: code == "200",
 	}
@@ -36,14 +37,6 @@ func DealResponse(c *gin.Context, data interface{}, err error) {
 		return
 	}
 	ReturnResponse(c, consts.SUCCESS, data)
-}
-
-func GetMsg(code string) string {
-	msg, ok := consts.MsgFlags[code]
-	if ok {
-		return strings.Replace(strings.ToLower(msg), "_", " ", -1)
-	}
-	return consts.MsgFlags[consts.SYSTEM_ERROR]
 }
 
 func ParseJson(c *gin.Context, obj any) bool {

@@ -5,6 +5,7 @@ import (
 	"gin_study/config"
 	"gin_study/factory"
 	"gin_study/gen/mysql"
+	"gin_study/language"
 	"gin_study/logger"
 	"gin_study/router"
 	"sync"
@@ -31,8 +32,18 @@ func init() {
 // @host 127.0.0.1:8081
 // @BasePath /api/v1
 func main() {
+
 	flag.Parse()
 	config.GetConfig(env)
+
+	// 启动 Logger
+	defer logger.Sync()
+	logger.InitLogger(logger.LogConfig{
+		FileName:   "./log/timemanage.log",
+		MaxSize:    100,
+		MaxAge:     30,
+		MaxBackups: 100,
+	})
 
 	var wg sync.WaitGroup
 	wg.Add(3) // 有3个并发任务需要等待
@@ -43,34 +54,20 @@ func main() {
 		mysql.Start()
 	}()
 
+	// 启动 多语言
+	go func() {
+		defer wg.Done() // 标记任务完成
+		var langList = []string{"en", "zh"}
+		language.InitI18n(&langList)
+	}()
+
 	// 启动 Redis
 	go func() {
 		defer wg.Done()
 		factory.RedisStart()
 	}()
 
-	// 启动 Logger
-	defer logger.Sync()
-	go func() {
-		defer wg.Done()
-		logger.InitLogger(logger.LogConfig{
-			FileName:   "./log/timemanage.log",
-			MaxSize:    100,
-			MaxAge:     30,
-			MaxBackups: 100,
-		})
-	}()
-
 	// 等待 MySQL ， Redis ，logger初始化完成
 	wg.Wait()
 	router.Start()
-	//
-
-	// whereCommon1 := query.Task.Where(query.Task.UserID.Eq(2))
-	// whereCommon2 := query.Task.Where(query.Task.UserID.Eq(2))
-	// likeStr1 := fmt.Sprintf("%%,%d", 1)
-	// likeStr2 := fmt.Sprintf("%%,%d,%%", 1)
-	// var result SumResult
-	// whereCommon1.Where(query.Task.CategoryPath.Like(likeStr1)).Or(whereCommon2.Where(query.Task.CategoryPath.Like(likeStr2))).Select(query.Task.SpentTime.Sum().As("SUM")).Scan(&result)
-	// fmt.Print(result.SumSpentTime)
 }

@@ -1,0 +1,83 @@
+[200]
+hash = "sha1-42a8f651d79fd005eeac0612df6442b983a01184"
+other = "成功"
+
+[300]
+hash = "sha1-95a7f2b995fd1e1d2d971fdd2c867c958b47daff"
+other = "参数错误"
+
+[301]
+hash = "sha1-976f5c6da04217f533c029a7a546e2f50ae24928"
+other = "token失效"
+
+[302]
+hash = "sha1-f52061b53392747528d865ca6c9dd757db0e7774"
+other = "登录失败"
+
+[303]
+hash = "sha1-08cae8cb99f8166e54dad0f73959ea34613d5d9b"
+other = "请求太频繁"
+
+[304]
+hash = "sha1-4276e6ab2a3146d041bbfb13b5fe149cba1fd3ab"
+other = "没有数据"
+
+[400]
+hash = "sha1-10588307553e766ab3c7d328d948dc6754893cef"
+other = "错误的请求"
+
+[500]
+hash = "sha1-0979f5d763cf88dc17a0a08b3ec5d8bdbe748ecc"
+other = "系统错误"
+
+[CategoryHasSub]
+hash = "sha1-fe7dcb336fde9833fb3697ba43ea730e0178541f"
+other = "该分类存在子分类"
+
+[CategoryUsed]
+hash = "sha1-78e706c5bd8368e05707e3ce0b8019afddf4ba91"
+other = "任务中使用了此分类"
+
+[CodeSent]
+hash = "sha1-ed45d711d0b485988ac567534d3e6e3cad0b7c1f"
+other = "邮箱验证码已经发送了"
+
+[EmailCodeError]
+hash = "sha1-38964ef7a3681a3d3179a4b3d54e09484eacf414"
+other = "邮箱验证码已失效"
+
+[EmailExits]
+hash = "sha1-e8bc8eecbdea84ad628ef0d635646ea7668f6c38"
+other = "该邮箱已存在"
+
+[EmailInvalid]
+hash = "sha1-38964ef7a3681a3d3179a4b3d54e09484eacf414"
+other = "邮箱格式错误"
+
+[NameExits]
+hash = "sha1-8fecd6eaaf0b6828ba3505b9328311f8663b5c54"
+other = "用户名已存在"
+
+[NoCategory]
+hash = "sha1-4d46d70ac4b897a69c92c4e683c0996170d7e9f8"
+other = "分类不存在"
+
+[NoTask]
+hash = "sha1-ec5a1c1e323b033a833be14238a9aa96bd391fd9"
+other = "任务不存在"
+
+[PasswordEqual]
+hash = "sha1-6157bb820f141ba85162d3f88a4f4b5ba0e6d570"
+other = "新密码不能和老密码相同"
+
+[TimeError]
+hash = "sha1-b607ba2c24b524c1a6fbd3e94a3cae98ebe33450"
+other = "开始时间必须早于结束时间"
+
+[UserOrEmailError]
+hash = "sha1-fed3fad49a099a0ab877fc4f5d9ab291ff2fc505"
+other = "用户名或邮箱错误"
+
+[UserOrPasswordError]
+hash = "sha1-15c76ea9e1b93a06d4d4c28a8a05c464eb51839c"
+other = "用户或密码错误"
