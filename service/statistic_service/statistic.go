@@ -83,7 +83,7 @@ func GetLineValue(userID int64, req *request.GetLineValueRequest) (*[]response.L
 
 func getSpot(timeType string, categoryID, userID int64, beijingLocation *time.Location) *[]response.LineSpots {
 	var spots *[]response.LineSpots
-	yCounts := 0
+	yCounts := 7
 	now := time.Now().In(beijingLocation)
 	switch timeType {
 	case "day":
@@ -119,7 +119,7 @@ func getDaySpots(now time.Time, categoryID int64, userID int64, yCounts int, loc
 	var spots []response.LineSpots
 	startTime := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, location)
 	endTime := time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 999999999, location)
-	for yCounts < 12 {
+	for yCounts > 0 {
 		startTimeMillis := factory.GetMillis(startTime)
 		endTimeMillis := factory.GetMillis(endTime)
 		spendTime := getSum(categoryID, userID, startTimeMillis, endTimeMillis)
@@ -129,7 +129,7 @@ func getDaySpots(now time.Time, categoryID int64, userID int64, yCounts int, loc
 		})
 		startTime = startTime.AddDate(0, 0, -1)
 		endTime = endTime.AddDate(0, 0, -1)
-		yCounts++
+		yCounts--
 	}
 	return &spots
 }
@@ -142,7 +142,7 @@ func getWeekSpots(now time.Time, categoryID int64, userID int64, yCounts int, lo
 	endOfWeek := startOfWeek.AddDate(0, 0, 6)
 	startTime := time.Date(startOfWeek.Year(), startOfWeek.Month(), startOfWeek.Day(), 0, 0, 0, 0, location)
 	endTime := time.Date(endOfWeek.Year(), endOfWeek.Month(), endOfWeek.Day(), 23, 59, 59, 999999999, location)
-	for yCounts < 12 {
+	for yCounts > 0 {
 		startTimeMillis := factory.GetMillis(startTime)
 		endTimeMillis := factory.GetMillis(endTime)
 		spendTime := getSum(categoryID, userID, startTimeMillis, endTimeMillis)
@@ -151,9 +151,9 @@ func getWeekSpots(now time.Time, categoryID int64, userID int64, yCounts int, lo
 			X: startTimeMillis,
 			Y: spendTime,
 		})
-		startTime = startTime.AddDate(0, 0, -6)
-		endTime = endTime.AddDate(0, 0, -6)
-		yCounts++
+		startTime = startTime.AddDate(0, 0, -7)
+		endTime = endTime.AddDate(0, 0, -7)
+		yCounts--
 	}
 	return &spots
 }
@@ -164,7 +164,7 @@ func getMonthSpots(now time.Time, categoryID int64, userID int64, yCounts int, l
 	nextMonth := time.Date(now.Year(), now.Month()+1, 1, 0, 0, 0, 0, location)
 	endOfMonth := nextMonth.AddDate(0, 0, -1)
 	endTime := time.Date(endOfMonth.Year(), endOfMonth.Month(), endOfMonth.Day(), 23, 59, 59, 999999999, location)
-	for yCounts < 12 {
+	for yCounts > 0 {
 		startTimeMillis := factory.GetMillis(startTime)
 		endTimeMillis := factory.GetMillis(endTime)
 		spendTime := getSum(categoryID, userID, startTimeMillis, endTimeMillis)
@@ -176,7 +176,7 @@ func getMonthSpots(now time.Time, categoryID int64, userID int64, yCounts int, l
 		endOfMonth = startTime.AddDate(0, 0, -1)
 		endTime = time.Date(endOfMonth.Year(), endOfMonth.Month(), endOfMonth.Day(), 23, 59, 59, 999999999, location)
 		startTime = time.Date(startTime.Year(), startTime.Month()-1, 1, 0, 0, 0, 0, location)
-		yCounts++
+		yCounts--
 	}
 	return &spots
 }
@@ -187,7 +187,7 @@ func getYearSpots(now time.Time, categoryID int64, userID int64, yCounts int, lo
 	nextYear := time.Date(now.Year()+1, 1, 1, 0, 0, 0, 0, location)
 	endOfYear := nextYear.AddDate(0, 0, -1)
 	endTime := time.Date(endOfYear.Year(), endOfYear.Month(), endOfYear.Day(), 23, 59, 59, 999999999, location)
-	for yCounts < 12 {
+	for yCounts > 0 {
 		startTimeMillis := factory.GetMillis(startTime)
 		endTimeMillis := factory.GetMillis(endTime)
 		spendTime := getSum(categoryID, userID, startTimeMillis, endTimeMillis)
@@ -198,7 +198,7 @@ func getYearSpots(now time.Time, categoryID int64, userID int64, yCounts int, lo
 		endOfYear = startTime.AddDate(0, 0, -1)
 		endTime = time.Date(endOfYear.Year(), endOfYear.Month(), endOfYear.Day(), 23, 59, 59, 999999999, location)
 		startTime = time.Date(startTime.Year()-1, 1, 1, 0, 0, 0, 0, location)
-		yCounts++
+		yCounts--
 	}
 	return &spots
 }
