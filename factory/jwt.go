@@ -1,7 +1,7 @@
 package factory
 
 import (
-	"fmt"
+	"errors"
 	"gin_study/config"
 	"strconv"
 	"time"
@@ -59,7 +59,7 @@ func DecodeToken(tokenstring string) (*UserClaims, error) {
 		tokenKey := config.Config.Jwt.RedisKey + strconv.FormatInt(claims.UserID, 10) + claims.TokenId.String()
 		token, err := RedisGet(tokenKey)
 		if err != nil || token != tokenstring {
-			return nil, fmt.Errorf("token invalid")
+			return nil, errors.New("token expired")
 		}
 		// 延长token的过期时间
 		err = RedisExpire(tokenKey, 24*time.Hour)

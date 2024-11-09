@@ -9,6 +9,7 @@ import (
 
 	"gin_study/api/consts"
 	"gin_study/factory"
+	"gin_study/language"
 	"gin_study/logger"
 	"io"
 	"strconv"
@@ -64,7 +65,8 @@ func VerifyToken(c *gin.Context) {
 	}
 	userClaims, err := factory.DecodeToken(token.Token)
 	if err != nil {
-		ReturnResponse(c, consts.TOKEN_INVALID, err.Error())
+		lang := c.GetString(consts.LANG)
+		ReturnResponse(c, consts.TOKEN_INVALID, language.GetLocale(lang, consts.TOKEN_INVALID))
 		c.Abort()
 		return
 	}
