@@ -16,6 +16,7 @@ const (
 
 const (
 	USER_ID      = "userID"
+	TOKEN_ID     = "tokenID"
 	EQUIPMENT_ID = "equipmentID"
 	LANG         = "lang"
 )

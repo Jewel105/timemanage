@@ -383,6 +383,27 @@ paths:
       summary: 忘记密码
       tags:
       - COMMON API
+  /common/user/log/out:
+    get:
+      consumes:
+      - application/json
+      description: 退出登录
+      operationId: Logout
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
+        in: header
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: boolean
+      summary: 退出登录
+      tags:
+      - COMMON API
   /common/user/login:
     post:
       consumes:

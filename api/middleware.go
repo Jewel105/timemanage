@@ -72,6 +72,7 @@ func VerifyToken(c *gin.Context) {
 	}
 
 	c.Set(consts.USER_ID, userClaims.UserID)
+	c.Set(consts.TOKEN_ID, userClaims.TokenId)
 	c.Next()
 }
 

@@ -244,6 +244,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/common/user/log/out": {
+            "get": {
+                "description": "退出登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "COMMON API"
+                ],
+                "summary": "退出登录",
+                "operationId": "Logout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
+                        "name": "token",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
         "/common/user/login": {
             "post": {
                 "description": "登录",

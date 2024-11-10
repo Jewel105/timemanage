@@ -4,9 +4,11 @@ import (
 	"gin_study/api"
 	"gin_study/api/consts"
 	"gin_study/gen/request"
+	"gin_study/language"
 	userservice "gin_study/service/user_service"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // @Id Login
@@ -29,6 +31,32 @@ func Login(c *gin.Context) {
 
 	token, e := userservice.Login(equipmentID, &req, lang)
 	api.DealResponse(c, token, e)
+}
+
+// @Id Logout
+// @Summary 退出登录
+// @Description 退出登录
+// @Tags COMMON API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
+// @success 200 boolean ture "success"
+// @Router /common/user/log/out [get]
+func Logout(c *gin.Context) {
+	userID := api.GetUserID(c)
+	if userID == 0 {
+		return
+	}
+	tokenID, ok := c.Get(consts.TOKEN_ID)
+
+	lang := c.GetString(consts.LANG)
+
+	if !ok {
+		api.DealResponse(c, false, &consts.ApiErr{Code: consts.TOKEN_INVALID, Msg: language.GetLocale(lang, consts.TOKEN_INVALID)})
+	}
+
+	success, e := userservice.Logout(userID, tokenID.(uuid.UUID), lang)
+	api.DealResponse(c, success, e)
 }
 
 // @Id Register

@@ -71,3 +71,9 @@ func DecodeToken(tokenstring string) (*UserClaims, error) {
 		return nil, err
 	}
 }
+
+func DeleteToken(userID int64, tokenId uuid.UUID) error {
+	tokenKey := config.Config.Jwt.RedisKey + strconv.FormatInt(userID, 10) + tokenId.String()
+	err := RedisDel(tokenKey)
+	return err
+}

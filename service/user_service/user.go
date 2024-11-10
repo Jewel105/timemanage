@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 	"gopkg.in/gomail.v2"
 )
@@ -50,6 +51,14 @@ func Login(equipmentID int64, req *request.LoginRequest, lang string) (string, e
 	token, e := factory.CreateToken(user.Name, user.ID)
 
 	return token, e
+}
+
+func Logout(userID int64, tokenID uuid.UUID, lang string) (bool, error) {
+	err := factory.DeleteToken(userID, tokenID)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 func Register(req *request.RegisterRequest, lang string) (int64, error) {
