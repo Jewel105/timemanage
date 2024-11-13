@@ -12,9 +12,11 @@ type User struct {
 	UpdatedTime time.Time      `gorm:"column:update_time;autoUpdateTime:milli" json:"updatedTime"`
 	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time;index" json:"deleteTime"`
 
-	Name     string `gorm:"column:name;size:64" json:"name"`           // 用户名
-	Password string `gorm:"column:password;size:128" json:"password"`  // 密码
-	Email    string `gorm:"column:email;size:128;unique" json:"email"` // 邮箱
+	Name      string `gorm:"column:name;size:64" json:"name"`             // 用户名
+	Password  string `gorm:"column:password;size:128" json:"password"`    // 密码
+	Email     string `gorm:"column:email;size:128;unique" json:"email"`   // 邮箱
+	AvatarURL string `gorm:"column:avatar_url;size:256" json:"avatarUrl"` // 头像URL
+	Signature string `gorm:"column:signature;size:256" json:"signature"`  // 个性签名
 }
 
 type Task struct {

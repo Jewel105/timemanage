@@ -22,7 +22,7 @@ import (
 
 func Login(equipmentID int64, req *request.LoginRequest, lang string) (string, error) {
 	// 用户名或密码都可以登录
-	user, err := query.User.Where(query.User.Name.Eq(req.Name)).Or(query.User.Email.Eq(req.Name)).First()
+	user, err := query.User.Select(query.User.ID, query.User.Name, query.User.Password, query.User.Email).Where(query.User.Name.Eq(req.Name)).Or(query.User.Email.Eq(req.Name)).First()
 	if err != nil {
 		return "", &consts.ApiErr{Code: consts.LOGIN_FAILED, Msg: language.GetLocale(lang, "UserOrPasswordError")}
 	}
