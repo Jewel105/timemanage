@@ -9,6 +9,7 @@ import (
 	"gin_study/gen/mysql"
 	"gin_study/gen/query"
 	"gin_study/gen/request"
+	"gin_study/gen/response"
 	"gin_study/language"
 	"gin_study/logger"
 	"strconv"
@@ -179,4 +180,13 @@ func ForgetPassword(req *request.RegisterRequest, lang string) (int64, error) {
 	}
 	err = mysql.DeferTx(tx, err)
 	return user.ID, err
+}
+
+func GetInfo(userID int64) (*response.UserInfo, error) {
+	var res response.UserInfo
+	err := query.User.Where(query.User.ID.Eq(userID)).Scan(&res)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
 }

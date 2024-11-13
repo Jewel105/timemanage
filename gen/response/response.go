@@ -35,3 +35,11 @@ type LineSpots struct {
 	X int64 `json:"x"` // x轴值
 	Y int64 `json:"y"` // y轴值
 }
+
+type UserInfo struct {
+	ID        int64  `json:"id"`        // 用户ID
+	Name      string `json:"name"`      // 用户名
+	Email     string `json:"email"`     // 邮箱
+	AvatarURL string `json:"avatarUrl"` // 头像URL
+	Signature string `json:"signature"` // 个性签名
+}

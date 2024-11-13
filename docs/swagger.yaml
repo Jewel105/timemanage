@@ -225,6 +225,24 @@ definitions:
         description: 任务开始时间
         type: integer
     type: object
+  response.UserInfo:
+    properties:
+      avatarUrl:
+        description: 头像URL
+        type: string
+      email:
+        description: 邮箱
+        type: string
+      id:
+        description: 用户ID
+        type: integer
+      name:
+        description: 用户名
+        type: string
+      signature:
+        description: 个性签名
+        type: string
+    type: object
 host: 127.0.0.1:8081
 info:
   contact:
@@ -382,28 +400,7 @@ paths:
             type: int
       summary: 忘记密码
       tags:
-      - COMMON API
-  /common/user/log/out:
-    get:
-      consumes:
-      - application/json
-      description: 退出登录
-      operationId: Logout
-      parameters:
-      - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
-        in: header
-        name: token
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            type: boolean
-      summary: 退出登录
-      tags:
-      - COMMON API
+      - 用户API
   /common/user/login:
     post:
       consumes:
@@ -430,7 +427,7 @@ paths:
             type: string
       summary: 登录
       tags:
-      - COMMON API
+      - 用户API
   /common/user/register:
     post:
       consumes:
@@ -453,7 +450,7 @@ paths:
             type: int
       summary: 注册
       tags:
-      - COMMON API
+      - 用户API
   /common/user/send/code:
     post:
       consumes:
@@ -476,7 +473,70 @@ paths:
             type: boolean
       summary: 发送验证码
       tags:
-      - COMMON API
+      - 用户API
+  /common/user/session/edit:
+    post:
+      consumes:
+      - application/json
+      description: 编辑用户信息
+      operationId: EditUserInfo
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
+        in: header
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: boolean
+      summary: 编辑用户信息
+      tags:
+      - 用户API
+  /common/user/session/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户信息
+      operationId: GetInfo
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
+        in: header
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.UserInfo'
+      summary: 获取用户信息
+      tags:
+      - 用户API
+  /common/user/session/logout:
+    get:
+      consumes:
+      - application/json
+      description: 退出登录
+      operationId: Logout
+      parameters:
+      - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
+        in: header
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: boolean
+      summary: 退出登录
+      tags:
+      - 用户API
   /statistic/line:
     post:
       consumes:

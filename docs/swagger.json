@@ -213,7 +213,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "COMMON API"
+                    "用户API"
                 ],
                 "summary": "忘记密码",
                 "operationId": "ForgetPassword",
@@ -238,38 +238,6 @@
                 }
             }
         },
-        "/common/user/log/out": {
-            "get": {
-                "description": "退出登录",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "COMMON API"
-                ],
-                "summary": "退出登录",
-                "operationId": "Logout",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
-                        "name": "token",
-                        "in": "header"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                }
-            }
-        },
         "/common/user/login": {
             "post": {
                 "description": "登录",
@@ -280,7 +248,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "COMMON API"
+                    "用户API"
                 ],
                 "summary": "登录",
                 "operationId": "Login",
@@ -321,7 +289,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "COMMON API"
+                    "用户API"
                 ],
                 "summary": "注册",
                 "operationId": "Register",
@@ -356,7 +324,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "COMMON API"
+                    "用户API"
                 ],
                 "summary": "发送验证码",
                 "operationId": "SendCode",
@@ -369,6 +337,102 @@
                         "schema": {
                             "$ref": "#/definitions/request.SendCodeRequest"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/user/session/edit": {
+            "post": {
+                "description": "编辑用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户API"
+                ],
+                "summary": "编辑用户信息",
+                "operationId": "EditUserInfo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
+                        "name": "token",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/user/session/info": {
+            "get": {
+                "description": "获取用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户API"
+                ],
+                "summary": "获取用户信息",
+                "operationId": "GetInfo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
+                        "name": "token",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/response.UserInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/common/user/session/logout": {
+            "get": {
+                "description": "退出登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户API"
+                ],
+                "summary": "退出登录",
+                "operationId": "Logout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
+                        "name": "token",
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -967,6 +1031,31 @@
                 "startTime": {
                     "description": "任务开始时间",
                     "type": "integer"
+                }
+            }
+        },
+        "response.UserInfo": {
+            "type": "object",
+            "properties": {
+                "avatarUrl": {
+                    "description": "头像URL",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "用户名",
+                    "type": "string"
+                },
+                "signature": {
+                    "description": "个性签名",
+                    "type": "string"
                 }
             }
         }

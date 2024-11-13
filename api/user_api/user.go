@@ -14,7 +14,7 @@ import (
 // @Id Login
 // @Summary 登录
 // @Description 登录
-// @Tags COMMON API
+// @Tags 用户API
 // @Accept  json
 // @Produce application/json
 // @Param equipment header string false "3425243"
@@ -36,12 +36,12 @@ func Login(c *gin.Context) {
 // @Id Logout
 // @Summary 退出登录
 // @Description 退出登录
-// @Tags COMMON API
+// @Tags 用户API
 // @Accept  json
 // @Produce application/json
 // @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
 // @success 200 boolean ture "success"
-// @Router /common/user/log/out [get]
+// @Router /common/user/session/logout [get]
 func Logout(c *gin.Context) {
 	userID := api.GetUserID(c)
 	if userID == 0 {
@@ -62,7 +62,7 @@ func Logout(c *gin.Context) {
 // @Id Register
 // @Summary 注册
 // @Description 注册
-// @Tags COMMON API
+// @Tags 用户API
 // @Accept  json
 // @Produce application/json
 // @Param req body request.RegisterRequest true "Json"
@@ -82,7 +82,7 @@ func Register(c *gin.Context) {
 // @Id SendCode
 // @Summary 发送验证码
 // @Description 发送验证码
-// @Tags COMMON API
+// @Tags 用户API
 // @Accept json
 // @Produce application/json
 // @Param req body request.SendCodeRequest true "Json"
@@ -102,7 +102,7 @@ func SendCode(c *gin.Context) {
 // @Id ForgetPassword
 // @Summary 忘记密码
 // @Description 忘记密码
-// @Tags COMMON API
+// @Tags 用户API
 // @Accept json
 // @Produce application/json
 // @Param req body request.RegisterRequest true "Json"
@@ -114,7 +114,50 @@ func ForgetPassword(c *gin.Context) {
 		return
 	}
 	lang := c.GetString(consts.LANG)
-
 	userID, err := userservice.ForgetPassword(&req, lang)
 	api.DealResponse(c, userID, err)
+}
+
+// @Id GetInfo
+// @Summary 获取用户信息
+// @Description 获取用户信息
+// @Tags 用户API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
+// @success 200 {object} response.UserInfo "success"
+// @Router /common/user/session/info [get]
+func GetInfo(c *gin.Context) {
+	userID := api.GetUserID(c)
+	if userID == 0 {
+		return
+	}
+	info, e := userservice.GetInfo(userID)
+	api.DealResponse(c, info, e)
+}
+
+// @Id EditUserInfo
+// @Summary 编辑用户信息
+// @Description 编辑用户信息
+// @Tags 用户API
+// @Accept  json
+// @Produce application/json
+// @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
+// @success 200 boolean ture "success"
+// @Router /common/user/session/edit [post]
+func EditUserInfo(c *gin.Context) {
+	userID := api.GetUserID(c)
+	if userID == 0 {
+		return
+	}
+	tokenID, ok := c.Get(consts.TOKEN_ID)
+
+	lang := c.GetString(consts.LANG)
+
+	if !ok {
+		api.DealResponse(c, false, &consts.ApiErr{Code: consts.TOKEN_INVALID, Msg: language.GetLocale(lang, consts.TOKEN_INVALID)})
+	}
+
+	success, e := userservice.Logout(userID, tokenID.(uuid.UUID), lang)
+	api.DealResponse(c, success, e)
 }

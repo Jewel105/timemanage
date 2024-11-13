@@ -15,8 +15,11 @@ func AddRouter(router *gin.RouterGroup) {
 		user.POST("/forget/password", ForgetPassword)
 	}
 
-	log := user.Group("/log")
-	log.Use(api.VerifyToken)
-	log.GET("/out", Logout)
-
+	session := user.Group("/session")
+	session.Use(api.VerifyToken)
+	{
+		session.GET("/logout", Logout)
+		session.GET("/info", GetInfo)
+		session.POST("/edit", EditUserInfo)
+	}
 }
