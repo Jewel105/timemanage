@@ -9,3 +9,4 @@ build:
   	export GOARCH=${GOARCH}; \
 			export CGO_ENABLED=${CGO_ENABLED}; \
 	go build -o ${BINARY}-${GOOS}-${GOARCH}-${VERSION} -ldflags="-s -w" ./main.go
+	bash upload.sh
