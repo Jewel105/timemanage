@@ -40,6 +40,7 @@ func Login(c *gin.Context) {
 // @Accept  json
 // @Produce application/json
 // @Param token header string false "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq"
+// @Param equipment header string false "3425243"
 // @success 200 boolean ture "success"
 // @Router /common/user/session/logout [get]
 func Logout(c *gin.Context) {
@@ -66,6 +67,8 @@ func Logout(c *gin.Context) {
 // @Accept  json
 // @Produce application/json
 // @Param req body request.RegisterRequest true "Json"
+// @Param Equipment header string false "3425243"
+// @Param Language header string false "en"
 // @Success 200 {int} int "1"
 // @Router  /common/user/register [post]
 func Register(c *gin.Context) {

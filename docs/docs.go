@@ -40,6 +40,18 @@ const docTemplate = `{
                         "in": "header"
                     },
                     {
+                        "type": "string",
+                        "description": "3425243",
+                        "name": "Equipment",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "en",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
                         "type": "integer",
                         "description": "分类ID",
                         "name": "id",
@@ -308,6 +320,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/request.RegisterRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "3425243",
+                        "name": "Equipment",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "en",
+                        "name": "Language",
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -438,6 +462,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq",
                         "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "3425243",
+                        "name": "equipment",
                         "in": "header"
                     }
                 ],

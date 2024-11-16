@@ -263,6 +263,14 @@ paths:
         in: header
         name: token
         type: string
+      - description: "3425243"
+        in: header
+        name: Equipment
+        type: string
+      - description: en
+        in: header
+        name: Language
+        type: string
       - description: 分类ID
         in: path
         name: id
@@ -441,6 +449,14 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.RegisterRequest'
+      - description: "3425243"
+        in: header
+        name: Equipment
+        type: string
+      - description: en
+        in: header
+        name: Language
+        type: string
       produces:
       - application/json
       responses:
@@ -526,6 +542,10 @@ paths:
       - description: enjmcvhdwernxhcuvyudfdjfhkjxkjaoerpq
         in: header
         name: token
+        type: string
+      - description: "3425243"
+        in: header
+        name: equipment
         type: string
       produces:
       - application/json

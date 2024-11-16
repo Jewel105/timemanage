@@ -62,6 +62,8 @@ func SaveCategory(c *gin.Context) {
 // @Accept  json
 // @Produce application/json
 // @Param token header string false "enjmcvhdwernxhcuvyudfdjfhpq"
+// @Param Equipment header string false "3425243"
+// @Param Language header string false "en"
 // @Param id path int true "分类ID"
 // @success 200 boolean ture "success"
 // @Router  /categories/delete/:id [post]

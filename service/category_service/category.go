@@ -52,16 +52,13 @@ func DeleteCategory(userID int64, idStr, lang string) error {
 	}
 	userCategoryQuery := query.Category.Where(query.Category.UserID.Eq(userID))
 	categoryQuery := userCategoryQuery.Where(query.Category.ID.Eq(id))
-	count, err := categoryQuery.Count()
+	curCategory, err := categoryQuery.First()
 	if err != nil {
-		return err
-	}
-	if count == 0 {
 		return &consts.ApiErr{Code: consts.NO_DATA, Msg: language.GetLocale(lang, "NoCategory")}
 	}
 
 	//  在子分类，则不删除
-	count, err = query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ParentID.Eq(id)).Count()
+	count, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ParentID.Eq(id)).Count()
 	if err != nil {
 		return err
 	}
@@ -69,16 +66,26 @@ func DeleteCategory(userID int64, idStr, lang string) error {
 		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: language.GetLocale(lang, "CategoryHasSub")}
 	}
 
-	// 任务列表中存在该分类，不删除
-	count, err = query.Task.Where(query.Task.UserID.Eq(userID)).Where(query.Task.CategoryID.Eq(id)).Count()
-	if err != nil {
-		return err
-	}
-	if count > 0 {
-		return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: language.GetLocale(lang, "CategoryUsed")}
+	tx := query.Q.Begin()
+
+	if curCategory.ParentID != 0 {
+		// 如果不是顶级分类，将任务列列表中的path和categoryID改为父分类
+		_, err = query.Task.Where(query.Task.UserID.Eq(userID)).Where(query.Task.CategoryID.Eq(id)).Updates(models.Task{CategoryPath: curCategory.Path, CategoryID: curCategory.ParentID})
+		if err != nil {
+			return err
+		}
+	} else {
+		// 如果是顶级分类，有任务存在则不能删除
+		count, err = query.Task.Where(query.Task.UserID.Eq(userID)).Where(query.Task.CategoryID.Eq(id)).Count()
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			return &consts.ApiErr{Code: consts.DELETE_FAILED, Msg: language.GetLocale(lang, "CategoryUsed")}
+		}
 	}
 
-	tx := query.Q.Begin()
+	// 删除分类
 	info, err := query.Category.Where(query.Category.UserID.Eq(userID)).Where(query.Category.ID.Eq(id)).Delete()
 	fmt.Println(info)
 	err = mysql.DeferTx(tx, err)

@@ -16,6 +16,12 @@ other = "Too Frequently"
 [304]
 other = "No Data"
 
+[305]
+other = "Delete Failed"
+
+[306]
+other = "Code Invalid"
+
 [400]
 other = "Bad Request"
 

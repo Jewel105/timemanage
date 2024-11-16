@@ -22,6 +22,12 @@ other = "请求太频繁"
 hash = "sha1-4276e6ab2a3146d041bbfb13b5fe149cba1fd3ab"
 other = "没有数据"
 
+[305]
+other = "删除失败"
+
+[306]
+other = "验证码失效"
+
 [400]
 hash = "sha1-10588307553e766ab3c7d328d948dc6754893cef"
 other = "错误的请求"
